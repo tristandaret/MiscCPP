@@ -46,7 +46,7 @@ void Process::Datafile(const std::string &comment, const std::string &datafilepa
 	fpTree->SetBranchAddress("pos", &pos);
 	fpTree->SetBranchAddress("dir", &dir);
 	fpTree->SetBranchAddress("chi2", &chi2);
-	fpTree->SetBranchAddress("mom", &mom);
+	fpTree->SetBranchAddress("mom", &mom_og);
 	fpTree->SetBranchAddress("avg_pad_mult", &APM);
 	fpTree->SetBranchAddress("starttime", &start_time);
 	fpTree->SetBranchAddress("mean_time", &mean_time);
@@ -69,10 +69,13 @@ void Process::Datafile(const std::string &comment, const std::string &datafilepa
 	dxmin = 50, dxmax = 150;			fdrawfile += ("_" + std::to_string(dxmin) 		+ "dx" + std::to_string(dxmax));
 	dirminY = 0.7; dirmaxY = 1;			fdrawfile += ("_" + std::to_string(dirminY)		+ "dirY" + std::to_string(dirmaxY));
 	chi2max = 1000;						fdrawfile += ("_chi2_" + std::to_string(chi2max));
-	fdrawfile += 						".pdf";
+	fdrawfile += 						"_tHAT.pdf";
 
 	for(int i = 0; i < nentries; i++){
 		fpTree->GetEntry(i);
+		// FOR COSMICS if the track is in tHAT the sign must be flipped
+		(fdrawfile.find("cosmic") != std::string::npos and pos[1] > 0) ? mom = -mom_og : mom = mom_og;
+		// mom = mom_og;
 		if(fabs(mom) < 1 || std::isnan(mom)) continue;
 
 		if(nclmin > ncl or ncl > nclmax) continue;
@@ -83,6 +86,7 @@ void Process::Datafile(const std::string &comment, const std::string &datafilepa
 		if(fabs(mom) < momcutlow or fabs(mom) > momcuthigh) continue;
 		if(mean_time < tcutmin or mean_time > tcutmax) continue;
 		if(chi2 > chi2max) continue;
+		if(pos[1] < 0) continue;
 
 		fph1f_WF->							Fill(wf/1.019);
 		fph1f_XP->							Fill(xp);

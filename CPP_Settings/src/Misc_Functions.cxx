@@ -126,7 +126,7 @@ void PrintResolution(TH1* th1, TCanvas* pCanvas, float NDCx, float NDCy, const f
 		std::cerr << "Error: No fit found for " << th1->GetName() << std::endl;
 		return;
 	}
-	// tf1->					SetLineWidth(0);
+	tf1->					SetLineWidth(0);
 	}
 
 	double	xMax =			pCanvas->GetUxmax();
@@ -146,8 +146,8 @@ void PrintResolution(TH1* th1, TCanvas* pCanvas, float NDCx, float NDCy, const f
 	float reso	= 			tf1->GetParameter(2)/tf1->GetParameter(1) * 100;
 	float dreso	= 			GetResoError(tf1);
 
-	// pPaveText->				AddText(Form("%s (%d entries)", title.c_str(), (int)th1->GetEntries()));
-	pPaveText->				AddText(Form("%s", title.c_str()));
+	pPaveText->				AddText(Form("%s (%d entries)", title.c_str(), (int)th1->GetEntries()));
+	// pPaveText->				AddText(Form("%s", title.c_str()));
 	pPaveText->				AddText(Form("#frac{#sigma}{#mu}	= %.2f #pm %.2f %%", reso, dreso));
 	pPaveText->				AddText(Form("#mu	= %.1f #pm %.1f", mu, dmu));
 	pPaveText->				AddText(Form("#sigma	= %.1f #pm %.1f", sigma, dsigma));

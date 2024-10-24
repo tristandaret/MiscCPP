@@ -7,3 +7,4 @@ CPP_Projects/*/Output_Log
 CPP_Projects/*/dump.log
 CPP_Projects/Data_unprocessed
 CPP_Projects/*.root
+*.log

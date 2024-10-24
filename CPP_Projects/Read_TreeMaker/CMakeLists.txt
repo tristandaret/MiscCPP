@@ -16,7 +16,8 @@ include(${ROOT_USE_FILE})
 
 # Add source files
 file(GLOB SOURCES "src/*.cxx")
-list(APPEND SOURCES "$ENV{HOME}/Documents/Code/CPP/CPP_Settings/src/*.cxx")
+file(GLOB SETTINGS_SOURCES "$ENV{HOME}/Documents/Code/CPP/CPP_Settings/src/*.cxx")
+list(APPEND SOURCES ${SETTINGS_SOURCES})
 
 # Add a library target
 add_library(TreeMakerLib ${SOURCES})

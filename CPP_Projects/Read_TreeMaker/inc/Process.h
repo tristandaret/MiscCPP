@@ -90,6 +90,7 @@ class Process
 		Double_t pos[3];
 		Double_t dir[3];
 		Double_t chi2;
+		Double_t mom_og;
 		Double_t mom;
 		Double_t APM;
 		Double_t start_time;

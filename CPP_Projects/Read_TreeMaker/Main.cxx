@@ -42,7 +42,7 @@ int main(){
 		v_processes.back()->			Datafile(comment, datafilepath, drawfolderpath, filename);
 		p_draw->						Run(*v_processes.back());
 	}
-	// p_draw->							CompareRuns(v_processes, compfolderpath, runsettagname);
+	if(v_comments.size() > 1) p_draw->	CompareRuns(v_processes, compfolderpath, runsettagname);
 }
 
 
