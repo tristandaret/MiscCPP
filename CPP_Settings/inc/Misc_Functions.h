@@ -1,0 +1,42 @@
+#ifndef MISC_T_H
+#define MISC_T_H
+
+#include "Util.h"
+
+
+/* GENERAL FUNCTIONS*/
+// Find if a value is in a vector
+bool is_in(std::vector<double> v, double val);
+
+
+// Equivalent of numpy linspace (npoints uniformly spaced between start and end)
+std::vector<double> linspace(double start, double end, int numPoints);
+
+
+
+/* GENERAL MATH*/
+//Heaviside
+float Heaviside(const float& t, const float& t_0);
+
+// Mean of vector
+float mean(const std::vector<float>& values);
+
+// Fit a gaussian but within +/- 2sigma to fit only the peak correctly
+TF1* Fit1Gauss(TH1* h1F);
+TF1* Fit1Gauss(TH1* h1F, const float &range);
+
+/* ROOT */
+
+// Formula to get resolution error using a TF1
+double GetResoError(TF1* tf1);
+double GetResoError(TF1* tf1, const int& mu, const int& sigma);
+
+// Write resolution value for a 1-gaussian fit
+void PrintResolution(TH1* th1, TCanvas* pCanvas);
+void PrintResolution(TH1* th1, TCanvas* pCanvas, float NDCx, float NDCy, Color_t color, const std::string& title);
+void PrintResolution(TH1* th1, TCanvas* pCanvas, float NDCx, float NDCy, const float &size, Color_t color, const std::string& title);
+
+// Draw TH1
+void DrawTH1(const std::string& OutDir, TH1* h1);
+
+#endif // MISC_T_H

@@ -1,0 +1,805 @@
+Event's ID: #0
+  Track's ID: #0 | 3 subtracks
+  Track's parameters (mm): X = 227.563 | Y = 1065.86 | Z = -2769.7 | Vx = -0.249373 | Vy = -0.83115 | Vz = 0.496993 | Curve = 3.26489e-05
+    Subtrack's ERAM ID: #4
+      Cluster's position: X = -47.3853 | Y = 668.129 | Z = -2528.25
+      Cluster's position: X = -62.4924 | Y = 615.341 | Z = -2496.45
+      Cluster's position: X = -5.08563 | Y = 603.407 | Z = -2487.09
+      Cluster's position: X = -1.03021 | Y = 575.385 | Z = -2473
+      Cluster's position: X = -7 | Y = 563.859 | Z = -2463.18
+      Cluster's position: X = -12.9698 | Y = 557.326 | Z = -2459.15
+      Cluster's position: X = -18.9396 | Y = 550.575 | Z = -2455.33
+      Cluster's position: X = -24.9094 | Y = 537.776 | Z = -2446.95
+      Cluster's position: X = -24.9094 | Y = 531.747 | Z = -2442.33
+      Cluster's position: X = -30.8792 | Y = 525.266 | Z = -2438.24
+      Cluster's position: X = -36.8489 | Y = 512.521 | Z = -2429.77
+      Cluster's position: X = -39.8338 | Y = 505.266 | Z = -2426.53
+      Cluster's position: X = -42.8187 | Y = 492.987 | Z = -2417.56
+      Cluster's position: X = -51.7734 | Y = 485.947 | Z = -2414.08
+      Cluster's position: X = -57.7432 | Y = 479.805 | Z = -2409.59
+      Cluster's position: X = -57.7432 | Y = 473.538 | Z = -2405.26
+    Subtrack's ERAM ID: #8
+      Cluster's position: X = 227.563 | Y = 1065.33 | Z = -2770.59
+      Cluster's position: X = 224.541 | Y = 1058.59 | Z = -2766.78
+      Cluster's position: X = 218.498 | Y = 1046.26 | Z = -2757.86
+      Cluster's position: X = 227.563 | Y = 1052.71 | Z = -2762.01
+      Cluster's position: X = 212.456 | Y = 1038.92 | Z = -2754.71
+      Cluster's position: X = 209.434 | Y = 1025.8 | Z = -2746.67
+      Cluster's position: X = 206.413 | Y = 1019.79 | Z = -2742.05
+      Cluster's position: X = 197.349 | Y = 1006.59 | Z = -2734.09
+      Cluster's position: X = 197.349 | Y = 999.706 | Z = -2730.44
+      Cluster's position: X = 185.263 | Y = 986.756 | Z = -2722.21
+      Cluster's position: X = 182.242 | Y = 974.146 | Z = -2713.61
+      Cluster's position: X = 179.22 | Y = 967.1 | Z = -2710.14
+      Cluster's position: X = 173.177 | Y = 954.082 | Z = -2701.98
+      Cluster's position: X = 167.135 | Y = 946.907 | Z = -2698.65
+      Cluster's position: X = 164.113 | Y = 933.998 | Z = -2690.37
+      Cluster's position: X = 161.092 | Y = 927.333 | Z = -2686.48
+      Cluster's position: X = 152.028 | Y = 914.517 | Z = -2678.09
+      Cluster's position: X = 152.028 | Y = 910.455 | Z = -2671.32
+      Cluster's position: X = 139.942 | Y = 890.075 | Z = -2671.32
+      Cluster's position: X = 145.985 | Y = 900.265 | Z = -2671.32
+      Cluster's position: X = 142.963 | Y = 890.075 | Z = -2660.04
+      Cluster's position: X = 93.1101 | Y = 874.94 | Z = -2654.24
+      Cluster's position: X = 127.856 | Y = 862.191 | Z = -2645.78
+      Cluster's position: X = 121.813 | Y = 855.229 | Z = -2642.21
+      Cluster's position: X = 121.813 | Y = 847.833 | Z = -2639.12
+      Cluster's position: X = 115.771 | Y = 841.734 | Z = -2634.58
+      Cluster's position: X = 115.771 | Y = 835.047 | Z = -2630.72
+      Cluster's position: X = 112.749 | Y = 830.147 | Z = -2624.85
+      Cluster's position: X = 106.706 | Y = 822.177 | Z = -2622.39
+      Cluster's position: X = 106.706 | Y = 815.732 | Z = -2618.25
+    Subtrack's ERAM ID: #12
+      Cluster's position: X = 85.5566 | Y = 779.469 | Z = -2596.76
+      Cluster's position: X = 79.5138 | Y = 766.833 | Z = -2588.18
+      Cluster's position: X = 76.4924 | Y = 759.758 | Z = -2584.74
+      Cluster's position: X = 67.4281 | Y = 746.817 | Z = -2576.5
+      Cluster's position: X = 64.4067 | Y = 735.203 | Z = -2566.79
+      Cluster's position: X = 67.4281 | Y = 740.786 | Z = -2571.9
+      Cluster's position: X = 8.5107 | Y = 727.61 | Z = -2563.93
+      Cluster's position: X = 52.3211 | Y = 714.082 | Z = -2556.34
+      Cluster's position: X = 49.2997 | Y = 707.208 | Z = -2552.67
+      Cluster's position: X = 43.2569 | Y = 694.229 | Z = -2544.47
+      Cluster's position: X = 40.2355 | Y = 687.358 | Z = -2540.81
+      Cluster's position: X = 31.1713 | Y = 675.065 | Z = -2531.84
+      Cluster's position: X = 22.107 | Y = 654.545 | Z = -2520.72
+      Cluster's position: X = 19.0856 | Y = 647.907 | Z = -2516.8
+      Cluster's position: X = 7 | Y = 634.768 | Z = -2508.77
+      Cluster's position: X = 7 | Y = 622.594 | Z = -2499.69
+      Cluster's position: X = 10.0214 | Y = 628.086 | Z = -2504.9
+      Cluster's position: X = 21.3565 | Y = 544.087 | Z = -2451.24
+Info in <TCanvas::Print>: pdf file ../Evt_Display.pdf has been created using the current canvas
+ 
+Event's ID: #1
+  Track's ID: #0 | 3 subtracks
+  Track's parameters (mm): X = 49.2997 | Y = 1124.06 | Z = -2570.01 | Vx = -0.308007 | Vy = -0.876599 | Vz = -0.369737 | Curve = -8.77884e-05
+    Subtrack's ERAM ID: #4
+      Cluster's position: X = -145.581 | Y = 681.545 | Z = -2734.14
+      Cluster's position: X = -5.08563 | Y = 691.735 | Z = -2739.02
+      Cluster's position: X = -70.0459 | Y = 712.115 | Z = -2735.6
+      Cluster's position: X = -27.8943 | Y = 600.025 | Z = -2773.92
+      Cluster's position: X = -24.9094 | Y = 610.215 | Z = -2772.85
+      Cluster's position: X = -18.9396 | Y = 620.405 | Z = -2768.75
+      Cluster's position: X = -12.9698 | Y = 630.595 | Z = -2765.04
+      Cluster's position: X = -12.9698 | Y = 640.785 | Z = -2761.59
+      Cluster's position: X = -7 | Y = 650.975 | Z = -2757.78
+    Subtrack's ERAM ID: #8
+      Cluster's position: X = 49.2997 | Y = 808.555 | Z = -2697.49
+      Cluster's position: X = 55.3425 | Y = 818.745 | Z = -2694.51
+      Cluster's position: X = 7 | Y = 828.935 | Z = -2689.41
+      Cluster's position: X = 64.4067 | Y = 839.125 | Z = -2685.64
+      Cluster's position: X = 67.4281 | Y = 849.315 | Z = -2681.57
+      Cluster's position: X = 73.4709 | Y = 859.505 | Z = -2677.85
+      Cluster's position: X = 76.4924 | Y = 869.695 | Z = -2673.72
+      Cluster's position: X = 82.5352 | Y = 879.885 | Z = -2669.83
+      Cluster's position: X = 85.5566 | Y = 890.075 | Z = -2665.7
+      Cluster's position: X = 91.5994 | Y = 900.265 | Z = -2661.09
+      Cluster's position: X = 97.6422 | Y = 910.455 | Z = -2656.67
+      Cluster's position: X = 97.6422 | Y = 920.645 | Z = -2654.1
+      Cluster's position: X = 103.685 | Y = 930.835 | Z = -2650.05
+      Cluster's position: X = 109.728 | Y = 941.025 | Z = -2644.14
+      Cluster's position: X = 112.749 | Y = 951.215 | Z = -2642.11
+      Cluster's position: X = 118.792 | Y = 961.405 | Z = -2636.62
+      Cluster's position: X = 124.835 | Y = 971.595 | Z = -2633.54
+      Cluster's position: X = 127.856 | Y = 981.785 | Z = -2629.65
+      Cluster's position: X = 133.899 | Y = 991.975 | Z = -2623.11
+      Cluster's position: X = 139.942 | Y = 1002.16 | Z = -2619.6
+      Cluster's position: X = 142.963 | Y = 1012.35 | Z = -2616.86
+      Cluster's position: X = 149.006 | Y = 1022.54 | Z = -2611.28
+      Cluster's position: X = 155.049 | Y = 1032.73 | Z = -2608.24
+      Cluster's position: X = 158.07 | Y = 1042.93 | Z = -2604.43
+      Cluster's position: X = 164.113 | Y = 1053.11 | Z = -2598.91
+      Cluster's position: X = 170.156 | Y = 1063.31 | Z = -2596.36
+      Cluster's position: X = 173.177 | Y = 1073.49 | Z = -2590.94
+      Cluster's position: X = 179.22 | Y = 1083.69 | Z = -2586.6
+      Cluster's position: X = 182.242 | Y = 1093.88 | Z = -2583.15
+      Cluster's position: X = 185.263 | Y = 1104.06 | Z = -2578.01
+      Cluster's position: X = 191.306 | Y = 1114.26 | Z = -2575.16
+      Cluster's position: X = 200.37 | Y = 1124.44 | Z = -2570.92
+    Subtrack's ERAM ID: #12
+      Cluster's position: X = 0.957187 | Y = 701.925 | Z = -2737.33
+      Cluster's position: X = 10.0214 | Y = 722.305 | Z = -2732.42
+      Cluster's position: X = 16.0642 | Y = 732.495 | Z = -2729.07
+      Cluster's position: X = 13.0428 | Y = 742.685 | Z = -2723.7
+      Cluster's position: X = 22.107 | Y = 752.875 | Z = -2721.49
+      Cluster's position: X = 28.1498 | Y = 763.065 | Z = -2713.75
+      Cluster's position: X = 31.1713 | Y = 773.255 | Z = -2712.07
+      Cluster's position: X = 37.2141 | Y = 783.445 | Z = -2709.14
+      Cluster's position: X = 49.713 | Y = 661.165 | Z = -2756.46
+  Track's ID: #1 | 1 subtracks
+  Track's parameters (mm): X = -325.355 | Y = 811.515 | Z = -2091.26 | Vx = -0.0619509 | Vy = 0.998071 | Vz = -0.0040508 | Curve = 0.00413548
+    Subtrack's ERAM ID: #1
+      Cluster's position: X = -325.355 | Y = 1053.11 | Z = -2176.76
+      Cluster's position: X = -322.333 | Y = 1042.93 | Z = -2181.44
+      Cluster's position: X = -319.312 | Y = 1032.73 | Z = -2188.13
+      Cluster's position: X = -322.333 | Y = 1022.54 | Z = -2192.65
+      Cluster's position: X = -325.355 | Y = 1012.35 | Z = -2196.46
+      Cluster's position: X = -328.376 | Y = 1002.16 | Z = -2195.71
+      Cluster's position: X = -334.419 | Y = 991.975 | Z = -2189.52
+      Cluster's position: X = -340.462 | Y = 981.785 | Z = -2179.14
+      Cluster's position: X = -334.419 | Y = 971.595 | Z = -2166.79
+      Cluster's position: X = -328.376 | Y = 961.405 | Z = -2155.57
+      Cluster's position: X = -325.355 | Y = 951.215 | Z = -2151.69
+      Cluster's position: X = -328.376 | Y = 941.025 | Z = -2140.98
+      Cluster's position: X = -337.44 | Y = 930.835 | Z = -2131.53
+      Cluster's position: X = -334.419 | Y = 920.645 | Z = -2126
+      Cluster's position: X = -337.44 | Y = 910.455 | Z = -2119.35
+      Cluster's position: X = -334.419 | Y = 900.265 | Z = -2107.39
+      Cluster's position: X = -331.398 | Y = 890.075 | Z = -2098.52
+      Cluster's position: X = -325.355 | Y = 874.942 | Z = -2097.87
+      Cluster's position: X = -325.355 | Y = 861.273 | Z = -2090.44
+      Cluster's position: X = -328.376 | Y = 867.456 | Z = -2094.88
+      Cluster's position: X = -328.376 | Y = 854.226 | Z = -2086.95
+      Cluster's position: X = -322.333 | Y = 846.59 | Z = -2084.14
+      Cluster's position: X = -307.226 | Y = 813.049 | Z = -2098.7
+      Cluster's position: X = -310.248 | Y = 811.524 | Z = -2089.11
+Info in <TCanvas::Print>: Current canvas added to pdf file ../Evt_Display.pdf
+ 
+Event's ID: #2
+  Track's ID: #0 | 4 subtracks
+  Track's parameters (mm): X = 10.0214 | Y = 694.77 | Z = -2752.84 | Vx = -0.621112 | Vy = -0.249552 | Vz = 0.742929 | Curve = 0.00688911
+    Subtrack's ERAM ID: #0
+      Cluster's position: X = -573.11 | Y = 910.455 | Z = -2598.97
+    Subtrack's ERAM ID: #4
+      Cluster's position: X = -2.06422 | Y = 722.305 | Z = -2631.18
+      Cluster's position: X = -2.06422 | Y = 712.115 | Z = -2632.46
+      Cluster's position: X = -2.06422 | Y = 699.608 | Z = -2634.91
+    Subtrack's ERAM ID: #8
+      Cluster's position: X = 10.0214 | Y = 808.555 | Z = -2618.94
+      Cluster's position: X = 13.0428 | Y = 818.745 | Z = -2616.72
+      Cluster's position: X = 13.0428 | Y = 828.935 | Z = -2614.61
+      Cluster's position: X = 16.0642 | Y = 839.125 | Z = -2613.46
+      Cluster's position: X = 16.0642 | Y = 849.315 | Z = -2610.74
+      Cluster's position: X = 16.0642 | Y = 859.505 | Z = -2610.21
+      Cluster's position: X = 16.0642 | Y = 869.695 | Z = -2608.45
+      Cluster's position: X = 19.0856 | Y = 879.885 | Z = -2607.88
+      Cluster's position: X = 19.0856 | Y = 900.265 | Z = -2604.28
+      Cluster's position: X = 19.0856 | Y = 920.645 | Z = -2586.8
+      Cluster's position: X = 10.0214 | Y = 941.025 | Z = -2578.48
+      Cluster's position: X = 10.0214 | Y = 951.215 | Z = -2584.37
+      Cluster's position: X = 25.1284 | Y = 961.405 | Z = -2586.41
+      Cluster's position: X = 37.2141 | Y = 971.595 | Z = -2588.81
+      Cluster's position: X = 139.942 | Y = 1073.49 | Z = -2563.22
+      Cluster's position: X = 46.2783 | Y = 1053.11 | Z = -2567.66
+      Cluster's position: X = 43.2569 | Y = 1042.93 | Z = -2582.22
+      Cluster's position: X = 43.2569 | Y = 1032.73 | Z = -2584.27
+    Subtrack's ERAM ID: #12
+      Cluster's position: X = 360.505 | Y = 654.186 | Z = -2765.11
+      Cluster's position: X = 384.676 | Y = 647.319 | Z = -2768.78
+      Cluster's position: X = 306.119 | Y = 655.566 | Z = -2744.08
+      Cluster's position: X = 342.376 | Y = 655.292 | Z = -2755.06
+      Cluster's position: X = 304.609 | Y = 648.137 | Z = -2724.57
+      Cluster's position: X = 245.691 | Y = 654.064 | Z = -2719.86
+      Cluster's position: X = 200.37 | Y = 653.922 | Z = -2708.42
+      Cluster's position: X = 158.07 | Y = 653.65 | Z = -2696.84
+      Cluster's position: X = 121.813 | Y = 653.562 | Z = -2685.46
+      Cluster's position: X = 79.5138 | Y = 656.901 | Z = -2666.59
+      Cluster's position: X = 82.5352 | Y = 653.823 | Z = -2674.47
+      Cluster's position: X = 43.2569 | Y = 657.659 | Z = -2656.15
+      Cluster's position: X = 13.0428 | Y = 662.108 | Z = -2649.8
+      Cluster's position: X = 3.97859 | Y = 665.224 | Z = -2641.97
+      Cluster's position: X = 3.97859 | Y = 783.445 | Z = -2621.39
+      Cluster's position: X = 3.97859 | Y = 773.255 | Z = -2621.91
+      Cluster's position: X = 0.957187 | Y = 763.065 | Z = -2622.81
+      Cluster's position: X = 3.97859 | Y = 752.875 | Z = -2626.33
+      Cluster's position: X = 0.957187 | Y = 742.685 | Z = -2629.38
+      Cluster's position: X = 0.957187 | Y = 732.495 | Z = -2630.19
+  Track's ID: #1 | 2 subtracks
+  Track's parameters (mm): X = 354.462 | Y = 1011.01 | Z = -2509.54 | Vx = 0.706934 | Vy = -0.289224 | Vz = 0.645441 | Curve = 0.0061684
+    Subtrack's ERAM ID: #8
+      Cluster's position: X = 354.462 | Y = 977.227 | Z = -2524.68
+      Cluster's position: X = 375.612 | Y = 984.721 | Z = -2513.4
+      Cluster's position: X = 396.761 | Y = 988.127 | Z = -2502.12
+      Cluster's position: X = 411.868 | Y = 996.913 | Z = -2490.84
+      Cluster's position: X = 433.018 | Y = 1001.05 | Z = -2479.56
+      Cluster's position: X = 445.104 | Y = 1001.89 | Z = -2468.28
+      Cluster's position: X = 463.232 | Y = 1003.19 | Z = -2457
+      Cluster's position: X = 481.361 | Y = 1004.51 | Z = -2445.72
+      Cluster's position: X = 487.404 | Y = 999.017 | Z = -2434.44
+      Cluster's position: X = 532.725 | Y = 987.461 | Z = -2411.88
+      Cluster's position: X = 541.789 | Y = 986.858 | Z = -2400.6
+      Cluster's position: X = 73.4709 | Y = 986.511 | Z = -2389.32
+      Cluster's position: X = 538.768 | Y = 977.599 | Z = -2378.04
+    Subtrack's ERAM ID: #9
+      Cluster's position: X = 662.645 | Y = 1035.63 | Z = -2343.77
+      Cluster's position: X = 683.795 | Y = 1055.61 | Z = -2332.04
+      Cluster's position: X = 707.966 | Y = 1073.49 | Z = -2318.45
+      Cluster's position: X = 695.881 | Y = 1063.31 | Z = -2318.94
+      Cluster's position: X = 717.031 | Y = 1104.06 | Z = -2300.26
+      Cluster's position: X = 646.028 | Y = 1124.44 | Z = -2284.8
+      Cluster's position: X = 630.92 | Y = 1083.69 | Z = -2309.28
+  Track's ID: #2 | 1 subtracks
+  Track's parameters (mm): X = 925.508 | Y = 1002 | Z = -2351.65 | Vx = 0.339824 | Vy = -0.9377 | Vz = 0.0723829 | Curve = 0.000989667
+    Subtrack's ERAM ID: #9
+      Cluster's position: X = 925.508 | Y = 1002.16 | Z = -2349.5
+      Cluster's position: X = 931.55 | Y = 991.975 | Z = -2350.77
+      Cluster's position: X = 937.593 | Y = 981.785 | Z = -2353.36
+      Cluster's position: X = 934.572 | Y = 971.595 | Z = -2351.38
+      Cluster's position: X = 943.636 | Y = 961.405 | Z = -2349.78
+      Cluster's position: X = 899.826 | Y = 951.215 | Z = -2345.81
+      Cluster's position: X = 949.679 | Y = 941.025 | Z = -2341.99
+      Cluster's position: X = 952.7 | Y = 930.835 | Z = -2342.66
+      Cluster's position: X = 958.743 | Y = 920.645 | Z = -2341.71
+      Cluster's position: X = 964.786 | Y = 910.455 | Z = -2341.2
+      Cluster's position: X = 973.85 | Y = 900.265 | Z = -2338.31
+      Cluster's position: X = 985.936 | Y = 890.075 | Z = -2336.83
+      Cluster's position: X = 982.914 | Y = 879.885 | Z = -2335.01
+      Cluster's position: X = 985.936 | Y = 869.695 | Z = -2329.54
+      Cluster's position: X = 985.936 | Y = 859.505 | Z = -2329.85
+      Cluster's position: X = 988.957 | Y = 849.315 | Z = -2330.27
+      Cluster's position: X = 985.936 | Y = 839.125 | Z = -2325.21
+  Track's ID: #3 | 1 subtracks
+  Track's parameters (mm): X = -7 | Y = 467.252 | Z = -2676.21 | Vx = -0.228214 | Vy = 0.939217 | Vz = 0.256494 | Curve = 0.00144494
+    Subtrack's ERAM ID: #4
+      Cluster's position: X = -7 | Y = 630.595 | Z = -2651.07
+      Cluster's position: X = -12.9698 | Y = 620.405 | Z = -2648.1
+      Cluster's position: X = -18.9396 | Y = 610.215 | Z = -2653.17
+      Cluster's position: X = -27.8943 | Y = 600.025 | Z = -2652.99
+      Cluster's position: X = -27.8943 | Y = 589.835 | Z = -2654.97
+      Cluster's position: X = -30.8792 | Y = 579.645 | Z = -2656.61
+      Cluster's position: X = -39.8338 | Y = 569.455 | Z = -2656.42
+      Cluster's position: X = -29.3867 | Y = 559.265 | Z = -2656.85
+      Cluster's position: X = -30.8792 | Y = 549.075 | Z = -2659.68
+      Cluster's position: X = -32.3716 | Y = 538.885 | Z = -2660.82
+      Cluster's position: X = -33.864 | Y = 528.695 | Z = -2664.17
+      Cluster's position: X = -42.8187 | Y = 498.125 | Z = -2666.8
+      Cluster's position: X = -42.8187 | Y = 487.935 | Z = -2667.92
+      Cluster's position: X = -44.3112 | Y = 477.745 | Z = -2674.83
+      Cluster's position: X = -45.8036 | Y = 467.555 | Z = -2677.32
+Info in <TCanvas::Print>: Current canvas added to pdf file ../Evt_Display.pdf
+ 
+Event's ID: #3
+  Track's ID: #0 | 4 subtracks
+  Track's parameters (mm): X = 7 | Y = 467.514 | Z = -2619.78 | Vx = 0.0334958 | Vy = 0.919079 | Vz = 0.392647 | Curve = 1.39041e-05
+    Subtrack's ERAM ID: #4
+      Cluster's position: X = -263.701 | Y = 467.555 | Z = -2619.88
+      Cluster's position: X = -257.731 | Y = 477.745 | Z = -2617.84
+      Cluster's position: X = -245.792 | Y = 487.935 | Z = -2610.72
+      Cluster's position: X = -236.837 | Y = 498.125 | Z = -2607.52
+      Cluster's position: X = -233.852 | Y = 508.315 | Z = -2603.24
+      Cluster's position: X = -221.912 | Y = 518.505 | Z = -2597.69
+      Cluster's position: X = -212.958 | Y = 528.695 | Z = -2594.05
+      Cluster's position: X = -204.003 | Y = 538.885 | Z = -2588.6
+      Cluster's position: X = -195.048 | Y = 549.075 | Z = -2585.54
+      Cluster's position: X = -189.079 | Y = 559.265 | Z = -2583.05
+      Cluster's position: X = -168.184 | Y = 569.455 | Z = -2574.33
+      Cluster's position: X = -174.154 | Y = 579.645 | Z = -2573.08
+      Cluster's position: X = -162.215 | Y = 589.835 | Z = -2566.77
+      Cluster's position: X = -150.275 | Y = 600.025 | Z = -2562.8
+      Cluster's position: X = -141.32 | Y = 620.405 | Z = -2555.6
+      Cluster's position: X = -117.441 | Y = 640.785 | Z = -2544.98
+      Cluster's position: X = -111.471 | Y = 650.975 | Z = -2541.8
+      Cluster's position: X = -102.517 | Y = 661.165 | Z = -2539.11
+      Cluster's position: X = -93.5619 | Y = 671.355 | Z = -2531.29
+      Cluster's position: X = -78.6375 | Y = 681.545 | Z = -2528.84
+      Cluster's position: X = -75.6526 | Y = 691.735 | Z = -2523.79
+      Cluster's position: X = -69.6828 | Y = 701.925 | Z = -2521.33
+      Cluster's position: X = -57.7432 | Y = 712.115 | Z = -2516.34
+      Cluster's position: X = -45.8036 | Y = 722.305 | Z = -2509.22
+      Cluster's position: X = -45.8036 | Y = 732.495 | Z = -2508.38
+      Cluster's position: X = -24.9094 | Y = 752.875 | Z = -2498.34
+      Cluster's position: X = -15.9547 | Y = 763.065 | Z = -2494.76
+      Cluster's position: X = -9.98489 | Y = 773.255 | Z = -2490.46
+    Subtrack's ERAM ID: #8
+      Cluster's position: X = 7 | Y = 808.555 | Z = -2474.45
+      Cluster's position: X = 19.0856 | Y = 818.745 | Z = -2471.15
+      Cluster's position: X = 22.107 | Y = 828.935 | Z = -2467.08
+      Cluster's position: X = 31.1713 | Y = 839.125 | Z = -2462.65
+      Cluster's position: X = 3.97859 | Y = 849.315 | Z = -2456.7
+      Cluster's position: X = 52.3211 | Y = 859.505 | Z = -2452.07
+      Cluster's position: X = 58.3639 | Y = 869.695 | Z = -2450.45
+      Cluster's position: X = 70.4495 | Y = 879.885 | Z = -2444.8
+      Cluster's position: X = 73.4709 | Y = 890.075 | Z = -2442
+      Cluster's position: X = 88.578 | Y = 900.265 | Z = -2435.86
+      Cluster's position: X = 91.5994 | Y = 910.455 | Z = -2433.64
+      Cluster's position: X = 103.685 | Y = 920.645 | Z = -2428.16
+      Cluster's position: X = 112.749 | Y = 930.835 | Z = -2423.47
+      Cluster's position: X = 118.792 | Y = 941.025 | Z = -2419.61
+      Cluster's position: X = 130.878 | Y = 951.215 | Z = -2415.9
+      Cluster's position: X = 136.92 | Y = 961.405 | Z = -2410.75
+      Cluster's position: X = 145.985 | Y = 971.595 | Z = -2407.19
+      Cluster's position: X = 158.07 | Y = 981.785 | Z = -2401.5
+      Cluster's position: X = 161.092 | Y = 991.975 | Z = -2398.69
+      Cluster's position: X = 176.199 | Y = 1002.16 | Z = -2393.31
+      Cluster's position: X = 182.242 | Y = 1012.35 | Z = -2388.36
+      Cluster's position: X = 188.284 | Y = 1022.54 | Z = -2384.72
+      Cluster's position: X = 200.37 | Y = 1032.73 | Z = -2381.22
+    Subtrack's ERAM ID: #9
+      Cluster's position: X = 260.798 | Y = 1104.06 | Z = -2350.55
+      Cluster's position: X = 266.841 | Y = 1114.26 | Z = -2346.88
+      Cluster's position: X = 278.927 | Y = 1124.44 | Z = -2343.94
+    Subtrack's ERAM ID: #12
+      Cluster's position: X = 440.734 | Y = 610.215 | Z = -2557.97
+      Cluster's position: X = 33.2961 | Y = 630.595 | Z = -2547.05
+Info in <TCanvas::Print>: Current canvas added to pdf file ../Evt_Display.pdf
+ 
+Event's ID: #4
+  Track's ID: #0 | 3 subtracks
+  Track's parameters (mm): X = -8.10703 | Y = 466.567 | Z = -2758.81 | Vx = -0.0399652 | Vy = 0.878247 | Vz = 0.476535 | Curve = 1.76026e-05
+    Subtrack's ERAM ID: #0
+      Cluster's position: X = -8.10703 | Y = 869.695 | Z = -2542.53
+      Cluster's position: X = -5.08563 | Y = 879.885 | Z = -2539.98
+      Cluster's position: X = -2.06422 | Y = 890.075 | Z = -2531.14
+      Cluster's position: X = -47.3853 | Y = 971.595 | Z = -2487.65
+    Subtrack's ERAM ID: #4
+      Cluster's position: X = -114.456 | Y = 467.555 | Z = -2760.63
+      Cluster's position: X = -108.486 | Y = 477.745 | Z = -2754.72
+      Cluster's position: X = -108.486 | Y = 487.935 | Z = -2748.69
+      Cluster's position: X = -102.517 | Y = 498.125 | Z = -2743.38
+      Cluster's position: X = -102.517 | Y = 508.315 | Z = -2738.27
+      Cluster's position: X = -96.5468 | Y = 518.505 | Z = -2730.61
+      Cluster's position: X = -93.5619 | Y = 528.695 | Z = -2723.81
+      Cluster's position: X = -90.577 | Y = 538.885 | Z = -2719.52
+      Cluster's position: X = -90.577 | Y = 549.075 | Z = -2715.56
+      Cluster's position: X = -84.6073 | Y = 559.265 | Z = -2709.37
+      Cluster's position: X = -81.6224 | Y = 569.455 | Z = -2701.5
+      Cluster's position: X = -24.9094 | Y = 579.645 | Z = -2698.42
+      Cluster's position: X = -75.6526 | Y = 589.835 | Z = -2690.2
+      Cluster's position: X = -69.6828 | Y = 600.025 | Z = -2687.78
+      Cluster's position: X = -69.6828 | Y = 610.215 | Z = -2679.46
+      Cluster's position: X = -63.713 | Y = 620.405 | Z = -2675.59
+      Cluster's position: X = -60.7281 | Y = 630.595 | Z = -2668.07
+      Cluster's position: X = -57.7432 | Y = 640.785 | Z = -2664.66
+      Cluster's position: X = -27.8943 | Y = 742.685 | Z = -2609.22
+      Cluster's position: X = -30.8792 | Y = 732.495 | Z = -2616.21
+      Cluster's position: X = -30.8792 | Y = 722.305 | Z = -2620
+      Cluster's position: X = -36.8489 | Y = 712.115 | Z = -2624.17
+      Cluster's position: X = -36.8489 | Y = 701.925 | Z = -2627.64
+      Cluster's position: X = -24.9094 | Y = 752.875 | Z = -2603.75
+      Cluster's position: X = -12.9698 | Y = 783.445 | Z = -2587.7
+      Cluster's position: X = -15.9547 | Y = 773.255 | Z = -2595.96
+      Cluster's position: X = -21.9245 | Y = 763.065 | Z = -2598.23
+    Subtrack's ERAM ID: #8
+      Cluster's position: X = 3.97859 | Y = 900.265 | Z = -2528.22
+      Cluster's position: X = 3.97859 | Y = 910.455 | Z = -2519.56
+      Cluster's position: X = 7 | Y = 920.645 | Z = -2517.13
+      Cluster's position: X = 13.0428 | Y = 930.835 | Z = -2509.09
+      Cluster's position: X = 13.0428 | Y = 941.025 | Z = -2505.11
+      Cluster's position: X = 19.0856 | Y = 951.215 | Z = -2497.43
+      Cluster's position: X = 19.0856 | Y = 961.405 | Z = -2496.51
+      Cluster's position: X = 28.1498 | Y = 981.785 | Z = -2483.95
+      Cluster's position: X = 31.1713 | Y = 991.975 | Z = -2478.39
+      Cluster's position: X = 34.1927 | Y = 1002.16 | Z = -2473.46
+      Cluster's position: X = 40.2355 | Y = 1012.35 | Z = -2464.71
+      Cluster's position: X = 43.2569 | Y = 1022.54 | Z = -2460.95
+      Cluster's position: X = 46.2783 | Y = 1032.73 | Z = -2453.56
+      Cluster's position: X = 49.2997 | Y = 1042.93 | Z = -2450.81
+      Cluster's position: X = 52.3211 | Y = 1053.11 | Z = -2444.83
+      Cluster's position: X = 55.3425 | Y = 1063.31 | Z = -2439.32
+      Cluster's position: X = 58.3639 | Y = 1073.49 | Z = -2433.26
+      Cluster's position: X = 61.3853 | Y = 1083.69 | Z = -2427.5
+      Cluster's position: X = 64.4067 | Y = 1093.88 | Z = -2422.23
+      Cluster's position: X = 67.4281 | Y = 1104.06 | Z = -2417.49
+      Cluster's position: X = 70.4495 | Y = 1114.26 | Z = -2410.92
+      Cluster's position: X = 73.4709 | Y = 1124.44 | Z = -2406.5
+Info in <TCanvas::Print>: Current canvas added to pdf file ../Evt_Display.pdf
+ 
+Event's ID: #5
+  Track's ID: #0 | 4 subtracks
+  Track's parameters (mm): X = 91.5994 | Y = 467.077 | Z = -2732.36 | Vx = 0.338197 | Vy = 0.889211 | Vz = 0.308101 | Curve = 3.01728e-05
+    Subtrack's ERAM ID: #0
+      Cluster's position: X = -38.3211 | Y = 828.935 | Z = -2608.99
+      Cluster's position: X = -479.446 | Y = 849.315 | Z = -2604.71
+    Subtrack's ERAM ID: #4
+      Cluster's position: X = -5.08563 | Y = 600.025 | Z = -2684.93
+      Cluster's position: X = -2.06422 | Y = 610.215 | Z = -2682.53
+      Cluster's position: X = -47.3853 | Y = 650.975 | Z = -2668.06
+      Cluster's position: X = -17.1713 | Y = 681.545 | Z = -2659.91
+      Cluster's position: X = -48.7885 | Y = 477.745 | Z = -2730.77
+      Cluster's position: X = -42.8187 | Y = 487.935 | Z = -2727.9
+      Cluster's position: X = -36.8489 | Y = 498.125 | Z = -2722.19
+      Cluster's position: X = -33.864 | Y = 508.315 | Z = -2719.81
+      Cluster's position: X = -27.8943 | Y = 518.505 | Z = -2712.78
+      Cluster's position: X = -24.9094 | Y = 528.695 | Z = -2711.12
+      Cluster's position: X = -9.98489 | Y = 549.075 | Z = -2700.72
+      Cluster's position: X = -9.98489 | Y = 559.265 | Z = -2699.61
+      Cluster's position: X = -4.01511 | Y = 569.455 | Z = -2698.58
+    Subtrack's ERAM ID: #8
+      Cluster's position: X = 91.5994 | Y = 808.555 | Z = -2616.65
+      Cluster's position: X = 97.6422 | Y = 818.745 | Z = -2612.15
+      Cluster's position: X = 106.706 | Y = 839.125 | Z = -2605.29
+      Cluster's position: X = 118.792 | Y = 869.695 | Z = -2596.16
+      Cluster's position: X = 124.835 | Y = 879.885 | Z = -2592.87
+      Cluster's position: X = 127.856 | Y = 890.075 | Z = -2589.07
+      Cluster's position: X = 133.899 | Y = 900.265 | Z = -2584.96
+      Cluster's position: X = 139.942 | Y = 910.455 | Z = -2583.15
+      Cluster's position: X = 139.942 | Y = 920.645 | Z = -2580.77
+      Cluster's position: X = 149.006 | Y = 930.835 | Z = -2575.09
+      Cluster's position: X = 149.006 | Y = 941.025 | Z = -2572.8
+      Cluster's position: X = 161.092 | Y = 951.215 | Z = -2568.56
+      Cluster's position: X = 158.07 | Y = 961.405 | Z = -2567.95
+      Cluster's position: X = 100.664 | Y = 971.595 | Z = -2562.64
+      Cluster's position: X = 170.156 | Y = 981.785 | Z = -2559.99
+      Cluster's position: X = 179.22 | Y = 991.975 | Z = -2555.54
+      Cluster's position: X = 179.22 | Y = 1002.16 | Z = -2552.86
+      Cluster's position: X = 188.284 | Y = 1012.35 | Z = -2548.06
+      Cluster's position: X = 194.327 | Y = 1022.54 | Z = -2543.85
+      Cluster's position: X = 191.306 | Y = 1032.73 | Z = -2542.9
+      Cluster's position: X = 200.37 | Y = 1042.93 | Z = -2538.99
+      Cluster's position: X = 206.413 | Y = 1053.11 | Z = -2535.18
+      Cluster's position: X = 209.434 | Y = 1063.31 | Z = -2531.73
+      Cluster's position: X = 212.456 | Y = 1073.49 | Z = -2528.24
+      Cluster's position: X = 221.52 | Y = 1083.69 | Z = -2523.82
+      Cluster's position: X = 221.52 | Y = 1093.88 | Z = -2522.88
+      Cluster's position: X = 227.563 | Y = 1104.06 | Z = -2518.75
+      Cluster's position: X = 233.605 | Y = 1114.26 | Z = -2514.3
+      Cluster's position: X = 239.648 | Y = 1124.44 | Z = -2511.33
+    Subtrack's ERAM ID: #12
+      Cluster's position: X = 0.957187 | Y = 620.405 | Z = -2678.28
+      Cluster's position: X = 10.0214 | Y = 630.595 | Z = -2675.05
+      Cluster's position: X = 10.0214 | Y = 640.785 | Z = -2673.76
+      Cluster's position: X = 22.107 | Y = 661.165 | Z = -2665.06
+      Cluster's position: X = 28.1498 | Y = 671.355 | Z = -2662.67
+      Cluster's position: X = 37.2141 | Y = 691.735 | Z = -2654.6
+      Cluster's position: X = 40.2355 | Y = 701.925 | Z = -2652.04
+      Cluster's position: X = 46.2783 | Y = 712.115 | Z = -2648.79
+      Cluster's position: X = 49.2997 | Y = 722.305 | Z = -2644.7
+      Cluster's position: X = 58.3639 | Y = 732.495 | Z = -2641.56
+      Cluster's position: X = 58.3639 | Y = 742.685 | Z = -2640.36
+      Cluster's position: X = 64.4067 | Y = 752.875 | Z = -2633.43
+      Cluster's position: X = 70.4495 | Y = 763.065 | Z = -2631.29
+      Cluster's position: X = 73.4709 | Y = 773.255 | Z = -2629.08
+      Cluster's position: X = 79.5138 | Y = 783.445 | Z = -2624.21
+      Cluster's position: X = 0.462236 | Y = 467.555 | Z = -2733.74
+      Cluster's position: X = 49.713 | Y = 538.885 | Z = -2708.59
+Info in <TCanvas::Print>: Current canvas added to pdf file ../Evt_Display.pdf
+ 
+Event's ID: #6
+  Track's ID: #0 | 1 subtracks
+  Track's parameters (mm): X = 215.477 | Y = 808.466 | Z = -2268.54 | Vx = 0.332628 | Vy = 0.916854 | Vz = 0.220767 | Curve = 0.000119159
+    Subtrack's ERAM ID: #9
+      Cluster's position: X = 215.477 | Y = 808.555 | Z = -2268.91
+      Cluster's position: X = 218.498 | Y = 818.745 | Z = -2266.67
+      Cluster's position: X = 218.498 | Y = 828.935 | Z = -2265.56
+      Cluster's position: X = 227.563 | Y = 839.125 | Z = -2259.9
+      Cluster's position: X = 230.584 | Y = 849.315 | Z = -2257.11
+      Cluster's position: X = 236.627 | Y = 859.505 | Z = -2255.61
+      Cluster's position: X = 242.67 | Y = 869.695 | Z = -2253.98
+      Cluster's position: X = 254.755 | Y = 900.265 | Z = -2246.52
+      Cluster's position: X = 257.777 | Y = 910.455 | Z = -2244.39
+      Cluster's position: X = 260.798 | Y = 920.645 | Z = -2242.84
+      Cluster's position: X = 266.841 | Y = 930.835 | Z = -2240.41
+      Cluster's position: X = 272.884 | Y = 941.025 | Z = -2237.34
+      Cluster's position: X = 266.841 | Y = 951.215 | Z = -2234.89
+      Cluster's position: X = 278.927 | Y = 961.405 | Z = -2233.72
+      Cluster's position: X = 281.948 | Y = 971.595 | Z = -2231.71
+      Cluster's position: X = 281.948 | Y = 981.785 | Z = -2230.11
+      Cluster's position: X = 287.991 | Y = 991.975 | Z = -2226.61
+      Cluster's position: X = 291.012 | Y = 1002.16 | Z = -2224.55
+      Cluster's position: X = 287.991 | Y = 1012.35 | Z = -2222.46
+      Cluster's position: X = 300.076 | Y = 1022.54 | Z = -2220.47
+      Cluster's position: X = 300.076 | Y = 1032.73 | Z = -2217.93
+      Cluster's position: X = 306.119 | Y = 1042.93 | Z = -2214.01
+      Cluster's position: X = 312.162 | Y = 1063.31 | Z = -2210.21
+      Cluster's position: X = 312.162 | Y = 1073.49 | Z = -2209.32
+      Cluster's position: X = 318.205 | Y = 1093.88 | Z = -2205.02
+      Cluster's position: X = 324.248 | Y = 1104.06 | Z = -2203.5
+      Cluster's position: X = 327.269 | Y = 1114.26 | Z = -2201.3
+  Track's ID: #1 | 3 subtracks
+  Track's parameters (mm): X = 251.734 | Y = 488.681 | Z = -1955.31 | Vx = 0.225633 | Vy = 0.927405 | Vz = -0.298345 | Curve = -1.31497e-05
+    Subtrack's ERAM ID: #5
+      Cluster's position: X = -7 | Y = 671.355 | Z = -2008.23
+      Cluster's position: X = -12.9698 | Y = 661.165 | Z = -2005.52
+      Cluster's position: X = -18.9396 | Y = 650.975 | Z = -2002.43
+      Cluster's position: X = -24.9094 | Y = 640.785 | Z = -2000.67
+      Cluster's position: X = -30.8792 | Y = 630.595 | Z = -1998.66
+      Cluster's position: X = -33.864 | Y = 620.405 | Z = -1995.9
+      Cluster's position: X = -39.8338 | Y = 610.215 | Z = -1994.05
+      Cluster's position: X = -45.8036 | Y = 600.025 | Z = -1989.49
+      Cluster's position: X = -51.7734 | Y = 589.835 | Z = -1986.98
+      Cluster's position: X = -60.7281 | Y = 569.455 | Z = -1983.26
+      Cluster's position: X = -63.713 | Y = 559.265 | Z = -1979.56
+      Cluster's position: X = -72.6677 | Y = 549.075 | Z = -1974.96
+      Cluster's position: X = -78.6375 | Y = 538.885 | Z = -1971.86
+      Cluster's position: X = -84.6073 | Y = 528.695 | Z = -1969.62
+      Cluster's position: X = -90.577 | Y = 518.505 | Z = -1966.02
+      Cluster's position: X = -93.5619 | Y = 508.315 | Z = -1963.15
+      Cluster's position: X = -102.517 | Y = 498.125 | Z = -1960.09
+      Cluster's position: X = -108.486 | Y = 487.935 | Z = -1957.63
+    Subtrack's ERAM ID: #9
+      Cluster's position: X = 251.734 | Y = 1114.26 | Z = -2157.03
+      Cluster's position: X = 248.713 | Y = 1104.06 | Z = -2154.67
+      Cluster's position: X = 239.648 | Y = 1093.88 | Z = -2150.77
+      Cluster's position: X = 233.605 | Y = 1083.69 | Z = -2147.96
+      Cluster's position: X = 158.07 | Y = 1073.49 | Z = -2145.09
+      Cluster's position: X = 218.498 | Y = 1063.31 | Z = -2141.1
+      Cluster's position: X = 215.477 | Y = 1053.11 | Z = -2139.47
+      Cluster's position: X = 209.434 | Y = 1042.93 | Z = -2135.31
+      Cluster's position: X = 206.413 | Y = 1032.73 | Z = -2133.69
+      Cluster's position: X = 197.349 | Y = 1022.54 | Z = -2129.93
+      Cluster's position: X = 191.306 | Y = 1012.35 | Z = -2127.44
+      Cluster's position: X = 182.242 | Y = 1002.16 | Z = -2122.76
+      Cluster's position: X = 179.22 | Y = 991.975 | Z = -2119.35
+      Cluster's position: X = 170.156 | Y = 981.785 | Z = -2117.01
+      Cluster's position: X = 167.135 | Y = 971.595 | Z = -2113.03
+      Cluster's position: X = 149.006 | Y = 951.215 | Z = -2106.55
+      Cluster's position: X = 145.985 | Y = 941.025 | Z = -2103.6
+      Cluster's position: X = 139.942 | Y = 930.835 | Z = -2099.8
+      Cluster's position: X = 136.92 | Y = 920.645 | Z = -2098.15
+      Cluster's position: X = 127.856 | Y = 910.455 | Z = -2093.54
+      Cluster's position: X = 124.835 | Y = 900.265 | Z = -2089.72
+      Cluster's position: X = 112.749 | Y = 890.075 | Z = -2086.75
+      Cluster's position: X = 106.706 | Y = 879.885 | Z = -2084.76
+      Cluster's position: X = 100.664 | Y = 869.695 | Z = -2078.43
+      Cluster's position: X = 94.6208 | Y = 859.505 | Z = -2076.38
+      Cluster's position: X = 88.578 | Y = 849.315 | Z = -2073.61
+      Cluster's position: X = 82.5352 | Y = 839.125 | Z = -2071.65
+      Cluster's position: X = 76.4924 | Y = 828.935 | Z = -2065.45
+      Cluster's position: X = 67.4281 | Y = 818.745 | Z = -2063.38
+      Cluster's position: X = 64.4067 | Y = 808.555 | Z = -2060.59
+    Subtrack's ERAM ID: #13
+      Cluster's position: X = 6.43202 | Y = 579.645 | Z = -1985.06
+  Track's ID: #2 | 3 subtracks
+  Track's parameters (mm): X = 67.4281 | Y = 864.587 | Z = -2233.6 | Vx = 0.0416078 | Vy = -0.898411 | Vz = -0.43718 | Curve = -0.000407461
+    Subtrack's ERAM ID: #5
+      Cluster's position: X = -42.8532 | Y = 705.831 | Z = -2013.44
+    Subtrack's ERAM ID: #12
+      Cluster's position: X = 67.4281 | Y = 467.555 | Z = -2401.55
+      Cluster's position: X = 61.3853 | Y = 477.745 | Z = -2397.68
+      Cluster's position: X = 76.4924 | Y = 487.935 | Z = -2393.3
+      Cluster's position: X = 82.5352 | Y = 508.315 | Z = -2384.13
+      Cluster's position: X = 85.5566 | Y = 518.505 | Z = -2380.73
+    Subtrack's ERAM ID: #13
+      Cluster's position: X = 112.749 | Y = 589.835 | Z = -2351.66
+      Cluster's position: X = 112.749 | Y = 600.025 | Z = -2349.91
+      Cluster's position: X = 118.792 | Y = 610.215 | Z = -2346.01
+      Cluster's position: X = 124.835 | Y = 623.062 | Z = -2343.5
+      Cluster's position: X = 130.878 | Y = 637.204 | Z = -2336.59
+      Cluster's position: X = 133.899 | Y = 645.367 | Z = -2334.35
+      Cluster's position: X = 142.963 | Y = 658.541 | Z = -2326.37
+      Cluster's position: X = 136.92 | Y = 652.396 | Z = -2330.85
+      Cluster's position: X = 145.985 | Y = 665.981 | Z = -2323.33
+      Cluster's position: X = 149.006 | Y = 674.573 | Z = -2321.56
+      Cluster's position: X = 158.07 | Y = 688.129 | Z = -2314
+      Cluster's position: X = 158.07 | Y = 694.994 | Z = -2310.33
+      Cluster's position: X = 164.113 | Y = 703.303 | Z = -2308.24
+      Cluster's position: X = 167.135 | Y = 717.519 | Z = -2301.41
+      Cluster's position: X = 176.199 | Y = 725.538 | Z = -2299.02
+      Cluster's position: X = 185.263 | Y = 740.009 | Z = -2292.47
+      Cluster's position: X = 141.453 | Y = 748.105 | Z = -2290.15
+      Cluster's position: X = 188.284 | Y = 756.745 | Z = -2288.45
+      Cluster's position: X = 197.349 | Y = 770.177 | Z = -2280.75
+      Cluster's position: X = 200.37 | Y = 778.563 | Z = -2278.75
+      Cluster's position: X = 49.2997 | Y = 779.408 | Z = -2058.56
+Info in <TCanvas::Print>: Current canvas added to pdf file ../Evt_Display.pdf
+ 
+Event's ID: #7
+  Track's ID: #0 | 3 subtracks
+  Track's parameters (mm): X = -5.08563 | Y = 467.446 | Z = -2488.31 | Vx = -0.245898 | Vy = 0.966333 | Vz = 0.0757306 | Curve = 1.39091e-05
+    Subtrack's ERAM ID: #0
+      Cluster's position: X = -5.08563 | Y = 1042.93 | Z = -2444.79
+      Cluster's position: X = -2.06422 | Y = 1053.11 | Z = -2444.07
+      Cluster's position: X = -78.6375 | Y = 808.555 | Z = -2461.42
+      Cluster's position: X = -75.6526 | Y = 818.745 | Z = -2461.93
+      Cluster's position: X = -69.6828 | Y = 828.935 | Z = -2460.22
+      Cluster's position: X = -66.6979 | Y = 839.125 | Z = -2460.29
+      Cluster's position: X = -63.713 | Y = 849.315 | Z = -2459.86
+      Cluster's position: X = -57.7432 | Y = 859.505 | Z = -2458.29
+      Cluster's position: X = -54.7583 | Y = 869.695 | Z = -2456.72
+      Cluster's position: X = -51.7734 | Y = 879.885 | Z = -2455.69
+      Cluster's position: X = -48.7885 | Y = 890.075 | Z = -2455.57
+      Cluster's position: X = -39.8338 | Y = 900.265 | Z = -2453.98
+      Cluster's position: X = -39.8338 | Y = 910.455 | Z = -2453.54
+      Cluster's position: X = -36.8489 | Y = 920.645 | Z = -2452.4
+      Cluster's position: X = -30.8792 | Y = 930.835 | Z = -2452.44
+      Cluster's position: X = -21.9245 | Y = 941.025 | Z = -2451.37
+      Cluster's position: X = -21.9245 | Y = 951.215 | Z = -2451.52
+      Cluster's position: X = -18.9396 | Y = 961.405 | Z = -2450.46
+      Cluster's position: X = -7 | Y = 971.595 | Z = -2460.12
+      Cluster's position: X = -24.9094 | Y = 1002.16 | Z = -2451.69
+      Cluster's position: X = -30.8792 | Y = 1012.35 | Z = -2453.75
+    Subtrack's ERAM ID: #4
+      Cluster's position: X = -209.973 | Y = 467.555 | Z = -2489.7
+      Cluster's position: X = -141.32 | Y = 477.745 | Z = -2487.2
+      Cluster's position: X = -136.843 | Y = 487.935 | Z = -2486.87
+      Cluster's position: X = -195.048 | Y = 498.125 | Z = -2485.6
+      Cluster's position: X = -195.048 | Y = 508.315 | Z = -2485.22
+      Cluster's position: X = -126.396 | Y = 518.505 | Z = -2484.65
+      Cluster's position: X = -186.094 | Y = 528.695 | Z = -2483.73
+      Cluster's position: X = -183.109 | Y = 538.885 | Z = -2482.46
+      Cluster's position: X = -180.124 | Y = 549.075 | Z = -2482.39
+      Cluster's position: X = -174.154 | Y = 559.265 | Z = -2480.92
+      Cluster's position: X = -171.169 | Y = 569.455 | Z = -2480.97
+      Cluster's position: X = -165.199 | Y = 579.645 | Z = -2479.53
+      Cluster's position: X = -165.199 | Y = 589.835 | Z = -2478.99
+      Cluster's position: X = -159.23 | Y = 600.025 | Z = -2477.28
+      Cluster's position: X = -156.245 | Y = 610.215 | Z = -2476.57
+      Cluster's position: X = -153.26 | Y = 620.405 | Z = -2476.3
+      Cluster's position: X = -147.29 | Y = 630.595 | Z = -2476.23
+      Cluster's position: X = -141.32 | Y = 640.785 | Z = -2475.2
+      Cluster's position: X = -138.335 | Y = 650.975 | Z = -2472.9
+      Cluster's position: X = -132.366 | Y = 661.165 | Z = -2472.95
+      Cluster's position: X = -135.35 | Y = 671.355 | Z = -2472.8
+      Cluster's position: X = -126.396 | Y = 681.545 | Z = -2472.06
+      Cluster's position: X = -123.411 | Y = 691.735 | Z = -2470.53
+      Cluster's position: X = -120.426 | Y = 701.925 | Z = -2470.16
+      Cluster's position: X = -117.441 | Y = 712.115 | Z = -2469.85
+      Cluster's position: X = -114.456 | Y = 722.305 | Z = -2468.71
+      Cluster's position: X = -108.486 | Y = 732.495 | Z = -2467.49
+      Cluster's position: X = -105.502 | Y = 742.685 | Z = -2467.12
+      Cluster's position: X = -99.5317 | Y = 752.875 | Z = -2466.55
+      Cluster's position: X = -54.7583 | Y = 763.065 | Z = -2464.74
+      Cluster's position: X = -93.5619 | Y = 773.255 | Z = -2464.34
+      Cluster's position: X = -90.577 | Y = 783.445 | Z = -2464.25
+    Subtrack's ERAM ID: #8
+      Cluster's position: X = 3.97859 | Y = 1063.31 | Z = -2442.33
+      Cluster's position: X = 7 | Y = 1073.49 | Z = -2441.72
+      Cluster's position: X = 10.0214 | Y = 1083.69 | Z = -2441.21
+      Cluster's position: X = 13.0428 | Y = 1093.88 | Z = -2440.73
+      Cluster's position: X = 19.0856 | Y = 1104.06 | Z = -2440.25
+      Cluster's position: X = 22.107 | Y = 1114.26 | Z = -2440.13
+      Cluster's position: X = 31.1713 | Y = 1124.44 | Z = -2438.23
+Info in <TCanvas::Print>: Current canvas added to pdf file ../Evt_Display.pdf
+ 
+Event's ID: #8
+  Track's ID: #0 | 4 subtracks
+  Track's parameters (mm): X = 25.1284 | Y = 1112.94 | Z = -2196.96 | Vx = -0.0124127 | Vy = -0.881498 | Vz = -0.472025 | Curve = -3.03229e-05
+    Subtrack's ERAM ID: #1
+      Cluster's position: X = -65.5138 | Y = 920.645 | Z = -2300.12
+    Subtrack's ERAM ID: #4
+      Cluster's position: X = -5.08563 | Y = 701.925 | Z = -2407.75
+      Cluster's position: X = -2.06422 | Y = 712.115 | Z = -2403.89
+      Cluster's position: X = -2.06422 | Y = 722.305 | Z = -2396.91
+      Cluster's position: X = -5.08563 | Y = 661.165 | Z = -2459.09
+    Subtrack's ERAM ID: #9
+      Cluster's position: X = 25.1284 | Y = 818.745 | Z = -2348.74
+      Cluster's position: X = 25.1284 | Y = 828.935 | Z = -2345.33
+      Cluster's position: X = 28.1498 | Y = 839.125 | Z = -2339.35
+      Cluster's position: X = 31.1713 | Y = 849.315 | Z = -2333.99
+      Cluster's position: X = 34.1927 | Y = 859.505 | Z = -2326.81
+      Cluster's position: X = 34.1927 | Y = 869.695 | Z = -2323.02
+      Cluster's position: X = 37.2141 | Y = 879.885 | Z = -2317.41
+      Cluster's position: X = 37.2141 | Y = 890.075 | Z = -2312.01
+      Cluster's position: X = 43.2569 | Y = 900.265 | Z = -2308.46
+      Cluster's position: X = 43.2569 | Y = 910.455 | Z = -2300.84
+      Cluster's position: X = 52.3211 | Y = 951.215 | Z = -2280.2
+      Cluster's position: X = 58.3639 | Y = 961.405 | Z = -2277.53
+      Cluster's position: X = 58.3639 | Y = 971.595 | Z = -2269.35
+      Cluster's position: X = 64.4067 | Y = 981.785 | Z = -2266.96
+      Cluster's position: X = 64.4067 | Y = 991.975 | Z = -2262.45
+      Cluster's position: X = 67.4281 | Y = 1002.16 | Z = -2255.51
+      Cluster's position: X = 70.4495 | Y = 1012.35 | Z = -2249.67
+      Cluster's position: X = 70.4495 | Y = 1022.54 | Z = -2245.32
+      Cluster's position: X = 79.5138 | Y = 1032.73 | Z = -2241.21
+      Cluster's position: X = 79.5138 | Y = 1042.93 | Z = -2233.55
+      Cluster's position: X = 82.5352 | Y = 1053.11 | Z = -2230.3
+      Cluster's position: X = 85.5566 | Y = 1063.31 | Z = -2224.14
+      Cluster's position: X = 85.5566 | Y = 1073.49 | Z = -2220.48
+      Cluster's position: X = 91.5994 | Y = 1093.88 | Z = -2209.89
+      Cluster's position: X = 97.6422 | Y = 1104.06 | Z = -2204.46
+      Cluster's position: X = 97.6422 | Y = 1114.26 | Z = -2199.41
+    Subtrack's ERAM ID: #12
+      Cluster's position: X = 0.957187 | Y = 732.495 | Z = -2393.32
+      Cluster's position: X = 3.97859 | Y = 742.685 | Z = -2385.09
+      Cluster's position: X = 7 | Y = 752.875 | Z = -2381.24
+      Cluster's position: X = 10.0214 | Y = 763.065 | Z = -2377.76
+      Cluster's position: X = 88.578 | Y = 467.555 | Z = -2519.09
+      Cluster's position: X = 121.813 | Y = 477.745 | Z = -2519.22
+      Cluster's position: X = 112.749 | Y = 487.935 | Z = -2516.94
+      Cluster's position: X = 100.664 | Y = 508.315 | Z = -2508.94
+      Cluster's position: X = 91.5994 | Y = 518.505 | Z = -2507.66
+      Cluster's position: X = 85.5566 | Y = 528.695 | Z = -2502.55
+      Cluster's position: X = 76.4924 | Y = 538.885 | Z = -2497.16
+      Cluster's position: X = 67.4281 | Y = 549.075 | Z = -2494.21
+      Cluster's position: X = 61.3853 | Y = 559.265 | Z = -2488.86
+      Cluster's position: X = 58.3639 | Y = 569.455 | Z = -2486.06
+      Cluster's position: X = 55.3425 | Y = 579.645 | Z = -2482.61
+      Cluster's position: X = 46.2783 | Y = 589.835 | Z = -2476.01
+      Cluster's position: X = 34.1927 | Y = 600.025 | Z = -2473.49
+      Cluster's position: X = 22.107 | Y = 620.405 | Z = -2465.48
+      Cluster's position: X = 13.0428 | Y = 630.595 | Z = -2463.09
+      Cluster's position: X = 7 | Y = 640.785 | Z = -2462.44
+      Cluster's position: X = 0.957187 | Y = 650.975 | Z = -2459.92
+  Track's ID: #1 | 3 subtracks
+  Track's parameters (mm): X = -5.08563 | Y = 467.606 | Z = -2336.12 | Vx = -0.0651782 | Vy = 0.956055 | Vz = 0.28585 | Curve = 2.4634e-06
+    Subtrack's ERAM ID: #1
+      Cluster's position: X = -5.08563 | Y = 890.075 | Z = -2210.71
+      Cluster's position: X = -2.06422 | Y = 900.265 | Z = -2208.4
+      Cluster's position: X = -12.9698 | Y = 808.555 | Z = -2233.58
+      Cluster's position: X = -9.98489 | Y = 818.745 | Z = -2231.74
+      Cluster's position: X = -7 | Y = 828.935 | Z = -2227.51
+      Cluster's position: X = -7 | Y = 839.125 | Z = -2225.33
+    Subtrack's ERAM ID: #5
+      Cluster's position: X = -135.35 | Y = 467.555 | Z = -2335.95
+      Cluster's position: X = -129.381 | Y = 477.745 | Z = -2333.38
+      Cluster's position: X = -126.396 | Y = 487.935 | Z = -2329.41
+      Cluster's position: X = -123.411 | Y = 498.125 | Z = -2325.66
+      Cluster's position: X = -120.426 | Y = 508.315 | Z = -2323.86
+      Cluster's position: X = -117.441 | Y = 518.505 | Z = -2320.26
+      Cluster's position: X = -111.471 | Y = 528.695 | Z = -2315.84
+      Cluster's position: X = -111.471 | Y = 538.885 | Z = -2315.12
+      Cluster's position: X = -96.5468 | Y = 549.075 | Z = -2310.98
+      Cluster's position: X = -102.517 | Y = 559.265 | Z = -2310.14
+      Cluster's position: X = -96.5468 | Y = 569.455 | Z = -2305.36
+      Cluster's position: X = -96.5468 | Y = 579.645 | Z = -2302.81
+      Cluster's position: X = -90.577 | Y = 589.835 | Z = -2300.29
+      Cluster's position: X = -90.577 | Y = 600.025 | Z = -2295.51
+      Cluster's position: X = -84.6073 | Y = 610.215 | Z = -2291.44
+      Cluster's position: X = -81.6224 | Y = 620.405 | Z = -2289.78
+      Cluster's position: X = -72.6677 | Y = 630.595 | Z = -2286.12
+      Cluster's position: X = -75.6526 | Y = 640.785 | Z = -2284.7
+      Cluster's position: X = -66.6979 | Y = 650.975 | Z = -2282.91
+      Cluster's position: X = -69.6828 | Y = 661.165 | Z = -2277.47
+      Cluster's position: X = -66.6979 | Y = 671.355 | Z = -2275.01
+      Cluster's position: X = -60.7281 | Y = 681.545 | Z = -2270.49
+      Cluster's position: X = -57.7432 | Y = 691.735 | Z = -2269.45
+      Cluster's position: X = -54.7583 | Y = 701.925 | Z = -2266.62
+      Cluster's position: X = -48.7885 | Y = 712.115 | Z = -2264.24
+      Cluster's position: X = -45.8036 | Y = 722.305 | Z = -2258.69
+      Cluster's position: X = -42.8187 | Y = 732.495 | Z = -2256.8
+      Cluster's position: X = -39.8338 | Y = 742.685 | Z = -2253.19
+      Cluster's position: X = -33.864 | Y = 752.875 | Z = -2249.7
+      Cluster's position: X = -30.8792 | Y = 763.065 | Z = -2247.43
+      Cluster's position: X = -24.9094 | Y = 773.255 | Z = -2244.45
+      Cluster's position: X = -27.8943 | Y = 783.445 | Z = -2242.91
+    Subtrack's ERAM ID: #9
+      Cluster's position: X = 0.957187 | Y = 920.645 | Z = -2199.83
+      Cluster's position: X = 7 | Y = 930.835 | Z = -2198.82
+      Cluster's position: X = 13.0428 | Y = 941.025 | Z = -2195.45
+      Cluster's position: X = 19.0856 | Y = 951.215 | Z = -2191.74
+      Cluster's position: X = 19.0856 | Y = 961.405 | Z = -2189.09
+      Cluster's position: X = 22.107 | Y = 971.595 | Z = -2185.6
+      Cluster's position: X = 28.1498 | Y = 981.785 | Z = -2183.11
+      Cluster's position: X = 31.1713 | Y = 991.975 | Z = -2180.64
+      Cluster's position: X = 34.1927 | Y = 1002.16 | Z = -2176.88
+      Cluster's position: X = 34.1927 | Y = 1012.35 | Z = -2174.14
+      Cluster's position: X = 43.2569 | Y = 1022.54 | Z = -2169.39
+      Cluster's position: X = 43.2569 | Y = 1032.73 | Z = -2166.85
+      Cluster's position: X = 46.2783 | Y = 1042.93 | Z = -2165.25
+      Cluster's position: X = 55.3425 | Y = 1053.11 | Z = -2163.02
+      Cluster's position: X = 58.3639 | Y = 1063.31 | Z = -2157.34
+      Cluster's position: X = 58.3639 | Y = 1073.49 | Z = -2156.3
+      Cluster's position: X = 61.3853 | Y = 1083.69 | Z = -2152.28
+      Cluster's position: X = 70.4495 | Y = 1093.88 | Z = -2150.14
+      Cluster's position: X = 70.4495 | Y = 1104.06 | Z = -2145.85
+      Cluster's position: X = 76.4924 | Y = 1114.26 | Z = -2142.76
+      Cluster's position: X = 79.5138 | Y = 1124.44 | Z = -2140.06
+  Track's ID: #2 | 1 subtracks
+  Track's parameters (mm): X = -377.127 | Y = 473.169 | Z = -2531.44 | Vx = -0.835433 | Vy = 0.460477 | Vz = 0.300019 | Curve = 0.000203714
+    Subtrack's ERAM ID: #4
+      Cluster's position: X = -377.127 | Y = 471.909 | Z = -2529.5
+      Cluster's position: X = -362.202 | Y = 485.715 | Z = -2522.22
+      Cluster's position: X = -365.187 | Y = 479.565 | Z = -2526.69
+      Cluster's position: X = -356.233 | Y = 500.932 | Z = -2516.51
+      Cluster's position: X = -341.308 | Y = 493.105 | Z = -2519.11
+      Cluster's position: X = -350.263 | Y = 505.547 | Z = -2510.33
+      Cluster's position: X = -332.353 | Y = 525.641 | Z = -2498.73
+      Cluster's position: X = -326.384 | Y = 532.414 | Z = -2494.96
+      Cluster's position: X = -320.414 | Y = 540.247 | Z = -2492.34
+      Cluster's position: X = -308.474 | Y = 552.493 | Z = -2483.34
+      Cluster's position: X = -290.565 | Y = 565.319 | Z = -2474.97
+      Cluster's position: X = -275.64 | Y = 577.62 | Z = -2466.03
+      Cluster's position: X = -287.58 | Y = 571.895 | Z = -2470.98
+      Cluster's position: X = -260.716 | Y = 583.421 | Z = -2461.18
+      Cluster's position: X = -206.988 | Y = 603.276 | Z = -2449.32
+      Cluster's position: X = -206.988 | Y = 595.704 | Z = -2452.21
+      Cluster's position: X = -177.139 | Y = 608.652 | Z = -2443.98
+      Cluster's position: X = -99.5317 | Y = 616.401 | Z = -2441.28
+      Cluster's position: X = -141.32 | Y = 623.655 | Z = -2438.04
+      Cluster's position: X = -102.517 | Y = 636.152 | Z = -2429.3
+      Cluster's position: X = -69.6828 | Y = 648.6 | Z = -2420.52
+      Cluster's position: X = -93.5619 | Y = 642.035 | Z = -2424.54
+      Cluster's position: X = -36.8489 | Y = 656.193 | Z = -2417.65
+      Cluster's position: X = -36.8489 | Y = 664.884 | Z = -2416
+Info in <TCanvas::Print>: Current canvas added to pdf file ../Evt_Display.pdf and file closed
+ 

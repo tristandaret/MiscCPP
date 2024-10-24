@@ -1,0 +1,9 @@
+CPP_Projects/Read_Alignement/*.root
+CPP_Projects/*/build
+CPP_Projects/*/*/build
+CPP_Projects/*/Library
+CPP_Projects/*/ROOT_files
+CPP_Projects/*/Output_Log
+CPP_Projects/*/dump.log
+CPP_Projects/Data_unprocessed
+CPP_Projects/*.root
