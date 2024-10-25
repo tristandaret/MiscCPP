@@ -185,6 +185,7 @@ void Draw::Run(const Process &pr){
 	Graphic_setup(pr.fph1i_mom, 	 0.5, 1, kMagenta+2, 2, kMagenta-2, kMagenta, 0.2);
 	Graphic_setup(pr.fph1i_mom_tHAT, 0.5, 1, kRed+2, 2, kRed-2, kRed, 0.2);
 	Graphic_setup(pr.fph1i_mom_bHAT, 0.5, 1, kBlue+2, 2, kBlue-2, kBlue, 0.2);
+	// pr.fph1i_mom->					SetAxisRange(0, 1e4, "Y");
 	pr.fph1i_mom->						Draw();
 	pr.fph1i_mom_bHAT->					Draw("same");
 	pr.fph1i_mom_tHAT->					Draw("same");
@@ -197,6 +198,24 @@ void Draw::Run(const Process &pr){
 	plegmom->						Draw();
 	fpCanvas->						SaveAs(pr.fdrawfile.c_str());
 	delete plegmom;	
+
+	// Debugging ------------------------------------------------------------------------------------------------------------------------------
+	fpCanvas->						Clear();
+	gPad->							SetRightMargin(0.13);
+	pr.fph2f_dirYmom->				Draw("colz");
+	fpCanvas->						SaveAs(pr.fdrawfile.c_str());
+
+	fpCanvas->						Clear();
+	pr.fph2f_momposY->				Draw("colz");
+	fpCanvas->						SaveAs(pr.fdrawfile.c_str());
+
+	fpCanvas->						Clear();
+	pr.fph2f_dirYposY->				Draw("colz");
+	fpCanvas->						SaveAs(pr.fdrawfile.c_str());
+
+	fpCanvas->						Clear();
+	pr.fph2f_pullemu->				Draw("colz");
+	fpCanvas->						SaveAs(pr.fdrawfile.c_str());
 
 	// dEdx per momentum bin --------------------------------------------------------------------------------------------------------------------
 

@@ -10,6 +10,7 @@ int main(){
 	std::string tag = 					"_0000-45_s0_n28000";
 	// std::vector<std::string>			v_comments{"_noGRC", "_noRC_GERAM", "_noRC"};
 	std::vector<std::string>			v_comments{"_Ghardware_noRC"};
+	// std::vector<std::string>			v_comments{"_flipon"};
     std::vector<std::string>			v_tags;
     std::vector<std::string>			v_filepath;
     std::vector<std::string>			v_filepathraw;

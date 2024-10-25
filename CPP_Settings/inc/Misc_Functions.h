@@ -2,6 +2,7 @@
 #define MISC_T_H
 
 #include "Util.h"
+#include <type_traits> // for sign template
 
 
 /* GENERAL FUNCTIONS*/
@@ -11,6 +12,12 @@ bool is_in(std::vector<double> v, double val);
 
 // Equivalent of numpy linspace (npoints uniformly spaced between start and end)
 std::vector<double> linspace(double start, double end, int numPoints);
+
+// Sign template
+template <typename T>
+int sign(T x) {
+    return (x >= 0) ? 1 : (x < 0 ? -1 : 0);
+}
 
 
 

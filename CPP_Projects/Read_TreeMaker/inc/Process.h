@@ -57,13 +57,13 @@ class Process
 		TH2F *fph2f_XPdrift =					new TH2F("fph2f_XPdrift",	";drift time (timebins);dE/dx with WF (ADC counts/cm)", 510, 0, 510, 100, 0, 1000);
 		TH2F *fph2f_lenXP =						new TH2F("fph1f_lenXP",		";track length (cm);dE/dx with XP (ADC counts/cm)", 171, 0, 170, 100, 0, 1000);
 		// Momentum		
-		TH2F *fph2f_WFmom =						new TH2F("fph2f_WFmom",		";momentum (MeV);dE/dx with WF (ADC counts/cm)", nmombins, -momrange, momrange, 100, 0, 1000);
-		TH2F *fph2f_XPmom =						new TH2F("fph2f_XPmom",		";momentum (MeV);dE/dx with XP (ADC counts/cm)", nmombins, -momrange, momrange, 100, 0, 1000);
+		TH2F *fph2f_WFmom =						new TH2F("fph2f_WFmom",		";momentum (MeV);dE/dx with WF (ADC counts/cm)", 5*nmombins, -momrange, momrange, 5*100, 0, 1000);
+		TH2F *fph2f_XPmom =						new TH2F("fph2f_XPmom",		";momentum (MeV);dE/dx with XP (ADC counts/cm)", 5*nmombins, -momrange, momrange, 5*100, 0, 1000);
 		TH1I *fph1i_mom =						new TH1I("fph1i_mom",		";momentum (MeV);Count", 3*nmombins, -momrange, momrange);
 		TH1I *fph1i_mom_tHAT =					new TH1I("fph1i_mom_thAT",	";momentum (MeV);Count", 3*nmombins, -momrange, momrange);
 		TH1I *fph1i_mom_bHAT =					new TH1I("fph1i_mom_bhAT",	";momentum (MeV);Count", 3*nmombins, -momrange, momrange);
 		// Geometry		
-		TH2F *fph2f_XZ =							new TH2F("fph1f_XZ",	";X;Z", 100, -1, 1, 100, -1, 1);
+		TH2F *fph2f_XZ =						new TH2F("fph1f_XZ",		";X;Z", 100, -1, 1, 100, -1, 1);
 		TH1F *fph1f_dirY =						new TH1F("fph1f_dirY",		";Y direction;Count", 100, -1, 1);
 		TH1F *fph1f_trklen = 					new TH1F("fph1f_trklen",	";track length (cm);Count", 171, 0, 170);
 		TH1F *fph1f_chi2 =						new TH1F("fph1f_chi2",		";#chi^{2};Count", 1000, 0, 1e4);
@@ -82,6 +82,11 @@ class Process
 		TH1I *fph1i_tmaxTopCath =				new TH1I("fph1i_tmaxTopCath","End time in tHATPC;time bin;Count", 510, 0, 510);
 		TH1I *fph1i_tmaxEP2 =					new TH1I("fph1i_tmaxEP2",	"End time in EP2;time bin;Count", 510, 0, 510);
 		TH1I *fph1i_tmaxEP3 =					new TH1I("fph1i_tmaxEP3",	"End time in EP3;time bin;Count", 510, 0, 510);
+		// Debug
+		TH2F *fph2f_dirYposY = 					new TH2F("fph2f_dirYposY",	";Y direction;Y position", 100, -1, 1, 100, -1e3, 1e3);
+		TH2F *fph2f_dirYmom = 					new TH2F("fph2f_dirYmom",	";Y direction;Momentum", 100, -1, 1, nmombins, -momrange, momrange);
+		TH2F *fph2f_momposY = 					new TH2F("fph2f_momposY",	";Momentum;Y position", nmombins, -momrange, momrange, 100, -1e3, 1e3);
+		TH2F *fph2f_pullemu = 					new TH2F("ph2f_pullemu",	";Pull #mu;Pull e", 100, -10, 10, 100, -10, 10);
 
 		// Tree variables
 		Double_t wf;
@@ -96,6 +101,8 @@ class Process
 		Double_t start_time;
 		Double_t mean_time;
 		Double_t end_time;
+		Double_t pull_muon;
+		Double_t pull_ele;
 		Int_t	ncl;
 		Int_t	endplate;
 		Int_t	eram_channel;

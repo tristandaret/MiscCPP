@@ -39,6 +39,8 @@ void Process::Datafile(const std::string &comment, const std::string &datafilepa
 	fpFile =								TFile::Open(datafilepath.c_str());
 	fpTree =								(TTree*)fpFile->Get("outTree");
 	int nentries =							fpTree->GetEntries();
+	int dirYnegbHAT=0, dirYposbHAT=0, dirYnegtHAT=0, dirYpostHAT=0;
+	int nbotneg=0, nbotpos=0, ntopneg=0, ntoppos=0;
 
 	fpTree->SetBranchAddress("dEdx_WF", &wf);
 	fpTree->SetBranchAddress("dEdx_XP", &xp);
@@ -55,26 +57,32 @@ void Process::Datafile(const std::string &comment, const std::string &datafilepa
 	fpTree->SetBranchAddress("EndPlate_ID", &endplate);
 	fpTree->SetBranchAddress("eram_channel", &eram_channel);
 	fpTree->SetBranchAddress("eram_ID", &eram_ID);
+	fpTree->SetBranchAddress("pull_muon", &pull_muon);
+	fpTree->SetBranchAddress("pull_ele", &pull_ele);
 
 	// Cuts and output file 
 	int nclmin=0, nclmax=200, dirminY=-1, dirmaxY=1, dxmin=0, dxmax=2e3, ncroscut=0;
 	int apmcutlow=0, apmcuthigh=20, momcutlow=0, momcuthigh=1e6, tcutmin=0, tcutmax=1e3;
-	int chi2max = 1e6;
+	int chi2max = 1e6, hat=0;
 	// nclmin = 32;							fdrawfile += ("_" + std::to_string(nclmin)		+ "ncl");
 	// apmcutlow = 2, apmcuthigh = 4;		fdrawfile += ("_" + std::to_string(apmcutlow)	+ "apm" + std::to_string(apmcuthigh));
 	// momcutlow = 250, momcuthigh=600;		fdrawfile += ("_" + std::to_string(momcutlow)	+ "mom" + std::to_string(momcuthigh));
-	// momcutlow = 1e4;						fdrawfile += ("_" + std::to_string(momcutlow)	+ "mom");
-	// tcutmin = 0, tcutmax = 30;			fdrawfile += ("_" + std::to_string(tcutmin)		+ "tmin" + std::to_string(tcutmax));
+	// momcutlow = 1e2;						fdrawfile += ("_" + std::to_string(momcutlow)	+ "mom");
+	// tcutmin = 0, tcutmax = 150;			fdrawfile += ("_" + std::to_string(tcutmin)		+ "tmin" + std::to_string(tcutmax));
 	// nclmin=50, nclmax = 150;				fdrawfile += ("_" + std::to_string(nclmin)		+ "ncl" + std::to_string(nclmax));
 	dxmin = 50, dxmax = 150;			fdrawfile += ("_" + std::to_string(dxmin) 		+ "dx" + std::to_string(dxmax));
 	dirminY = 0.7; dirmaxY = 1;			fdrawfile += ("_" + std::to_string(dirminY)		+ "dirY" + std::to_string(dirmaxY));
 	chi2max = 1000;						fdrawfile += ("_chi2_" + std::to_string(chi2max));
-	fdrawfile += 						"_tHAT.pdf";
+	// hat = -1;								fdrawfile += std::string("_") + (hat == -1 ? "bHAT" : "tHAT");
+	fdrawfile += 						"_pull_pos1>0flip.pdf";
 
 	for(int i = 0; i < nentries; i++){
 		fpTree->GetEntry(i);
-		// FOR COSMICS if the track is in tHAT the sign must be flipped
-		(fdrawfile.find("cosmic") != std::string::npos and pos[1] > 0) ? mom = -mom_og : mom = mom_og;
+		// FOR COSMICS if the track is in tHAT and going up, the sign must be flipped
+		// if(fdrawfile.find("cosmic") != std::string::npos)
+			// (pos[1] > 0 and dir[1] > 0) ? mom = -mom_og : mom = mom_og;
+		// dir[1] > 0 ? mom = -mom_og : mom = mom_og;
+		pos[1] > 0 ? mom = -mom_og : mom = mom_og;
 		// mom = mom_og;
 		if(fabs(mom) < 1 || std::isnan(mom)) continue;
 
@@ -86,7 +94,8 @@ void Process::Datafile(const std::string &comment, const std::string &datafilepa
 		if(fabs(mom) < momcutlow or fabs(mom) > momcuthigh) continue;
 		if(mean_time < tcutmin or mean_time > tcutmax) continue;
 		if(chi2 > chi2max) continue;
-		if(pos[1] < 0) continue;
+		if(hat != 0 and sign(hat) != sign(pos[1])) continue;
+		if(fabs(pull_muon) > fabs(pull_ele)) continue;
 
 		fph1f_WF->							Fill(wf/1.019);
 		fph1f_XP->							Fill(xp);
@@ -143,8 +152,30 @@ void Process::Datafile(const std::string &comment, const std::string &datafilepa
 				fph1i_tmaxTopCath->Fill(end_time);
 			}
 		}
-	}
 
+		// Debug
+		if(dir[1] < 0 and pos[1] < 0) dirYnegbHAT++;
+		if(dir[1] > 0 and pos[1] < 0) dirYposbHAT++;
+		if(dir[1] < 0 and pos[1] > 0) dirYnegtHAT++;
+		if(dir[1] > 0 and pos[1] > 0) dirYpostHAT++;
+
+		if(pos[1] < 0 and sign(mom) < 0) nbotneg++;
+		if(pos[1] < 0 and sign(mom) > 0) nbotpos++;
+		if(pos[1] > 0 and sign(mom) < 0) ntopneg++;
+		if(pos[1] > 0 and sign(mom) > 0) ntoppos++;
+		fph2f_dirYmom->						Fill(dir[1], mom);
+		fph2f_momposY->						Fill(mom, pos[1]);
+		fph2f_dirYposY->					Fill(dir[1], pos[1]);
+		fph2f_pullemu->						Fill(pull_muon, pull_ele);
+	}
+	std::cout << "Y direction:" << std::endl;
+	std::cout << "tHAT: negative => " << dirYnegtHAT << " (" << dirYnegtHAT*100.0/(dirYnegtHAT+dirYpostHAT) << "%) positive => " << dirYpostHAT << " (" << dirYpostHAT*100.0/(dirYnegtHAT+dirYpostHAT) << "%)" << std::endl;
+	std::cout << "bHAT: negative => " << dirYnegbHAT << " (" << dirYnegbHAT*100.0/(dirYnegbHAT+dirYposbHAT) << "%) positive => " << dirYposbHAT << " (" << dirYposbHAT*100.0/(dirYnegbHAT+dirYposbHAT) << "%)" << std::endl;
+	std::cout << "Total: negative => " << dirYnegbHAT+dirYnegtHAT << " (" << (dirYnegbHAT+dirYnegtHAT)*100.0/(dirYnegbHAT+dirYposbHAT+dirYnegtHAT+dirYpostHAT) << "%) positive => " << dirYposbHAT+dirYpostHAT << " (" << (dirYposbHAT+dirYpostHAT)*100.0/(dirYnegbHAT+dirYposbHAT+dirYnegtHAT+dirYpostHAT) << "%)" << std::endl;
+
+	std::cout << "Momentum:" << std::endl;
+	std::cout << "Negative: " << ntopneg << " (top) => " << nbotneg << " (bottom) => top-bottom = " << ntopneg-nbotneg << std::endl;
+	std::cout << "Positive: " << ntoppos << " (top) => " << nbotpos << " (bottom) => top-bottom = " << ntoppos-nbotpos << std::endl;
 
 	// TGrafph filling
 	int ivalid = 0;
