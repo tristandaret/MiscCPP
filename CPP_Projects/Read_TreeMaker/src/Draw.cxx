@@ -95,25 +95,35 @@ void Draw::Run(const Process &pr){
 	gStyle->						SetOptStat(111111);
 	gStyle->						SetStatX(0.33);
 	gStyle->						SetStatY(0.95);
-	pr.fph2f_WFXP->						Draw("colz");
+	pr.fph2f_WFXP->					Draw("colz");
 	fpCanvas->						SaveAs(pr.fdrawfile.c_str());
 
 	// dE/dx vs track length ---------------------------------------------------------------------------------------------------------------------
 	fpCanvas->						Clear();
 	gStyle->						SetStatX(0.87);
-	pr.fph2f_lenXP->					Draw("colz");
+	pr.fph2f_XPlen->				Draw("colz");
+	fpCanvas->						SaveAs(pr.fdrawfile.c_str());
+
+	// dE/dx vs track angle phi -----------------------------------------------------------------------------------------------------------------
+	fpCanvas->						Clear();
+	pr.fph2f_XPphi->				Draw("colz");
 	fpCanvas->						SaveAs(pr.fdrawfile.c_str());
 
 	// dE/dx per time bin -----------------------------------------------------------------------------------------------------------------------
 	fpCanvas->						Clear();
-	gPad->							SetRightMargin(0.02);
-	gPad->							SetRightMargin(0.13);
+	gPad->							SetTopMargin(0.02);
+	gPad->							SetRightMargin(0.16);
 	gStyle->						SetOptStat(0);
 	gStyle->						SetOptFit(0); 
-	pr.fph2f_XPdrift->					Draw("colz");
-	TGraphErrors *ptge_mom_WFdrift =	Convert_TH2_TGE(pr.fph2f_XPdrift);
+	pr.fph2f_momdd_reso_XP->		GetZaxis()->SetRangeUser(0, 20);
+	pr.fph2f_momdd_reso_XP->		Draw("colz");
+	fpCanvas->						SaveAs(pr.fdrawfile.c_str());
+
+	fpCanvas->						Clear();
+	pr.fph2f_XPdrift->				Draw("colz");
+	TGraphErrors *ptge_mom_WFdrift =Convert_TH2_TGE(pr.fph2f_XPdrift);
 	TF1 *linearFit =				new TF1("linearFit", "pol1", 50, 250);
-	ptge_mom_WFdrift->					Fit(linearFit, "RQ");
+	ptge_mom_WFdrift->				Fit(linearFit, "RQ");
 	linearFit->						SetLineColor(kRed);
 	linearFit->						Draw("same");
 	fpCanvas->						SaveAs(pr.fdrawfile.c_str());
@@ -125,7 +135,7 @@ void Draw::Run(const Process &pr){
 		}
 		fpCanvas->					cd(i%16+1);
 		fpCanvas->cd(i%16+1)->		SetRightMargin(0.1);
-		pr.vmod_fph2f_XPtmean[i]->		Draw("colz");
+		pr.vmod_fph2f_XPtmean[i]->	Draw("colz");
 		if(i%16 == 15)fpCanvas->	SaveAs(pr.fdrawfile.c_str());
 	}
 

@@ -329,7 +329,7 @@ void Drawing::Distributions(){
 
 	// Mean RC per ERAM
 	std::vector<float> v_eram_rc;
-	std::vector<int> v_ID_low, v_ID_high, v_channel_low, v_channel_high;
+	std::vector<int> v_ID_low, v_ID_high, v_channel_low, v_channel_high, v_RCs;
 	float eram_rc, eram_npads;
 	for(int i=0;i<nerams;i++){
 		eram_rc = 0, eram_npads = 0;
@@ -343,10 +343,12 @@ void Drawing::Distributions(){
 		if(eram_rc/eram_npads < 130){
 			v_ID_low.push_back(pERAMMaps->ID(i));
 			v_channel_low.push_back(i);
+			v_RCs.push_back(0);
 		}
 		else{
 			v_ID_high.push_back(pERAMMaps->ID(i));
 			v_channel_high.push_back(i);
+			v_RCs.push_back(1);
 		}
 	}
 	std::cout << "Low RC ERAMs:" << std::endl;
@@ -362,6 +364,9 @@ void Drawing::Distributions(){
 	std::cout << std::endl;
 	std::cout << "ID:      ";
 	for(int i=0;i<(int)v_ID_high.size();i++) std::cout << v_ID_high[i] << " ";
+	std::cout << std::endl;
+	std::cout << "RC:      ";
+	for(int i=0;i<(int)v_RCs.size();i++) std::cout << v_RCs[i] << ", ";
 	std::cout << std::endl;
 
 	// Maps
