@@ -7,15 +7,8 @@ int main(){
 
 	std::string type =					"cosmics";
 	std::string runset =				"TreeMaker_dog1_00001022";
-	// std::string runset =				"TreeMaker_MC";
-	std::string tag = 					"_0000-45";
-	// std::string tag = 					"_0000-9";
-	// std::string tag = 					"_proton_100-2000MeV_x0_y105_z-200_phi-90_theta0_N3000";
-	// std::string tag = 					"_mu+-_50-3000MeV_x0_y105_z-200_phi-90_theta0_40k";
-	// std::vector<std::string>			v_comments{"_noGRC", "_noRC_GERAM", "_noRC"};
-	std::vector<std::string>			v_comments{"_master_T04"};
-	// std::vector<std::string>			v_comments{"_flipoff"};
-	// std::vector<std::string>			v_comments{"_reference"};
+	std::string tag = 					"_0000-9";
+	std::vector<std::string>			v_comments{"_RCHighLow", "_master_T04_GFixed"};
     std::vector<std::string>			v_tags;
     std::vector<std::string>			v_filepath;
     std::vector<std::string>			v_filepathraw;

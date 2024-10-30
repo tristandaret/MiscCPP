@@ -32,18 +32,24 @@ void Draw::Run(const Process &pr){
 	fpLegend->						SetTextSize(0.06);
 	fpLegend->						SetFillStyle(0);
 	fpLegend->						SetTextColor(kBlue-1);
-	fpLegend->						AddEntry(pr.ptge_mom_reso_WF, "Waveforms sum", "p");
-	fpLegend->						AddEntry(pr.ptge_mom_reso_XP, "Crossed pads", "p");
+	TLegendEntry *pentryWF =		fpLegend->AddEntry((TObject*)0, "Waveforms sum", "p");
+	pentryWF->						SetMarkerColor(kCyan+2);
+	pentryWF->						SetMarkerSize(7);
+	pentryWF->						SetMarkerStyle(33);
+	TLegendEntry *pentryXP =		fpLegend->AddEntry((TObject*)0, "Crossed pads", "p");
+	pentryXP->						SetMarkerColor(kMagenta+2);
+	pentryXP->						SetMarkerSize(7);
+	pentryXP->						SetMarkerStyle(47);
 	gPad->							SetTopMargin(0.05);
 	float invX = 					0;
 
 	// Global dE/dx plot -------------------------------------------------------------------------------------------------------------------
 	Graphic_setup(pr.fph1f_WF, 0.5, 1, kCyan+1, 2, kCyan-2, kCyan, 0.2);
 	Graphic_setup(pr.fph1f_XP, 0.5, 1, kMagenta+2, 2, kMagenta-2, kMagenta, 0.2);
-	pr.fph1f_WF->						SetAxisRange(0, 1.1	*std::max({pr.fph1f_WF->GetMaximum(), pr.fph1f_XP->GetMaximum()}),	"Y");
+	pr.fph1f_WF->					SetAxisRange(0, 1.1	*std::max({pr.fph1f_WF->GetMaximum(), pr.fph1f_XP->GetMaximum()}),	"Y");
 	if(pr.fph1f_WF->GetMean() > xmax/2) invX = 0.4;
-	pr.fph1f_WF->						Draw("HIST");
-	pr.fph1f_XP->						Draw("HIST sames");
+	pr.fph1f_WF->					Draw("HIST");
+	pr.fph1f_XP->					Draw("HIST sames");
 	PrintResolution(pr.fph1f_XP, fpCanvas, 0.65-invX, 0.58, kMagenta+2, "XP");
 	PrintResolution(pr.fph1f_WF, fpCanvas, 0.65-invX, 0.25, kCyan+2, "WF");
 	fpCanvas->						SaveAs((pr.fdrawfile + "(").c_str());
@@ -57,15 +63,15 @@ void Draw::Run(const Process &pr){
 	fpCanvas->						Clear();
 	fpCanvas->						Divide(4,4);
 	for(int i=0;i<32;i++){
-		pr.vmod_fph1f_WF[i]->			SetAxisRange(0, 1.1	*maxdEdx,	"Y");
-		pr.vmod_fph1f_XP[i]->			SetAxisRange(0, 1.1	*maxdEdx,	"Y");
+		pr.vmod_fph1f_WF[i]->		SetAxisRange(0, 1.1	*maxdEdx,	"Y");
+		pr.vmod_fph1f_XP[i]->		SetAxisRange(0, 1.1	*maxdEdx,	"Y");
 		Graphic_setup(pr.vmod_fph1f_WF[i], 0.5, 1, kCyan+1, 1, kCyan-2, kCyan, 0.2);
 		Graphic_setup(pr.vmod_fph1f_XP[i], 0.5, 1, kMagenta+2, 1, kMagenta-2, kMagenta, 0.2);
 	}
 	for(int i = 0; i < 16; i++){
 		fpCanvas->					cd(i+1);
-		pr.vmod_fph1f_WF[i]->			Draw();
-		pr.vmod_fph1f_XP[i]->			Draw("same");
+		pr.vmod_fph1f_WF[i]->		Draw();
+		pr.vmod_fph1f_XP[i]->		Draw("same");
 		if(pr.vmod_fph1f_WF[i]->GetEntries() < 100) continue;
 		xMax = pr.vmod_fph1f_WF[i]->GetXaxis()->GetXmax();
 		yMax = pr.vmod_fph1f_WF[i]->GetMaximum();
@@ -73,12 +79,12 @@ void Draw::Run(const Process &pr){
 		PrintResolution(pr.vmod_fph1f_WF[i], fpCanvas, 0.65-invX, 0.58, kCyan+2, "WF");
 		PrintResolution(pr.vmod_fph1f_XP[i], fpCanvas, 0.65-invX, 0.25, kMagenta+2, "XP");
 	}
-	fpCanvas->				SaveAs(pr.fdrawfile.c_str());
+	fpCanvas->						SaveAs(pr.fdrawfile.c_str());
 
 	for(int i = 16; i < 32; i++){
-		fpCanvas->				cd(i+1-16);
-		pr.vmod_fph1f_WF[i]->			Draw();
-		pr.vmod_fph1f_XP[i]->			Draw("same");
+		fpCanvas->					cd(i+1-16);
+		pr.vmod_fph1f_WF[i]->		Draw();
+		pr.vmod_fph1f_XP[i]->		Draw("same");
 
 		if(pr.vmod_fph1f_WF[i]->GetEntries() < 100) continue;
 		xMax = pr.vmod_fph1f_WF[i]->GetXaxis()->GetXmax();
@@ -87,7 +93,7 @@ void Draw::Run(const Process &pr){
 		PrintResolution(pr.vmod_fph1f_WF[i], fpCanvas, 0.65-invX, 0.58, kCyan+2, "WF");
 		PrintResolution(pr.vmod_fph1f_XP[i], fpCanvas, 0.65-invX, 0.25, kMagenta+2, "XP");
 	}
-	fpCanvas->				SaveAs(pr.fdrawfile.c_str());
+	fpCanvas->						SaveAs(pr.fdrawfile.c_str());
 
 	// dE/dx XP vs WF ---------------------------------------------------------------------------------------------------------------------------
 	fpCanvas->						Clear();
@@ -98,36 +104,49 @@ void Draw::Run(const Process &pr){
 	pr.fph2f_WFXP->					Draw("colz");
 	fpCanvas->						SaveAs(pr.fdrawfile.c_str());
 
-	// dE/dx vs track length ---------------------------------------------------------------------------------------------------------------------
-	fpCanvas->						Clear();
-	gStyle->						SetStatX(0.87);
-	pr.fph2f_XPlen->				Draw("colz");
-	fpCanvas->						SaveAs(pr.fdrawfile.c_str());
-
-	// dE/dx vs track angle phi -----------------------------------------------------------------------------------------------------------------
-	fpCanvas->						Clear();
-	pr.fph2f_XPphi->				Draw("colz");
-	fpCanvas->						SaveAs(pr.fdrawfile.c_str());
-
 	// dE/dx per time bin -----------------------------------------------------------------------------------------------------------------------
+	// Resolution
+	fpCanvas->						Clear();
+	gPad->							SetRightMargin(0.03);
+	Graphic_setup(pr.ptge_dd_reso_WF, 2, 33, kCyan+2, 2, kCyan+2);
+	Graphic_setup(pr.ptge_dd_reso_XP, 2, 47, kMagenta+2, 2, kMagenta+2);
+	pr.ptge_dd_reso_XP->			SetTitle(";Drift time (timebins);Resolution (%)");
+	pr.ptge_dd_reso_XP->			GetXaxis()->SetLimits(0, 510);
+	pr.ptge_dd_reso_XP->			GetYaxis()->SetRangeUser(resomin, resomax);
+	pr.ptge_dd_reso_XP->			DrawClone("AP");
+	pr.ptge_dd_reso_WF->			DrawClone("P same");
+	pr.ptge_dd_reso_XP->			SetMarkerSize(7);
+	pr.ptge_dd_reso_WF->			SetMarkerSize(7);
+	fpLegend->						Draw();
+	fpCanvas->						SaveAs(pr.fdrawfile.c_str());
+
+	// Mean
+	fpCanvas->						Clear();
+	Graphic_setup(pr.ptge_dd_mean_WF, 0, 33, kCyan+2, 2, kCyan+2);
+	Graphic_setup(pr.ptge_dd_mean_XP, 0, 47, kMagenta+2, 2, kMagenta+2);
+	pr.ptge_dd_mean_XP->			SetTitle(";Drift time (timebins);Mean (ADC counts/cm)");
+	pr.ptge_dd_mean_XP->			GetXaxis()->SetLimits(0, 510);
+	pr.ptge_dd_mean_XP->			GetYaxis()->SetRangeUser(meanmin, meanmax);
+	pr.ptge_dd_mean_XP->			Draw("APL");
+	pr.ptge_dd_mean_WF->			Draw("PL same");
+	fpLegend->						Draw();
+	fpCanvas->						SaveAs(pr.fdrawfile.c_str());
+
+	// 2D distribution
 	fpCanvas->						Clear();
 	gPad->							SetTopMargin(0.02);
-	gPad->							SetRightMargin(0.16);
+	gPad->							SetRightMargin(0.1);
 	gStyle->						SetOptStat(0);
 	gStyle->						SetOptFit(0); 
-	pr.fph2f_momdd_reso_XP->		GetZaxis()->SetRangeUser(0, 20);
-	pr.fph2f_momdd_reso_XP->		Draw("colz");
-	fpCanvas->						SaveAs(pr.fdrawfile.c_str());
-
-	fpCanvas->						Clear();
 	pr.fph2f_XPdrift->				Draw("colz");
-	TGraphErrors *ptge_mom_WFdrift =Convert_TH2_TGE(pr.fph2f_XPdrift);
+	TGraphErrors *ptge_mom_XPdrift =Convert_TH2_TGE(pr.fph2f_XPdrift);
 	TF1 *linearFit =				new TF1("linearFit", "pol1", 50, 250);
-	ptge_mom_WFdrift->				Fit(linearFit, "RQ");
+	ptge_mom_XPdrift->				Fit(linearFit, "RQ");
 	linearFit->						SetLineColor(kRed);
 	linearFit->						Draw("same");
 	fpCanvas->						SaveAs(pr.fdrawfile.c_str());
 
+	// 2D distribution module per module
 	for(int i = 0; i < 32; i++){
 		if(i%16 == 0){
 			fpCanvas->				Clear();
@@ -139,54 +158,115 @@ void Draw::Run(const Process &pr){
 		if(i%16 == 15)fpCanvas->	SaveAs(pr.fdrawfile.c_str());
 	}
 
-	// dE/dx vs momentum -------------------------------------------------------------------------------------------------------------------
+	// dE/dx vs track angle phi -----------------------------------------------------------------------------------------------------------------
+	// Resolution
+	fpCanvas->						Clear();
+	gPad->							SetRightMargin(0.03);
+	Graphic_setup(pr.ptge_phi_reso_WF, 2, 33, kCyan+2, 2, kCyan+2);
+	Graphic_setup(pr.ptge_phi_reso_XP, 2, 47, kMagenta+2, 2, kMagenta+2);
+	pr.ptge_phi_reso_XP->			SetTitle(";#varphi (#circ);Resolution (%)");
+	pr.ptge_phi_reso_XP->			GetXaxis()->SetLimits(-90, 90);
+	pr.ptge_phi_reso_XP->			GetYaxis()->SetRangeUser(resomin, resomax);
+	pr.ptge_phi_reso_XP->			DrawClone("AP");
+	pr.ptge_phi_reso_WF->			DrawClone("P same");
+	pr.ptge_phi_reso_XP->			SetMarkerSize(7);
+	pr.ptge_phi_reso_WF->			SetMarkerSize(7);
+	fpLegend->						Draw();
+	fpCanvas->						SaveAs(pr.fdrawfile.c_str());
+
+	// Mean
+	fpCanvas->						Clear();
+	Graphic_setup(pr.ptge_phi_mean_WF, 0, 33, kCyan+2, 2, kCyan+2);
+	Graphic_setup(pr.ptge_phi_mean_XP, 0, 47, kMagenta+2, 2, kMagenta+2);
+	pr.ptge_phi_mean_XP->			SetTitle(";#varphi (#circ);Mean (ADC counts/cm)");
+	pr.ptge_phi_mean_XP->			GetXaxis()->SetLimits(-90, 90);
+	pr.ptge_phi_mean_XP->			GetYaxis()->SetRangeUser(meanmin, meanmax);
+	pr.ptge_phi_mean_XP->			Draw("APL");
+	pr.ptge_phi_mean_WF->			Draw("PL same");
+	fpLegend->						Draw();
+	fpCanvas->						SaveAs(pr.fdrawfile.c_str());
+
+	// 2D distribution
+	fpCanvas->						Clear();
+	gPad->							SetTopMargin(0.02);
+	gPad->							SetRightMargin(0.11);
+	gStyle->						SetOptStat(0);
+	gStyle->						SetOptFit(0);
+	pr.fph2f_XPphi->				SetTitle(";#varphi (#circ);dE/dx with XP (ADC counts/cm)");
+	pr.fph2f_XPphi->				Draw("colz");
+	fpCanvas->						SaveAs(pr.fdrawfile.c_str());
+
+	// dE/dx vs track angle theta -----------------------------------------------------------------------------------------------------------------
+	// Resolution
+	fpCanvas->						Clear();
+	gPad->							SetRightMargin(0.03);
+	Graphic_setup(pr.ptge_theta_reso_WF, 2, 33, kCyan+2, 2, kCyan+2);
+	Graphic_setup(pr.ptge_theta_reso_XP, 2, 47, kMagenta+2, 2, kMagenta+2);
+	pr.ptge_theta_reso_XP->			SetTitle(";#theta (#circ);Resolution (%)");
+	pr.ptge_theta_reso_XP->			GetXaxis()->SetLimits(-90, 90);
+	pr.ptge_theta_reso_XP->			GetYaxis()->SetRangeUser(resomin, resomax);
+	pr.ptge_theta_reso_XP->			DrawClone("AP");
+	pr.ptge_theta_reso_WF->			DrawClone("P same");
+	pr.ptge_theta_reso_XP->			SetMarkerSize(7);
+	pr.ptge_theta_reso_WF->			SetMarkerSize(7);
+	fpLegend->						Draw();
+	fpCanvas->						SaveAs(pr.fdrawfile.c_str());
+
+	// Mean
+	fpCanvas->						Clear();
+	Graphic_setup(pr.ptge_theta_mean_WF, 0, 33, kCyan+2, 2, kCyan+2);
+	Graphic_setup(pr.ptge_theta_mean_XP, 0, 47, kMagenta+2, 2, kMagenta+2);
+	pr.ptge_theta_mean_XP->			SetTitle(";#theta (#circ);Mean (ADC counts/cm)");
+	pr.ptge_theta_mean_XP->			GetXaxis()->SetLimits(-90, 90);
+	pr.ptge_theta_mean_XP->			GetYaxis()->SetRangeUser(meanmin, meanmax);
+	pr.ptge_theta_mean_XP->			Draw("APL");
+	pr.ptge_theta_mean_WF->			Draw("PL same");
+	fpLegend->						Draw();
+	fpCanvas->						SaveAs(pr.fdrawfile.c_str());
+
+	// 2D distribution
+	fpCanvas->						Clear();
+	gPad->							SetRightMargin(0.11);
+	pr.fph2f_XPtheta->				SetTitle(";#theta (#circ);dE/dx with XP (ADC counts/cm)");
+	pr.fph2f_XPtheta->				Draw("colz");
+	fpCanvas->						SaveAs(pr.fdrawfile.c_str());
+
+	// dEdx per momentum bin --------------------------------------------------------------------------------------------------------------------
 	// Resolution
 	fpCanvas->						Clear();
 	gPad->							SetRightMargin(0.03);
 	Graphic_setup(pr.ptge_mom_reso_WF, 2, 33, kCyan+2, 2, kCyan+2);
 	Graphic_setup(pr.ptge_mom_reso_XP, 2, 47, kMagenta+2, 2, kMagenta+2);
-	pr.ptge_mom_reso_XP->					SetTitle(";Momentum (MeV/c);Resolution (%)");
-	pr.ptge_mom_reso_XP->					GetXaxis()->SetLimits(-momrange, momrange);
-	pr.ptge_mom_reso_XP->					GetYaxis()->SetRangeUser(resomin, resomax);
-	pr.ptge_mom_reso_XP->					DrawClone("AP");
-	pr.ptge_mom_reso_WF->					DrawClone("P same");
-	pr.ptge_mom_reso_XP->					SetMarkerSize(7);
-	pr.ptge_mom_reso_WF->					SetMarkerSize(7);
+	pr.ptge_mom_reso_XP->			SetTitle(";Momentum (MeV/c);Resolution (%)");
+	pr.ptge_mom_reso_XP->			GetXaxis()->SetLimits(-momrange, momrange);
+	pr.ptge_mom_reso_XP->			GetYaxis()->SetRangeUser(resomin, resomax);
+	pr.ptge_mom_reso_XP->			DrawClone("AP");
+	pr.ptge_mom_reso_WF->			DrawClone("P same");
+	pr.ptge_mom_reso_XP->			SetMarkerSize(7);
+	pr.ptge_mom_reso_WF->			SetMarkerSize(7);
 	fpLegend->						Draw();
 	fpCanvas->						SaveAs((pr.fdrawfile + "(").c_str());
 
-	// Resolution's mean
+	// Mean
 	fpCanvas->						Clear();
 	Graphic_setup(pr.ptge_mom_mean_WF, 0, 33, kCyan+2, 2, kCyan+2);
 	Graphic_setup(pr.ptge_mom_mean_XP, 0, 47, kMagenta+2, 2, kMagenta+2);
-	pr.ptge_mom_mean_XP->					SetTitle(";Momentum (MeV/c);Mean (ADC counts/cm)");
-	pr.ptge_mom_mean_XP->					GetXaxis()->SetLimits(-momrange, momrange);
-	pr.ptge_mom_mean_XP->					GetYaxis()->SetRangeUser(meanmin, meanmax);
-	pr.ptge_mom_mean_XP->					Draw("APL");
-	pr.ptge_mom_mean_WF->					Draw("PL same");
+	pr.ptge_mom_mean_XP->			SetTitle(";Momentum (MeV/c);Mean (ADC counts/cm)");
+	pr.ptge_mom_mean_XP->			GetXaxis()->SetLimits(-momrange, momrange);
+	pr.ptge_mom_mean_XP->			GetYaxis()->SetRangeUser(meanmin, meanmax);
+	pr.ptge_mom_mean_XP->			Draw("APL");
+	pr.ptge_mom_mean_WF->			Draw("PL same");
 	fpLegend->						Draw();
 	fpCanvas->						SaveAs(pr.fdrawfile.c_str());
 
-	// Resolution's standard deviation
+	// 2D distribution
 	fpCanvas->						Clear();
-	Graphic_setup(pr.ptge_mom_std_WF, 2, 33, kCyan+2, 2, kCyan+2);
-	Graphic_setup(pr.ptge_mom_std_XP, 2, 47, kMagenta+2, 2, kMagenta+2);
-	pr.ptge_mom_std_XP->					SetTitle(";Momentum (MeV/c);Standard deviation (ADC counts/cm)");
-	pr.ptge_mom_std_XP->					GetXaxis()->SetLimits(-momrange, momrange);
-	pr.ptge_mom_std_XP->					GetYaxis()->SetRangeUser(stdmin, stdmax);
-	pr.ptge_mom_std_XP->					Draw("AP");
-	pr.ptge_mom_std_WF->					Draw("P same");
-	fpLegend->						Draw();
-	fpCanvas->						SaveAs(pr.fdrawfile.c_str());
-
-	// Momentum plots ------------------------------------------------------------------------------------------------------------------------------
-	gPad->							SetRightMargin(0.13);
-	fpCanvas->						Clear();
-	pr.fph2f_WFmom->					Draw("colz");
+	gPad->							SetRightMargin(0.11);
+	pr.fph2f_XPmom->				Draw("colz");
 	fpCanvas->						SaveAs(pr.fdrawfile.c_str());
 
 	fpCanvas->						Clear();
-	pr.fph2f_XPmom->					Draw("colz");
+	pr.fph2f_WFmom->				Draw("colz");
 	fpCanvas->						SaveAs(pr.fdrawfile.c_str());
 
 	fpCanvas->						Clear();
@@ -195,10 +275,10 @@ void Draw::Run(const Process &pr){
 	Graphic_setup(pr.fph1i_mom, 	 0.5, 1, kMagenta+2, 2, kMagenta-2, kMagenta, 0.2);
 	Graphic_setup(pr.fph1i_mom_tHAT, 0.5, 1, kRed+2, 2, kRed-2, kRed, 0.2);
 	Graphic_setup(pr.fph1i_mom_bHAT, 0.5, 1, kBlue+2, 2, kBlue-2, kBlue, 0.2);
-	// pr.fph1i_mom->					SetAxisRange(0, 1e4, "Y");
-	pr.fph1i_mom->						Draw();
-	pr.fph1i_mom_bHAT->					Draw("same");
-	pr.fph1i_mom_tHAT->					Draw("same");
+	// pr.fph1i_mom->				SetAxisRange(0, 1e4, "Y");
+	pr.fph1i_mom->					Draw();
+	pr.fph1i_mom_bHAT->				Draw("same");
+	pr.fph1i_mom_tHAT->				Draw("same");
 	TLegend *plegmom = 				new TLegend(0.7, 0.7, 0.9, 0.9);
 	plegmom->						AddEntry(pr.fph1i_mom, "Both HATs", "l");
 	plegmom->						AddEntry(pr.fph1i_mom_tHAT, "tHAT", "l");
@@ -207,28 +287,73 @@ void Draw::Run(const Process &pr){
 	plegmom->						SetTextColor(kBlue-1);
 	plegmom->						Draw();
 	fpCanvas->						SaveAs(pr.fdrawfile.c_str());
-	delete plegmom;	
+	delete plegmom;
 
-	// Debugging ------------------------------------------------------------------------------------------------------------------------------
+	// Geometry plots ----------------------------------------------------------------------------------------------------------------------------
+
+	// dE/dx vs track length
 	fpCanvas->						Clear();
 	gPad->							SetRightMargin(0.13);
-	pr.fph2f_dirYmom->				Draw("colz");
+	gPad->							SetTopMargin(0.02);
+	gStyle->						SetStatX(0.87);
+	pr.fph2f_XPlen->				Draw("colz");
 	fpCanvas->						SaveAs(pr.fdrawfile.c_str());
 
 	fpCanvas->						Clear();
-	pr.fph2f_momposY->				Draw("colz");
+	gPad->							SetLogz();
+	pr.fph2f_XZ->					Draw("colz");
+	fpCanvas->						SaveAs(pr.fdrawfile.c_str());
+	gPad->							SetLogz(0);
+
+	fpCanvas->						Clear();
+	pr.fph2f_phitheta->				Draw("colz");
 	fpCanvas->						SaveAs(pr.fdrawfile.c_str());
 
 	fpCanvas->						Clear();
-	pr.fph2f_dirYposY->				Draw("colz");
+	gPad->							SetRightMargin(0.02);
+	pr.fph1f_phi->					Draw("HIST");
 	fpCanvas->						SaveAs(pr.fdrawfile.c_str());
 
+	fpCanvas->						Clear();
+	pr.fph1f_theta->				Draw("HIST");
+	fpCanvas->						SaveAs(pr.fdrawfile.c_str());
+
+	fpCanvas->						Clear();
+	gStyle->						SetOptStat(0);
+	pr.fph1f_trklen->				Draw("HIST");
+	fpCanvas->						SaveAs(pr.fdrawfile.c_str());
+
+	fpCanvas->						Clear();
+	pr.fph1f_chi2->					Draw("HIST");
+	fpCanvas->						SaveAs(pr.fdrawfile.c_str());
+
+	fpCanvas->						Clear();
+	gPad->							SetRightMargin(0.13);
+	pr.fph2f_chi2mom->				Draw("colz");
+	fpCanvas->						SaveAs(pr.fdrawfile.c_str());
+
+	// Debugging ------------------------------------------------------------------------------------------------------------------------------
 	fpCanvas->						Clear();
 	pr.fph2f_pullemu->				Draw("colz");
 	fpCanvas->						SaveAs(pr.fdrawfile.c_str());
 
-	// dEdx per momentum bin --------------------------------------------------------------------------------------------------------------------
+	fpCanvas->						Clear();
+	pr.fph2f_chi2ndfphi->			Draw("colz");
+	fpCanvas->						SaveAs(pr.fdrawfile.c_str());
 
+	fpCanvas->						Clear();
+	pr.fph2f_momtheta->				Draw("colz");
+	fpCanvas->						SaveAs(pr.fdrawfile.c_str());
+
+	fpCanvas->						Clear();
+	pr.fph2f_momR->					Draw("colz");
+	fpCanvas->						SaveAs(pr.fdrawfile.c_str());
+
+	fpCanvas->						Clear();
+	pr.fph2f_chi2ndfR->				Draw("colz");
+	fpCanvas->						SaveAs(pr.fdrawfile.c_str());
+
+	// dE/dx per momentum bin --------------------------------------------------------------------------------------------------------------------
 	gPad->							SetTopMargin(0.08);
 	gPad->							SetRightMargin(0.02);
 	for(int i=0;i<nmombins;i++){
@@ -245,33 +370,9 @@ void Draw::Run(const Process &pr){
 		fpCanvas->					SaveAs(pr.fdrawfile.c_str());
 	}
 
-	// Geometry plots ----------------------------------------------------------------------------------------------------------------------------
-	fpCanvas->						Clear();
-	gPad->							SetRightMargin(0.13);
-	pr.fph2f_XZ->						Draw("colz");
-	fpCanvas->						SaveAs(pr.fdrawfile.c_str());
-
+	// Drift velocity plots ----------------------------------------------------------------------------------------------------------------------
 	fpCanvas->						Clear();
 	gPad->							SetRightMargin(0.02);
-	pr.fph1f_dirY->						Draw("HIST");
-	fpCanvas->						SaveAs(pr.fdrawfile.c_str());
-
-	fpCanvas->						Clear();
-	pr.fph1f_trklen->					Draw("HIST");
-	fpCanvas->						SaveAs(pr.fdrawfile.c_str());
-
-	fpCanvas->						Clear();
-	gPad->							SetRightMargin(0.07);
-	pr.fph1f_chi2->						Draw("HIST");
-	fpCanvas->						SaveAs(pr.fdrawfile.c_str());
-
-	fpCanvas->						Clear();
-	gPad->							SetRightMargin(0.13);
-	pr.fph1f_chi2mom->					Draw("colz");
-	fpCanvas->						SaveAs(pr.fdrawfile.c_str());
-
-		// Drift velocity plots ----------------------------------------------------------------------------------------------------------------------
-	fpCanvas->						Clear();
 	int bins =						100;
 	int tmin =						-999;
 	int max =						-999;
@@ -448,8 +549,6 @@ void Draw::CompareRuns(const std::vector<Process*> &v_processes, const std::stri
 		Graphic_setup(pr_tmp.ptge_mom_reso_XP, 2, markers[i], colors[i], 2, colors[i]);
 		Graphic_setup(pr_tmp.ptge_mom_mean_WF, 0, markers[i], colors[i], 2, colors[i]);
 		Graphic_setup(pr_tmp.ptge_mom_mean_XP, 0, markers[i], colors[i], 2, colors[i]);
-		Graphic_setup(pr_tmp.ptge_mom_std_WF,  2, markers[i], colors[i], 2, colors[i]);
-		Graphic_setup(pr_tmp.ptge_mom_std_XP,  2, markers[i], colors[i], 2, colors[i]);
 	}
 
 	// Global dE/dx plot -------------------------------------------------------------------------------------------------------------------
@@ -485,17 +584,6 @@ void Draw::CompareRuns(const std::vector<Process*> &v_processes, const std::stri
 	pr.ptge_mom_mean_XP->			GetYaxis()->SetRangeUser(meanmin, meanmax);
 	for(int i=0;i<ncomparisons;i++){
 		v_processes[i]->ptge_mom_mean_XP->	DrawClone(i==0 ? "APL" : "PL same");
-	}
-	fpLegend->						Draw();
-	fpCanvas->						SaveAs(OutputFile.c_str());
-	fpCanvas-> 						Clear();
-
-	// Resolution's standard deviation
-	pr.ptge_mom_std_XP->				SetTitle(";Momentum (MeV/c);Standard deviation (ADC counts/cm)");
-	pr.ptge_mom_std_XP->				GetXaxis()->SetLimits(-momrange, momrange);
-	pr.ptge_mom_std_XP->				GetYaxis()->SetRangeUser(stdmin, stdmax);
-	for(int i=0;i<ncomparisons;i++){
-		v_processes[i]->ptge_mom_std_XP->	DrawClone(i==0 ? "AP" : "P same");
 	}
 	fpLegend->						Draw();
 	fpCanvas->						SaveAs((OutputFile + ")").c_str());

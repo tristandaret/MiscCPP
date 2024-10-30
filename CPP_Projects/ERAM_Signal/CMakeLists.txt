@@ -16,7 +16,8 @@ include(${ROOT_USE_FILE})
 
 # Add source files
 file(GLOB SOURCES "src/*.cxx")
-list(APPEND SOURCES "$ENV{HOME}/Documents/Code/CPP_style/SetStyle.cxx")
+file(GLOB SETTINGS_SOURCES "$ENV{HOME}/Documents/Code/CPP/CPP_Settings/src/*.cxx")
+list(APPEND SOURCES ${SETTINGS_SOURCES})
 
 # Add a library target
 add_library(SignalLib ${SOURCES})
@@ -24,7 +25,7 @@ add_library(SignalLib ${SOURCES})
 # Include directories
 target_include_directories(SignalLib PUBLIC 
     inc 
-    "$ENV{HOME}/Documents/Code/CPP_style"
+    "$ENV{HOME}/Documents/Code/CPP/CPP_Settings/inc"
 )
 
 # Link the dictionary to the library

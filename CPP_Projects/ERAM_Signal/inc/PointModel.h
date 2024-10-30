@@ -8,6 +8,7 @@
 #include <TF1.h>
 #include <TF1Convolution.h>
 
+void DrawPointModel();
 
 class PointModel
 {
