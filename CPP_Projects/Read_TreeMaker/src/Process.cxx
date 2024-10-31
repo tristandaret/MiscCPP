@@ -98,8 +98,8 @@ void Process::Datafile(const std::string &comment, const std::string &datafilepa
 	// thetamin = 0; thetamax = 90;			fdrawfile += ("_" + std::to_string(thetamin)	+ "theta" + std::to_string(thetamax));
 	// pullmumax = 2;						fdrawfile += ("_pullmu" + std::to_string(pullmumax));
 	// momcutlow = 200, momcuthigh=600;		fdrawfile += ("_" + std::to_string(momcutlow)	+ "mom" + std::to_string(momcuthigh));
-	// chi2max = 5;						fdrawfile += ("_chi2ndf" + std::to_string(chi2max));
-	// dxmin = 25;							fdrawfile += ("_" + std::to_string(dxmin) + "dx");
+	chi2max = 5;						fdrawfile += ("_chi2ndf" + std::to_string(chi2max));
+	dxmin = 25;							fdrawfile += ("_" + std::to_string(dxmin) + "dx");
 	// fdrawfile += 						"_dir1>0flip";
 	// hat = -1;							fdrawfile += std::string("_") + (hat == -1 ? "bHAT" : "tHAT");
 	fdrawfile += 						".pdf";

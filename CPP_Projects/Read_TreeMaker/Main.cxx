@@ -7,7 +7,7 @@ int main(){
 
 	std::string type =					"cosmics";
 	std::string runset =				"TreeMaker_dog1_00001022";
-	std::string tag = 					"_0000-9";
+	std::string tag = 					"_0000-45";
 	std::vector<std::string>			v_comments{"_RCHighLow", "_master_T04_GFixed"};
     std::vector<std::string>			v_tags;
     std::vector<std::string>			v_filepath;

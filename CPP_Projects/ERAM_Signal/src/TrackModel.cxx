@@ -1,120 +1,84 @@
 #include "TrackModel.h"
-#include "SetStyle.h"
 
 #include <TROOT.h>
-#include <TH1.h>
-#include <TCanvas.h>
-#include <TLegend.h>
-#include <TLatex.h>
-
-
-void DrawTrackModel(){
-
-	// Set Style
-	int lw = 						4;
-	TCanvas* pCanvas =				new TCanvas("pCanvas", "pCanvas", 1600, 1200);
-	TStyle* ptstyle =				SetMyStyle();
-	gROOT->							SetStyle(ptstyle->GetName());
-	gStyle->						SetPadRightMargin(0.03);
-	gStyle->						SetPadTopMargin(0.08);
-	gPad->							UseCurrentStyle();
-
-	int nbins = 					5e3;
-	int peaking = 					412;
-    float d =                       0;
-    float phi =                     42;
-    float RC =                      100;
-    float drift =                   300;
-	TrackModel *p_trackmodel = 		new TrackModel(d, phi, RC, drift, 0, 0);
-
-	gStyle->SetOptStat(0);
-
-	p_trackmodel->ptf1_Signal->SetNpx(nbins);
-	p_trackmodel->ptf1_Signal->SetLineWidth(lw);
-	p_trackmodel->ptf1_Signal->SetLineColor(kRed);
-    p_trackmodel->ptf1_Signal->SetTitle(Form("d = %.0f mm | phi = %.0f#circ | RC = %.0f ns/mm^{2} | drift = %.0f mm", d, phi, RC, drift));
-	p_trackmodel->ptf1_Signal->DrawClone();
-    TLatex latex;
-    latex.SetNDC();
-    latex.SetTextSize(0.06);
-    latex.SetTextAlign(13); // top right
-    latex.DrawLatex(0.5, 0.8, Form("A_{max} = %.0f ADC counts", p_trackmodel->GetAmax()));
-    latex.DrawLatex(0.5, 0.7, Form("T_{max} = %.0f ns", p_trackmodel->Gett_Amax()));
-	pCanvas->SaveAs("TrackSignal.pdf(");
-
-    pCanvas->Clear();
-    p_trackmodel->ptf1_Charge->SetNpx(nbins);
-    p_trackmodel->ptf1_Charge->SetLineWidth(lw);
-    p_trackmodel->ptf1_Charge->SetLineColor(kBlue);
-    p_trackmodel->ptf1_Charge->Draw();
-    pCanvas->SaveAs("TrackSignal.pdf");
-
-    pCanvas->Clear();
-    p_trackmodel->ptf1_dETFdt->SetNpx(nbins);
-    p_trackmodel->ptf1_dETFdt->SetLineWidth(lw);
-    p_trackmodel->ptf1_dETFdt->SetLineColor(kGreen+2);
-    p_trackmodel->ptf1_dETFdt->Draw();
-    pCanvas->SaveAs("TrackSignal.pdf)");
-}
-
-
-
+#include <chrono>
 
 // Constructor
-TrackModel::TrackModel(const float &impact, const float &phi, const float &RC, const float &drift, 
-                        const float &xpad, const float &ypad){
-    // Settings
-    fimpact =                   impact;
-    fphirad =                   phi/180*M_PI;
-    fdrift =                    drift;
-    fRC =                       RC;
-    fxpad =                     xpad;
-    fypad =                     ypad;
-    fm =                        std::tan(fphirad);
-    fq =                        (cos(fphirad)*fxpad-sin(fphirad)*fxpad+fimpact)/cos(fphirad);
-
-    // Defining the border of the pad considered
-    fxleft =					fxpad - fSXWIDTH/2;
-    fxright =					fxpad + fSXWIDTH/2;
-    fylow =						fypad - fSYWIDTH/2;
-    fyhigh =					fypad + fSYWIDTH/2;
-
-    // Eletronics
-    ws =                        2/fpeakingTime;
-    expfactor =                 ws/(2*Q);
-    arg =                       ws/2*std::sqrt(4-1/std::pow(Q,2));
-
+TrackModel::TrackModel(){
+    ptf1_ETF =                  new TF1(";time (ns); ADC counts/ns",   this, &TrackModel::ETF,  0, ftmax, 0);
     ptf1_dETFdt =		        new TF1(";time (ns); ADC counts/ns",   this, &TrackModel::dETFdt,  0, ftmax, 0);
-    ptf1_Charge =		        new TF1(";time (ns); Charge (fC)",     this, &TrackModel::Charge,  0, ftmax, 0);
-
-    ptf1_Convolution =	        new TF1Convolution(ptf1_Charge, ptf1_dETFdt, 0, ftmax, true);
-    ptf1_Convolution->	        SetRange(-ftmax, ftmax);
-    ptf1_Convolution->	        SetNofPointsFFT(fnconvolpoints);
-    ptf1_Signal =		        new TF1("", *ptf1_Convolution, 0, ftmax, ptf1_Convolution->GetNpar());
-
-    SetAmax(ptf1_Signal->GetMaximum());
-    Sett_Amax(ptf1_Signal->GetMaximumX());
 }
 
 
 // Destructor
 TrackModel::~TrackModel(){
+    delete ptf1_ETF;
     delete ptf1_dETFdt;
     delete ptf1_Charge;
     delete ptf1_Convolution;
     delete ptf1_Signal;
 }
 
+double TrackModel::GetRealCharge(const double &ADCmax, const double &length, const double &impact, 
+                                 const double &phi, const double &RC, const double &drift){
+    auto start = std::chrono::high_resolution_clock::now();
+    // Settings
+    fsignalreal =               ADCmax;
+    flength =                   length;
+    fimpact =                   impact;
+    fphirad =                   phi/180*M_PI;
+    // Safeguards for numerical instabilities
+    if(phi < 1e-5) fphirad =    1e-5/180*M_PI;
+    if(phi > 90-1e-5) fphirad = (90-1e-5)/180*M_PI;
+    fdrift =                    drift;
+    fRC =                       RC;
+    fm =                        std::tan(fphirad);
+    fq =                        (cos(fphirad)*fxpad-sin(fphirad)*fxpad+fimpact)/cos(fphirad);
+
+    ptf1_Charge =		        new TF1(";time (ns); Charge (fC)",     this, &TrackModel::Charge,  0, ftmax, 0);
+    ptf1_Convolution =	        new TF1Convolution(ptf1_Charge, ptf1_dETFdt, -ftmax, ftmax, true);
+    ptf1_Convolution->	        SetNofPointsFFT(fnconvolpoints);
+    ptf1_Signal =		        new TF1("", *ptf1_Convolution, 0, ftmax, ptf1_Convolution->GetNpar());
+
+    // Compute charge
+    /* The real charge deposited over the pad is linearly proportional to the length in the pad.
+    A normalization has to be chosen; since the data signal depends on the electronics transfer 
+    function, its max is a convenient choice */
+    fchargemodel =              flength * ptf1_ETF->GetMaximum();  
+    fsignalmodel =              ptf1_Signal->GetMaximum();
+    famplitudeloss =            fsignalmodel/fchargemodel;
+    fchargereal =               fsignalreal/famplitudeloss;
+
+    // std::cout << fsignalreal << "/" << famplitudeloss << " = " << fchargereal << std::endl;
+
+    delete ptf1_Charge;
+    delete ptf1_Convolution;
+    delete ptf1_Signal;
+
+    // Calculate elapsed time in milliseconds
+    auto end = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double, std::milli> duration = end - start;
+    time += duration.count();
+    std::cout << "Time elapsed: " << duration.count() << " ms" << std::endl;
+
+    return fchargereal;
+}
+
 
 // Eletronic transfer function
+Double_t TrackModel::ETF(Double_t *x, Double_t *par){
+    Double_t t = x[0];
+
+	if(t <= 0) return 0;
+	else return fnormelec*(std::exp(-ws*t) + std::exp(-expfactor*t) * (sinfactor*std::sin(arg*t) - std::cos(arg*t)));
+}
+
 Double_t TrackModel::dETFdt(Double_t *x, Double_t *par){
     Double_t t = x[0];
 
     if(t <= 0) return 0;
-    else return 4096/120*(-ws*std::exp(-ws*t) + std::exp(-expfactor*t) * (expfactor*(std::cos(arg*t) - sinfactor*std::sin(arg*t)) + arg*(std::sin(arg*t) + sinfactor*std::cos(arg*t))))/fSETFMAX;
+    else return fnormelec*(-ws*std::exp(-ws*t) + std::exp(-expfactor*t) * (expfactor*(std::cos(arg*t) - sinfactor*std::sin(arg*t)) + arg*(std::sin(arg*t) + sinfactor*std::cos(arg*t))));
 }
-
-
 
 
 // Charge function
@@ -122,23 +86,23 @@ Double_t TrackModel::Charge(Double_t *x, Double_t *par){
     Double_t t = x[0];
     
     if(t <= 0) return 0;
-    // Constants
+    // Factors
     double sigma = std::sqrt(2 * t / fRC + fDt * fDt * fdrift);  // includes transverse diffusion
     double coeff1 = std::sqrt(2 * (1 + fm * fm) / M_PI) * sigma;
     double denom = 2 * (1 + fm * fm) * sigma * sigma;
     double sqrt2_m2_sigma = std::sqrt(2 * (1 + fm * fm)) * sigma;
 
     // Terms
-    double term11 = std::exp(-std::pow(-fylow + fxright * fm + fq, 2) / denom);
-    double term12 = std::exp(-std::pow(-fylow + fxleft * fm + fq, 2) / denom);
-    double term13 = std::exp(-std::pow(-fyhigh + fxleft * fm + fq, 2) / denom);
-    double term14 = std::exp(-std::pow(-fyhigh + fxright * fm + fq, 2) / denom);
+    double expRC1 = std::exp(-std::pow(-fylow  + fxright * fm + fq, 2) / denom);
+    double expRC2 = std::exp(-std::pow(-fylow  + fxleft  * fm + fq, 2) / denom);
+    double expRC3 = std::exp(-std::pow(-fyhigh + fxleft  * fm + fq, 2) / denom);
+    double expRC4 = std::exp(-std::pow(-fyhigh + fxright * fm + fq, 2) / denom);
 
-    double term21 = (fylow - fxleft * fm - fq) * std::erf((-fylow + fxleft * fm + fq) / sqrt2_m2_sigma);
-    double term22 = (fyhigh - fxleft * fm - fq) * std::erf((-fyhigh + fxleft * fm + fq) / sqrt2_m2_sigma);
-    double term23 = (fylow - fxright * fm - fq) * std::erf((-fylow + fxright * fm + fq) / sqrt2_m2_sigma);
-    double term24 = (fyhigh - fxright * fm - fq) * std::erf((-fyhigh + fxright * fm + fq) / sqrt2_m2_sigma);
+    double erfRC1 = (fylow  - fxleft  * fm - fq) * std::erf((-fylow  + fxleft  * fm + fq) / sqrt2_m2_sigma);
+    double erfRC2 = (fyhigh - fxleft  * fm - fq) * std::erf((-fyhigh + fxleft  * fm + fq) / sqrt2_m2_sigma);
+    double erfRC3 = (fylow  - fxright * fm - fq) * std::erf((-fylow  + fxright * fm + fq) / sqrt2_m2_sigma);
+    double erfRC4 = (fyhigh - fxright * fm - fq) * std::erf((-fyhigh + fxright * fm + fq) / sqrt2_m2_sigma);
 
     // Return result
-    return flambdaG * std::sqrt(1 + fm * fm) / (2 * fm) * (coeff1 * (term11 - term12 + term13 - term14) + term21 - term22 - term23 + term24);
+    return std::sqrt(1 + fm * fm) / (2 * fm) * (coeff1 * (expRC1 - expRC2 + expRC3 - expRC4) + erfRC1 - erfRC2 - erfRC3 + erfRC4);
 }
