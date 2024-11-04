@@ -121,12 +121,11 @@ void PrintResolution(TH1* th1, TCanvas* pCanvas, float NDCx, float NDCy, Color_t
 void PrintResolution(TH1* th1, TCanvas* pCanvas, float NDCx, float NDCy, const float &size, Color_t color, const std::string& title){
 	TF1* tf1 =					th1->GetFunction("gausn");
 	if (!tf1){
-	tf1 =	 				Fit1Gauss(th1);
-	if (!tf1) {
-		std::cerr << "Error: No fit found for " << th1->GetName() << std::endl;
-		return;
-	}
-	tf1->					SetLineWidth(0);
+		tf1 =	 				Fit1Gauss(th1);
+		if (!tf1) {
+			std::cerr << "Error: No fit found for " << th1->GetName() << std::endl;
+			return;
+		}
 	}
 
 	double	xMax =			pCanvas->GetUxmax();
@@ -139,7 +138,7 @@ void PrintResolution(TH1* th1, TCanvas* pCanvas, float NDCx, float NDCy, const f
 	pPaveText->				SetShadowColor(0);
 	pPaveText->				SetLineWidth(1.5);
 
-	float mu	=			tf1->GetParameter(1);
+	float mu	=				tf1->GetParameter(1);
 	float dmu	=			tf1->GetParError(1);
 	float sigma	=			tf1->GetParameter(2);
 	float dsigma =			tf1->GetParError(2);

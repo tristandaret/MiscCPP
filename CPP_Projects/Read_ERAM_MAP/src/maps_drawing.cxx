@@ -489,12 +489,14 @@ void Drawing::Distributions(){
 
 	gPad->						UseCurrentStyle();
 	pTCanvas->					cd();
+
+	// Gain distribution
 	Graphic_setup(ph1_gain, 0.5, 1, kMagenta+1, 2, kMagenta-2, kMagenta, 0.2);
 	ph1_gain->					Draw("hist");
 	pTCanvas->					SaveAs(OutputFile_Beg.c_str());
 	pTCanvas->					Clear();
 
-
+	// RC distributions
 	Graphic_setup(ph1_rc, 0.5, 1, kMagenta+1, 2, kMagenta-2, kMagenta, 0.2);
 	Graphic_setup(ph1_rctop, 0.5, 1, kRed+1, 2, kRed-2, kRed, 0.2);
 	Graphic_setup(ph1_rcbot, 0.5, 1, kBlue+1, 2, kBlue-2, kBlue, 0.2);
@@ -514,6 +516,7 @@ void Drawing::Distributions(){
 	pTCanvas->					SaveAs(OutputFile.c_str());
 	pTCanvas->					Clear();
 
+	// RC distributions for low and high mean RC ERAMs
 	Graphic_setup(ph1_rchigh, 0.5, 1, kRed+1, 2, kRed-2, kRed, 0.2);
 	Graphic_setup(ph1_rclow, 0.5, 1, kBlue+1, 2, kBlue-2, kBlue, 0.2);
 	ph1_rclow->					Draw("hist");
@@ -528,6 +531,7 @@ void Drawing::Distributions(){
 	pTCanvas->					SaveAs(OutputFile.c_str());
 	pTCanvas->					Clear();	
 
+	// RC difference between neighbours
 	Graphic_setup(ph1_rcdiff, 0.5, 1, kMagenta+1, 2, kMagenta-2, kMagenta, 0.2);
 	Graphic_setup(ph1_rcdiffhori, 0.5, 1, kRed+1, 2, kRed-2, kRed, 0.2);
 	Graphic_setup(ph1_rcdiffvert, 0.5, 1, kBlue+1, 2, kBlue-2, kBlue, 0.2);

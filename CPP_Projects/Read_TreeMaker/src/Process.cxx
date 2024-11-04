@@ -87,19 +87,19 @@ void Process::Datafile(const std::string &comment, const std::string &datafilepa
 	int nclmin=0, nclmax=200, dxmin=0, dxmax=2e3, ncroscut=0;
 	int apmcutlow=0, apmcuthigh=20, momcutlow=0, momcuthigh=1e6, tcutmin=0, tcutmax=1e3;
 	int chi2max = 1e3, hat=0, pullmumax=100;
-	float phimin = -90, phimax = 90, thetamin = -90, thetamax = 90;
+	int phimin = -90, phimax = 90, thetamin = -90, thetamax = 90;
 	// nclmin = 32;							fdrawfile += ("_" + std::to_string(nclmin)		+ "ncl");
 	// apmcutlow = 2, apmcuthigh = 4;		fdrawfile += ("_" + std::to_string(apmcutlow)	+ "apm" + std::to_string(apmcuthigh));
 	// momcutlow = 1e2;						fdrawfile += ("_" + std::to_string(momcutlow)	+ "mom");
 	// tcutmin = 0, tcutmax = 75;			fdrawfile += ("_" + std::to_string(tcutmin)		+ "tmin" + std::to_string(tcutmax));
 	// nclmin=50, nclmax = 150;				fdrawfile += ("_" + std::to_string(nclmin)		+ "ncl" + std::to_string(nclmax));
 	// dxmin = 50, dxmax = 150;			fdrawfile += ("_" + std::to_string(dxmin) 		+ "dx" + std::to_string(dxmax));
-	// phimin = 45; dirmaxY = 90;			fdrawfile += ("_" + std::to_string(dirminY)		+ "dirY" + std::to_string(dirmaxY));
-	// thetamin = 0; thetamax = 90;			fdrawfile += ("_" + std::to_string(thetamin)	+ "theta" + std::to_string(thetamax));
 	// pullmumax = 2;						fdrawfile += ("_pullmu" + std::to_string(pullmumax));
 	// momcutlow = 200, momcuthigh=600;		fdrawfile += ("_" + std::to_string(momcutlow)	+ "mom" + std::to_string(momcuthigh));
+	// phimin = 45; phimax = 90;			fdrawfile += ("_" + std::to_string(phimin)		+ "phi" + std::to_string(phimax));
+	// thetamin = 0; thetamax = 45;			fdrawfile += ("_" + std::to_string(thetamin)	+ "theta" + std::to_string(thetamax));
 	chi2max = 5;						fdrawfile += ("_chi2ndf" + std::to_string(chi2max));
-	dxmin = 25;							fdrawfile += ("_" + std::to_string(dxmin) + "dx");
+	dxmin = 50;							fdrawfile += ("_" + std::to_string(dxmin) + "dx");
 	// fdrawfile += 						"_dir1>0flip";
 	// hat = -1;							fdrawfile += std::string("_") + (hat == -1 ? "bHAT" : "tHAT");
 	fdrawfile += 						".pdf";
@@ -227,6 +227,8 @@ void Process::Datafile(const std::string &comment, const std::string &datafilepa
 		fph2f_momtheta->					Fill(theta, mom);
 		fph2f_momR->						Fill(1/curv, mom);
 		fph2f_chi2ndfR->					Fill(1/curv, chi2/NDF);
+		fph2f_lentheta->					Fill(theta, dx/10);
+		fph2f_lenphi->						Fill(phi, dx/10);
 	}
 	std::cout << "Y direction:" << std::endl;
 	std::cout << "tHAT: negative => " << dirYnegtHAT << " (" << dirYnegtHAT*100.0/(dirYnegtHAT+dirYpostHAT) << "%) positive => " << dirYpostHAT << " (" << dirYpostHAT*100.0/(dirYnegtHAT+dirYpostHAT) << "%)" << std::endl;

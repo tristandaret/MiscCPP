@@ -25,7 +25,7 @@ class Draw
         std::vector<int> markers = {47, 34, 20, 21, 22, 23, 33, 43, 29};
 
         int resomin = 0;
-        int resomax = 30;
+        int resomax = 25;
         int meanmin = 200;
         int meanmax = 800;
         int stdmin = 0;

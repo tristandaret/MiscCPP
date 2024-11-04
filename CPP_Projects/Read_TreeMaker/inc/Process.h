@@ -132,6 +132,8 @@ class Process
 		TH2F *fph2f_momtheta = 					new TH2F("ph2f_momtheta",	";#theta;momentum (MeV)", 5*nthetabins, -90, 90, 5*nmombins, -momrange, momrange);
 		TH2F *fph2f_momR = 						new TH2F("ph2f_momR",		";R;momentum (MeV)", 300, -5e4, 5e4, 3*nmombins, -momrange, momrange);
 		TH2F *fph2f_chi2ndfR = 					new TH2F("ph2f_chi2ndfR",	";R;#chi^{2}/NDF", 300, -5e4, 5e4, 300, 0, 50);
+		TH2F *fph2f_lentheta = 					new TH2F("ph2f_lentheta",	";#theta;track length (cm)", 5*nthetabins, -90, 90, 171, 0, 170);
+		TH2F *fph2f_lenphi = 					new TH2F("ph2f_lenphi",		";#varphi;track length (cm)", 5*nphibins, -90, 90, 171, 0, 170);
 
 		// Tree variables
 		Double_t wf;

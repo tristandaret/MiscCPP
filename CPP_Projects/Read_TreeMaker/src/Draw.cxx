@@ -25,6 +25,7 @@ void Draw::Run(const Process &pr){
 	int xmax = 						pr.xmax;
 	int momrange = 					pr.momrange;
 	int nmombins = 					pr.nmombins;
+	int nthetabins = 				pr.nthetabins;
 	fpCanvas->						cd();
 	gStyle->						SetOptStat(0);
 	gStyle->						SetOptFit(0);
@@ -70,8 +71,8 @@ void Draw::Run(const Process &pr){
 	}
 	for(int i = 0; i < 16; i++){
 		fpCanvas->					cd(i+1);
-		pr.vmod_fph1f_WF[i]->		Draw();
-		pr.vmod_fph1f_XP[i]->		Draw("same");
+		pr.vmod_fph1f_WF[i]->		Draw("HIST");
+		pr.vmod_fph1f_XP[i]->		Draw("HIST same");
 		if(pr.vmod_fph1f_WF[i]->GetEntries() < 100) continue;
 		xMax = pr.vmod_fph1f_WF[i]->GetXaxis()->GetXmax();
 		yMax = pr.vmod_fph1f_WF[i]->GetMaximum();
@@ -83,8 +84,8 @@ void Draw::Run(const Process &pr){
 
 	for(int i = 16; i < 32; i++){
 		fpCanvas->					cd(i+1-16);
-		pr.vmod_fph1f_WF[i]->		Draw();
-		pr.vmod_fph1f_XP[i]->		Draw("same");
+		pr.vmod_fph1f_WF[i]->		Draw("HIST");
+		pr.vmod_fph1f_XP[i]->		Draw("HIST same");
 
 		if(pr.vmod_fph1f_WF[i]->GetEntries() < 100) continue;
 		xMax = pr.vmod_fph1f_WF[i]->GetXaxis()->GetXmax();
@@ -353,6 +354,14 @@ void Draw::Run(const Process &pr){
 	pr.fph2f_chi2ndfR->				Draw("colz");
 	fpCanvas->						SaveAs(pr.fdrawfile.c_str());
 
+	fpCanvas->						Clear();
+	pr.fph2f_lentheta->				Draw("colz");
+	fpCanvas->						SaveAs(pr.fdrawfile.c_str());
+
+	fpCanvas->						Clear();
+	pr.fph2f_lenphi->				Draw("colz");
+	fpCanvas->						SaveAs(pr.fdrawfile.c_str());
+
 	// dE/dx per momentum bin --------------------------------------------------------------------------------------------------------------------
 	gPad->							SetTopMargin(0.08);
 	gPad->							SetRightMargin(0.02);
@@ -367,6 +376,23 @@ void Draw::Run(const Process &pr){
 		pr.vmom_fph1f_XP[i]->				Draw("HIST same");
 		PrintResolution(pr.vmom_fph1f_XP[i], fpCanvas, 0.65-invX, 0.58, kMagenta+2, "XP");
 		PrintResolution(pr.vmom_fph1f_WF[i], fpCanvas, 0.65-invX, 0.25, kCyan+2, "WF");
+		fpCanvas->					SaveAs(pr.fdrawfile.c_str());
+	}
+
+	// dE/dx per theta bin --------------------------------------------------------------------------------------------------------------------
+	gPad->							SetTopMargin(0.08);
+	gPad->							SetRightMargin(0.02);
+	for(int i=0;i<nthetabins;i++){
+		fpCanvas->					Clear();
+		pr.vtheta_fph1f_WF[i]->				SetAxisRange(0, 1.1	*std::max({pr.vtheta_fph1f_WF[i]->GetMaximum(), pr.vtheta_fph1f_XP[i]->GetMaximum()}),	"Y");
+		float invX = 				0;
+		if(pr.vtheta_fph1f_WF[i]->GetMean() > xmax/2) invX = 0.4;
+		Graphic_setup(pr.vtheta_fph1f_WF[i], 0.5, 1, kCyan+1, 2, kCyan-2, kCyan, 0.2);
+		Graphic_setup(pr.vtheta_fph1f_XP[i], 0.5, 1, kMagenta+1, 2, kMagenta-2, kMagenta, 0.2);
+		pr.vtheta_fph1f_WF[i]->				Draw("");
+		pr.vtheta_fph1f_XP[i]->				Draw("same");
+		PrintResolution(pr.vtheta_fph1f_XP[i], fpCanvas, 0.65-invX, 0.58, kMagenta+2, "XP");
+		PrintResolution(pr.vtheta_fph1f_WF[i], fpCanvas, 0.65-invX, 0.25, kCyan+2, "WF");
 		fpCanvas->					SaveAs(pr.fdrawfile.c_str());
 	}
 
