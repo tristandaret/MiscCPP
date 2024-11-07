@@ -15,14 +15,14 @@ class Draw
     std::string     comment;
     std::vector<std::string> v_comment;
     std::string     type;
-    std::string     runset;
-    std::string     filename;
+    std::string     run;
+    std::string     fileName;
 
     private:
     
     // Data file
-	TFile			*fpFile;
-    TTree			*fpTree;
+	TFile			*fpInputFile;
+    TTree			*fpInputTree;
 
 
 	// Histograms

@@ -28,6 +28,12 @@ target_include_directories(TreeMakerLib PUBLIC
     "$ENV{HOME}/Documents/Code/CPP/CPP_Settings/inc"
 )
 
+# Generate dictionaries
+ROOT_GENERATE_DICTIONARY(G__TreeMakerLib
+	inc/Process.h
+	LINKDEF inc/Process_LinkDef.h
+	MODULE TreeMakerLib)
+
 # Link the dictionary to the library
 target_link_libraries(TreeMakerLib PUBLIC ${ROOT_LIBRARIES})
 
@@ -38,6 +44,7 @@ add_executable(TreeMakerReader Main.cxx)
 target_link_libraries(TreeMakerReader TreeMakerLib ${ROOT_LIBRARIES})
 
 # Add more debug information, including line number in case of segfault
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g")
 set(CMAKE_BUILD_TYPE "Debug")
 target_compile_options(TreeMakerReader PRIVATE -fno-omit-frame-pointer)
 target_link_options(TreeMakerReader PRIVATE -fno-omit-frame-pointer)

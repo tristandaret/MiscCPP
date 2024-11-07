@@ -5,137 +5,76 @@
 
 int main(){
 
-	std::string type =					"cosmics";
-	std::string runset =				"TreeMaker_dog1_00001022";
-	std::string tag = 					"_0000-45";
-	std::vector<std::string>			v_comments{"_RCHighLow", "_noLUT"};
-    std::vector<std::string>			v_tags;
-    std::vector<std::string>			v_filepath;
-    std::vector<std::string>			v_filepathraw;
+	int do_run = 1;
+	int do_draw = 1;
+	int do_draw_compcuts = 0;
+   // Output structure: type -> run -> comment -> fileName
+	std::string type =                  "cosmics";
+	std::string run =                   "TreeMaker_dog1_00001022";
+	// std::string run =                   "hattree_1148";
+	std::string tag =                   "_0000-45";
+	// std::string tag =                   "_full";
+	// std::vector<std::string>            v_comments{"_RCHighLow", "_master_T04_GFixed"};
+	std::vector<std::string>            v_comments{"_RCHighLow"};
+	// std::vector<std::string>            v_comments{""};
+   	std::vector<std::string>            v_filepaths;
 
-	std::string compfolderpath = 		"Output_PDF/" + type + "/" + runset;
-	std::string runsettagname = 		runset + tag;
 
-	std::vector<Process*> v_processes;
-	Draw *p_draw = 						new Draw();
+	Draw draw;
+	draw.                               SetOutputComparisonFolder("Output_PDF/" + type + "/" + run);
 
 	for(std::string comment : v_comments)
 	{
-		std::string filename = 			runset + tag + comment;
+		std::string fileName =           run + tag + comment;
+
 		// data
-		std::string datafolderpath = 	"ROOT_files/" + type + "/" + runset + "/" + comment;
-		MakeMyDir(datafolderpath);
-		std::string datafilepath = 		datafolderpath + "/" + filename + ".root";
-		if(!(fopen(datafilepath.c_str(), "r")))
+		std::string inputFolderPath =    "/local/home/td263283/Documents/Code/CPP/CPP_Projects/Read_TreeMaker/ROOT_files/" + type + "/" + run + "/" + comment;
+		MakeMyDir(inputFolderPath);
+		std::string inputFilePath =      inputFolderPath + "/" + fileName + ".root";
+		if(!(fopen(inputFilePath.c_str(), "r")))
 		{
-			std::cout << "Not found: " << datafilepath << std::endl;
-			int result = 				system(("scp cca9.in2p3.fr:~/public/Output_root/" + runset + "/" + comment + "/" + filename + ".root " + datafolderpath).c_str());
-			if(result == 0)				std::cout << "Downloaded: " << filename << ".root" << std::endl;
-			else{ 						std::cerr << "Error: scp command failed with exit code " << result << std::endl; continue;}
+			std::cout << "Not found: " << inputFilePath << std::endl;
+			int result =                  system(("scp cca9.in2p3.fr:~/public/Output_root/" + run + "/" + comment + "/" + fileName + ".root " + inputFolderPath).c_str());
+			if(result == 0)               std::cout << "Downloaded: " << fileName << ".root" << std::endl;
+			else{                         std::cerr << "Error: scp command failed with exit code " << result << std::endl; continue;}
 		}
+
 		// draw
-		std::string drawfolderpath = 	compfolderpath + "/" + comment;
-		MakeMyDir(drawfolderpath);
-		v_filepath.						push_back(datafilepath);
-		v_processes.					push_back(new Process());
-		v_processes.back()->			Datafile(comment, datafilepath, drawfolderpath, filename);
-		p_draw->						Run(*v_processes.back());
+		std::string outputComparisonFolder = "Output_PDF/"  + type + "/" + run;
+		std::string outputPDFFolder =    "Output_PDF/"  + type + "/" + run + "/" + comment;
+		std::string outputROOTFolder =   "Output_ROOT/" + type + "/" + run + "/" + comment;
+		MakeMyDir(outputPDFFolder);
+		MakeMyDir(outputROOTFolder);
+
+		Process process;
+		process.             SetType(type);
+		process.             SetRun(run);
+		process.             SetTag(tag);
+		process.             SetComment(comment);
+		process.             SetFileName(fileName);
+		process.             SetInputFile(inputFilePath);
+		process.             SetOutputROOTfolder(outputROOTFolder);
+		process.             SetCuts();
+		if(do_run){
+			process.		Run();
+			TFile tfile(process.GetROOTOutputPath().c_str(), "RECREATE");
+			process.		Write();
+			tfile.			Close();
+		}
+
+		v_filepaths.		push_back(process.GetROOTOutputPath());
+		draw.				SetOutputPDFFolder(outputPDFFolder);
+		if(do_draw) draw.	Run(v_filepaths.back());
 	}
-	if(v_comments.size() > 1) p_draw->	CompareRuns(v_processes, compfolderpath, runsettagname);
+	if(v_comments.size() > 1) draw.	CompareRuns(v_filepaths, "comments");
+
+	if(!do_draw_compcuts) return 0;
+	v_filepaths.clear();
+	v_filepaths.push_back("Output_ROOT/cosmics/TreeMaker_dog1_00001022/_RCHighLow/TreeMaker_dog1_00001022_0000-45_RCHighLow_dir1>0flip.root");
+	v_filepaths.push_back("Output_ROOT/cosmics/TreeMaker_dog1_00001022/_RCHighLow/TreeMaker_dog1_00001022_0000-45_RCHighLow_chi2ndf5_25dx_dir1>0flip.root");
+	v_filepaths.push_back("Output_ROOT/cosmics/TreeMaker_dog1_00001022/_RCHighLow/TreeMaker_dog1_00001022_0000-45_RCHighLow_chi2ndf5_25dx_200mom1000_dir1>0flip.root");
+	v_filepaths.push_back("Output_ROOT/cosmics/TreeMaker_dog1_00001022/_RCHighLow/TreeMaker_dog1_00001022_0000-45_RCHighLow_chi2ndf5_25dx_250mom500_dir1>0flip.root");
+	draw.						CompareRuns(v_filepaths, "cuts");
+
+	return 0;
 }
-
-
-
-
-
-
-
-
-
-// int main(){
-
-//     int run =						1;
-//     int compare_runs =                  0;
-//     int scan =							0;
-//     int compare_scans =					0;
-
-// 	Draw *p_process =						new Draw();
-// 	p_process->runset =					"cosmics";
-// 	p_process->type =						"TreeMaker_dog1_00000920";
-// 	p_process->v_comments =					{"_noGRC", "_noRC_GERAM", "_noRC"};
-//     std::vector<std::string>			v_tags;
-//     std::vector<std::string>			v_filepath;
-//     std::vector<std::string>			v_filepathraw;
-    
-//     if(p_process->runset == "phi"){
-//         v_tags.                         insert(v_tags.end(), {
-//                                         "_mu-_600MeV_x50_y-91_z-180_phi0_theta0_N5000_s0_n5000",
-//                                         "_mu-_600MeV_x50_y-90_z-180_phi-10_theta0_N5000_s0_n5000",
-//                                         "_mu-_600MeV_x50_y-85_z-180_phi-20_theta0_N5000_s0_n5000",
-//                                         "_mu-_600MeV_x50_y-74_z-180_phi-30_theta0_N5000_s0_n5000",
-//                                         "_mu-_600MeV_x50_y-64_z-180_phi-40_theta0_N5000_s0_n5000",
-//                                         "_mu-_600MeV_x50_y-60_z-180_phi-45_theta0_N5000_s0_n5000",
-//                                         "_mu-_600MeV_x50_y-55_z-180_phi-50_theta0_N5000_s0_n5000",
-//                                         "_mu-_600MeV_x50_y-50_z-180_phi-60_theta0_N5000_s0_n5000",
-//                                         "_mu-_600MeV_x50_y-43_z-180_phi-70_theta0_N5000_s0_n5000",
-//                                         "_mu-_600MeV_x50_y-40_z-180_phi-80_theta0_N5000_s0_n5000",
-//                                         "_mu-_600MeV_x50_y-39_z-180_phi-90_theta0_N5000_s0_n5000"});
-//     }
-
-//     else if(p_process->runset == "drift"){
-//         v_tags.                         insert(v_tags.end(), {
-//                                         "_mu-_600MeV_x97_y-40_z-200_phi-90_theta0_N5000_s0_n5000",
-//                                         "_mu-_600MeV_x88_y-40_z-200_phi-90_theta0_N5000_s0_n5000",
-//                                         "_mu-_600MeV_x78_y-40_z-200_phi-90_theta0_N5000_s0_n5000",
-//                                         "_mu-_600MeV_x68_y-40_z-200_phi-90_theta0_N5000_s0_n5000",
-//                                         "_mu-_600MeV_x58_y-40_z-200_phi-90_theta0_N5000_s0_n5000",
-//                                         "_mu-_600MeV_x48_y-40_z-200_phi-90_theta0_N5000_s0_n5000",
-//                                         "_mu-_600MeV_x38_y-40_z-200_phi-90_theta0_N5000_s0_n5000",
-//                                         "_mu-_600MeV_x28_y-40_z-200_phi-90_theta0_N5000_s0_n5000",
-//                                         "_mu-_600MeV_x18_y-40_z-200_phi-90_theta0_N5000_s0_n5000",
-//                                         "_mu-_600MeV_x8_y-40_z-200_phi-90_theta0_N5000_s0_n5000",
-//                                         "_mu-_600MeV_x1_y-40_z-200_phi-90_theta0_N5000_s0_n5000"});
-//     }
-
-//     else{
-//         v_tags.                         push_back("_0000-8_s0_n23000");
-//     }
-
-
-// 	for(std::string comment : p_process->v_comments)
-// 	{
-// 		p_process->comment = comment;
-// 		std::string datafolderpath = "ROOT_files/" + p_process->type + "/" + p_process->runset + "/" + p_process->comment;
-// 		MakeMyDir(datafolderpath);
-
-// 		for(std::string tag : v_tags)
-// 		{   
-// 			std::string filename = p_process->type + tag + comment;
-// 			std::string datafilepath = datafolderpath + "/" + filename + ".root";
-// 			if(!(fopen(datafilepath.c_str(), "r")))
-// 			{
-// 				std::cout << "Not found: " << datafilepath << std::endl;
-// 				int result = system(("scp cca9.in2p3.fr:~/public/Output_root/" + p_process->runset + "/" + comment + "/" + filename + ".root " + datafolderpath).c_str());
-// 				if(result == 0)	std::cout << "Downloaded: " << filename << ".root" << std::endl;
-// 				else{
-// 					std::cerr << "Error: scp command failed with exit code " << result << std::endl;
-// 					continue;
-// 				}
-// 			}
-// 			if(run){
-//                 p_process->filename = filename;
-//                 p_process->	Run(datafilepath);
-//             }
-// 			v_filepath.			push_back(datafilepath);
-// 		}
-// 	}
-
-// 	if(scan) p_process->			Scan(v_filepath);
-
-// 	if(compare_scans){
-// 		p_process->				CompareScans(v_tags, "WF");
-// 		p_process->				CompareScans(v_tags, "XP");
-// 	}
-
-// 	delete p_process;
-// }

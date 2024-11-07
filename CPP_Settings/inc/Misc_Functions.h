@@ -41,7 +41,7 @@ double GetResoError(TF1* tf1, const int& mu, const int& sigma);
 // Write resolution value for a 1-gaussian fit
 void PrintResolution(TH1* th1, TCanvas* pCanvas);
 void PrintResolution(TH1* th1, TCanvas* pCanvas, float NDCx, float NDCy, Color_t color, const std::string& title);
-void PrintResolution(TH1* th1, TCanvas* pCanvas, float NDCx, float NDCy, const float &size, Color_t color, const std::string& title);
+void PrintResolution(TH1* th1, TCanvas* pCanvas, float NDCx, float NDCy, const float &xwidth, const float &ywidth, const std::string &anchor, Color_t color, const std::string& title);
 
 // Draw TH1
 void DrawTH1(const std::string& OutDir, TH1* h1);

@@ -113,12 +113,12 @@ double GetResoError(TF1* tf1, const int& mu, const int& sigma){
 
 
 void PrintResolution(TH1* th1, TCanvas* pCanvas){
-	return PrintResolution(th1, pCanvas, 0.05, 0.7, kBlack, " ");
+	return PrintResolution(th1, pCanvas, 0.05, 0.7, 0.3, 0.3, "south west", kBlack, " ");
 }
 void PrintResolution(TH1* th1, TCanvas* pCanvas, float NDCx, float NDCy, Color_t color, const std::string& title){
-	return PrintResolution(th1, pCanvas, NDCx, NDCy, 0.3, color, title);
+	return PrintResolution(th1, pCanvas, NDCx, NDCy, 0.3, 0.3, "south west", color, title);
 }
-void PrintResolution(TH1* th1, TCanvas* pCanvas, float NDCx, float NDCy, const float &size, Color_t color, const std::string& title){
+void PrintResolution(TH1* th1, TCanvas* pCanvas, float NDCx, float NDCy, const float &xwidth, const float &ywidth, const std::string &anchor, Color_t color, const std::string& title){
 	TF1* tf1 =					th1->GetFunction("gausn");
 	if (!tf1){
 		tf1 =	 				Fit1Gauss(th1);
@@ -128,9 +128,15 @@ void PrintResolution(TH1* th1, TCanvas* pCanvas, float NDCx, float NDCy, const f
 		}
 	}
 
+	float arg1 = NDCx, arg2 = NDCy, arg3 = NDCx+xwidth, arg4 = NDCy+ywidth;
+	if (anchor.find("west") != std::string::npos) {arg1 = NDCx; arg3 = NDCx+xwidth;}
+	if (anchor.find("east") != std::string::npos) {arg1 = NDCx-xwidth; arg3 = NDCx;}
+	if (anchor.find("south") != std::string::npos){arg2 = NDCy; arg4 = NDCy+ywidth;}
+	if (anchor.find("north") != std::string::npos){arg2 = NDCy-ywidth; arg4 = NDCy;}
+
 	double	xMax =			pCanvas->GetUxmax();
 	double	yMax =			pCanvas->GetUymax();
-	TPaveText *pPaveText =	new TPaveText(NDCx, NDCy, NDCx+size, NDCy+size, "NDC");
+	TPaveText *pPaveText =	new TPaveText(arg1, arg2, arg3, arg4, "NDC");
 	pPaveText->				SetFillStyle(0);
 	pPaveText->				SetTextAlign(12);
 	pPaveText->				SetLineColor(color);

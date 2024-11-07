@@ -3,52 +3,75 @@
 
 
 #include "Util.h"
+#include <TObject.h>
 
-class Process
+class Process : public TObject
 {
 	public:
+		ClassDef(Process, 1);
+		// Constructor
 		Process();
+		// Destructor
 		~Process();
 		// Member functions
-		void Datafile(const std::string &comment, const std::string &datafilepath, const std::string &drawfolderpath, const std::string &filename);
+		void SetCuts();
+		void Run();
+
+		void SetType(const std::string &type){ftype = type;}
+		void SetRun(const std::string &run){frun = run;}
+		void SetTag(const std::string &tag){ftag = tag;}
+		void SetComment(const std::string &comment){fcomment = comment;}
+		void SetFileName(const std::string &fileName){ffileName = fileName;}
+		void SetInputFile(const std::string &inputfile){finputFile = inputfile;}
+		void SetOutputROOTfolder(const std::string &outputROOTfolder){foutputROOTfolder = outputROOTfolder;}
+
+		std::string GetROOTOutputPath(){return fRealpathROOT;}
+		float GetMean(){return fph1f_WF->GetMean();}
 
 	private:
 		
 		// Data file settings
-		std::string fdrawfolderpath;
-		std::string ffilename;
-		std::string fdrawfile;
+		std::string ftype;
+		std::string frun;
+		std::string ftag;
 		std::string fcomment;
-		TFile *fpFile;
-		TTree *fpTree;
+
+		std::string finputFile;
+		std::string foutputROOTfolder;
+
+		std::string ffileName;
+		std::string fcutslist;
+		std::string fRealpathROOT;
 
 		// Analysis settings
-		int xmax =								1300;
+		int dEdxmax =							1300;
 
-		int nmombins =							101;
-		int momrange =							3000;
-		int mombinwidth =						2*momrange/(nmombins-1);
+		float nmombins =						101;
+		float momrange =						3000;
+		float mombinwidth =						2*momrange/(nmombins-1);
 		int momindex =							0;
 
-		int nddbins =							101;
-		int ddrange =							510;
-		int ddbinwidth =						ddrange/(nddbins-1);
+		float nddbins =							101;
+		float ddrange =							510;
+		float ddbinwidth =						ddrange/(nddbins-1);
 		int ddindex =							0;
 
-		int nphibins =							91;
-		int phirange =							90;
-		int phibinwidth =						2*phirange/(nphibins-1);
+		float nphibins =						91;
+		float phirange =						90;
+		float phibinwidth =						2*phirange/(nphibins-1);
 		int phiindex =							0;
 
-		int nthetabins =						91;
-		int thetarange =						90;
-		int thetabinwidth =						2*thetarange/(nthetabins-1);
+		float nthetabins =						91;
+		float thetarange =						90;
+		float thetabinwidth =					2*thetarange/(nthetabins-1);
 		int thetaindex =						0;
 
 
 		// Histograms
-		TF1  *fptf1_WF;
-		TF1  *fptf1_XP;
+		TF1  *fptf1_WF =						nullptr;
+		TF1  *fptf1_XP =						nullptr;
+		TF1  *fptf1_pullmu =					nullptr;
+		TF1  *fptf1_pullelec =					nullptr;
 		// Vectors for dE/dx per ERAM module
 		std::vector<TH1F*>	vmod_fph1f_XP;
 		std::vector<TH1F*>	vmod_fph1f_WF;
@@ -62,6 +85,14 @@ class Process
 		TGraphErrors *ptge_mom_mean_XP =		new TGraphErrors();
 		TGraphErrors *ptge_mom_reso_WF =		new TGraphErrors();
 		TGraphErrors *ptge_mom_reso_XP =		new TGraphErrors();
+
+		// Vectors for pulls per momentum bin
+		std::vector<TH1F*> vmom_fph1f_pullmu;
+		std::vector<TH1F*> vmom_fph1f_pullelec;
+		TGraphErrors *ptge_mom_mean_pullmu =	new TGraphErrors();
+		TGraphErrors *ptge_mom_mean_pullelec =	new TGraphErrors();
+		TGraphErrors *ptge_mom_std_pullmu =		new TGraphErrors();
+		TGraphErrors *ptge_mom_std_pullelec =	new TGraphErrors();
 
 		// Vectors for dE/dx per drift distance bin
 		std::vector<TH1F*> vdd_fph1f_WF;
@@ -87,14 +118,22 @@ class Process
 		TGraphErrors *ptge_theta_reso_WF =		new TGraphErrors();
 		TGraphErrors *ptge_theta_reso_XP =		new TGraphErrors();
 
+		// Vectors for pulls per theta angle bin
+		std::vector<TH1F*> vtheta_fph1f_pullmu;
+		std::vector<TH1F*> vtheta_fph1f_pullelec;
+		TGraphErrors *ptge_theta_mean_pullmu =	new TGraphErrors();
+		TGraphErrors *ptge_theta_mean_pullelec =new TGraphErrors();
+		TGraphErrors *ptge_theta_std_pullmu =	new TGraphErrors();
+		TGraphErrors *ptge_theta_std_pullelec =	new TGraphErrors();
+
 
 		// Base
 		int nbinsdEdx =							500;
-		TH1F *fph1f_WF =						new TH1F("fph1f_WF",		";dE/dx(ADC counts/cm);Count", 100, 0, xmax);
-		TH1F *fph1f_XP =						new TH1F("fph1f_XP",		";dE/dx(ADC counts/cm);Count", 100, 0, xmax);
+		TH1F *fph1f_WF =						new TH1F("fph1f_WF",		";dE/dx(ADC counts/cm);Count", 100, 0, dEdxmax);
+		TH1F *fph1f_XP =						new TH1F("fph1f_XP",		";dE/dx(ADC counts/cm);Count", 100, 0, dEdxmax);
 		// 2D with dE/dx		
 		TH2F *fph2f_WFXP =						new TH2F("fph1f_WFXP",		";dE/dx with WF (ADC counts/cm);dE/dx with XP (ADC counts/cm)", 100, 0, 1000, 100, 0, 1000);
-		TH2F *fph2f_XPdrift =					new TH2F("fph2f_XPdrift",	";drift time (timebins);dE/dx with WF (ADC counts/cm)", 510, 0, 510, nbinsdEdx, 0, 1000);
+		TH2F *fph2f_XPdrift =					new TH2F("fph2f_XPdrift",	";drift time (timebins);dE/dx with XP (ADC counts/cm)", 510, 0, 510, nbinsdEdx, 0, 1000);
 		TH2F *fph2f_XPlen =						new TH2F("fph1f_lenXP",		";track length (cm);dE/dx with XP (ADC counts/cm)", 171, 0, 170, nbinsdEdx, 0, 1000);
 		TH2F *fph2f_XPphi = 					new TH2F("fph2f_XPphi",		";#phi; dE/dx with XP (ADC counts/cm)", 5*nphibins, -90, 90, nbinsdEdx, 0, 1000);
 		TH2F *fph2f_XPtheta =					new TH2F("fph2f_XPtheta",	";#theta; dE/dx with XP (ADC counts/cm)", 5*nthetabins, -90, 90, nbinsdEdx, 0, 1000);
@@ -127,7 +166,10 @@ class Process
 		TH1I *fph1i_tmaxEP2 =					new TH1I("fph1i_tmaxEP2",	"End time in EP2;time bin;Count", 510, 0, 510);
 		TH1I *fph1i_tmaxEP3 =					new TH1I("fph1i_tmaxEP3",	"End time in EP3;time bin;Count", 510, 0, 510);
 		// Debug
-		TH2F *fph2f_pullemu = 					new TH2F("ph2f_pullemu",	";Pull #mu;Pull e", 100, -10, 10, 100, -10, 10);
+		TH1F *fph1f_pullmu =					new TH1F("fph1f_pullmu",	";Pull #mu;Count", 100, -20, 20);
+		TH1F *fph1f_pullelec =						new TH1F("fph1f_pullelec",		";Pull e;Count", 100, -20, 20);
+		TH1F *fph1f_pullproton =				new TH1F("fph1f_pullproton",";Pull p;Count", 100, -20, 20);
+		TH2F *fph2f_pullelecmu = 					new TH2F("ph2f_pullelecmu",	";Pull #mu;Pull e", 100, -20, 20, 100, -20, 20);
 		TH2F *fph2f_chi2ndfphi = 				new TH2F("ph2f_chi2ndfphi",	";#varphi;#chi^{2}/NDF", 100, -90, 90, 100, 0, 50);
 		TH2F *fph2f_momtheta = 					new TH2F("ph2f_momtheta",	";#theta;momentum (MeV)", 5*nthetabins, -90, 90, 5*nmombins, -momrange, momrange);
 		TH2F *fph2f_momR = 						new TH2F("ph2f_momR",		";R;momentum (MeV)", 300, -5e4, 5e4, 3*nmombins, -momrange, momrange);
@@ -154,10 +196,24 @@ class Process
 		Double_t end_time;
 		Double_t pull_muon;
 		Double_t pull_ele;
+		Double_t pull_proton;
 		Int_t	ncl;
 		Int_t	endplate;
 		Int_t	eram_channel;
 		Int_t	eram_ID;
+
+		// Cuts
+		int nclmin=0, nclmax=200;
+		int dxmin=0;
+		int ddEdxmax=2e3;
+		int ncroscut=0;
+		int apmcutlow=0, apmcuthigh=20;
+		int momcutlow=0, momcuthigh=1e6;
+		int tcutmin=0, tcutmax=1e3;
+		int chi2max = 1e3;
+		int hat=0, pullmumax=100;
+		int phimin = -90, phimax = 90;
+		int thetamin = -90, thetamax = 90;
 
 		// Friend declarations to allow inner classes to access private members
 		friend class Draw;
