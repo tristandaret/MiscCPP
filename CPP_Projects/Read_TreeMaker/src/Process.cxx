@@ -168,7 +168,7 @@ Process::~Process() {
 
 void Process::SetCuts(){
 	// nclmin = 32;							fcutslist += ("_" + std::to_string(nclmin)		+ "ncl");
-	// apmcutlow = 2, apmcuthigh = 4;		fcutslist += ("_" + std::to_string(apmcutlow)	+ "apm" + std::to_string(apmcuthigh));
+	// apmcutlow = 2, apmcuthigh = 4;		fcutslist += ("_" + sàtd::to_string(apmcutlow)	+ "apm" + std::to_string(apmcuthigh));
 	// momcutlow = 1e2;						fcutslist += ("_" + std::to_string(momcutlow)	+ "mom");
 	// tcutmin = 0, tcutmax = 75;			fcutslist += ("_" + std::to_string(tcutmin)		+ "tmin" + std::to_string(tcutmax));
 	// nclmin=50, nclmax = 150;				fcutslist += ("_" + std::to_string(nclmin)		+ "ncl" + std::to_string(nclmax));
@@ -176,9 +176,9 @@ void Process::SetCuts(){
 	// pullmumax = 2;						fcutslist += ("_pullmu" + std::to_string(pullmumax));
 	// phimin = 80; phimax = 90;			fcutslist += ("_" + std::to_string(phimin)		+ "phi" + std::to_string(phimax));
 	// thetamin = 0; thetamax = 10;			fcutslist += ("_" + std::to_string(thetamin)	+ "theta" + std::to_string(thetamax));
-	chi2max = 5;						fcutslist += ("_chi2ndf" + std::to_string(chi2max));
-	dxmin = 25;							fcutslist += ("_" + std::to_string(dxmin) + "dx");
-	momcutlow = 100, momcuthigh=600;		fcutslist += ("_" + std::to_string(momcutlow)	+ "mom" + std::to_string(momcuthigh));
+	// chi2max = 5;						fcutslist += ("_chi2ndf" + std::to_string(chi2max));
+	// dxmin = 25;							fcutslist += ("_" + std::to_string(dxmin) + "dx");
+	// momcutlow = 100, momcuthigh=600;		fcutslist += ("_" + std::to_string(momcutlow)	+ "mom" + std::to_string(momcuthigh));
 	fcutslist += 						"_dir1>0flip";
 	// hat = -1;							fcutslist += std::string("_") + (hat == -1 ? "bHAT" : "tHAT");
 

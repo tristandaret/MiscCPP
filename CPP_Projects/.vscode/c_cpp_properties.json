@@ -4,7 +4,8 @@
             "name": "Linux",
             "includePath": [
                 "${workspaceFolder}/**",
-                "/local/home/td263283/root/**"
+                "/local/home/td263283/root/**",
+                "/local/home/td263283/Documents/Code/CPP/CPP_Settings/**"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/clang",
