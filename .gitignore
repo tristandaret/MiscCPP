@@ -1,4 +1,5 @@
 CPP_Projects/Read_Alignement/*.root
+CPP_Projects/SpatialResolution/root_files/
 CPP_Projects/*/build
 CPP_Projects/*/*/build
 CPP_Projects/*/Library
