@@ -33,6 +33,10 @@ TF1* Fit1Gauss(TH1* h1F);
 TF1* Fit1Gauss(TH1* h1F, const float &range);
 
 /* ROOT */
+double GetSeparation(const float& mean1, const float& std1, const float& mean2, const float& std2);
+double GetSeparation(const TF1 *tf1_1, const TF1 *tf1_2);
+double GetSeparationError(const float& mean1, const float& std1, const float& dmean1, const float& dstd1, const float& mean2, const float& std2, const float& dmean2, const float& dstd2);
+double GetSeparationError(const TF1 *tf1_1, const TF1 *tf1_2);
 
 // Formula to get resolution error using a TF1
 double GetResoError(TF1* tf1);

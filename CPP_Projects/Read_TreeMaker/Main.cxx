@@ -5,9 +5,9 @@
 
 int main(){
 
-	int do_run = 1;
-	int do_draw = 1;
-	int do_draw_compcuts = 0;
+	int do_run = 			0;
+	int do_draw = 			1;
+	int do_draw_compcuts =	0;
    // Output structure: type -> run -> comment -> fileName
 	std::string type =                  "cosmics";
 	// std::string run =                   "TreeMaker_dog1_00001022";

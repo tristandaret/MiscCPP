@@ -176,9 +176,9 @@ void Process::SetCuts(){
 	// pullmumax = 2;						fcutslist += ("_pullmu" + std::to_string(pullmumax));
 	// phimin = 80; phimax = 90;			fcutslist += ("_" + std::to_string(phimin)		+ "phi" + std::to_string(phimax));
 	// thetamin = 0; thetamax = 10;			fcutslist += ("_" + std::to_string(thetamin)	+ "theta" + std::to_string(thetamax));
-	// chi2max = 5;						fcutslist += ("_chi2ndf" + std::to_string(chi2max));
-	// dxmin = 25;							fcutslist += ("_" + std::to_string(dxmin) + "dx");
-	// momcutlow = 100, momcuthigh=600;		fcutslist += ("_" + std::to_string(momcutlow)	+ "mom" + std::to_string(momcuthigh));
+	chi2max = 5;						fcutslist += ("_chi2ndf" + std::to_string(chi2max));
+	dxmin = 25;							fcutslist += ("_" + std::to_string(dxmin) + "dx");
+	momcutlow = 100, momcuthigh=600;		fcutslist += ("_" + std::to_string(momcutlow)	+ "mom" + std::to_string(momcuthigh));
 	fcutslist += 						"_dir1>0flip";
 	// hat = -1;							fcutslist += std::string("_") + (hat == -1 ? "bHAT" : "tHAT");
 

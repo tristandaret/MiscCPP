@@ -98,6 +98,42 @@ void DrawTH1(const std::string& OutDir, TH1* h1){
 
 
 
+double GetSeparation(const float& mean1, const float& std1, const float& mean2, const float& std2){
+	float separation = std::fabs(mean1 - mean2) / std::sqrt((std::pow(std1, 2) + std::pow(std2, 2)) / 2);
+	return separation;
+}
+
+double GetSeparation(const TF1 *tf1_1, const TF1 *tf1_2){
+	float mean1 = tf1_1->GetParameter(1);
+	float std1 = tf1_1->GetParameter(2);
+	float mean2 = tf1_2->GetParameter(1);
+	float std2 = tf1_2->GetParameter(2);
+	return GetSeparation(mean1, std1, mean2, std2);
+}
+
+
+
+double GetSeparationError(const float& mean1, const float& std1, const float& dmean1, const float& dstd1, const float& mean2, const float& std2, const float& dmean2, const float& dstd2){
+	float mu_part =		(pow(dmean1, 2)+pow(dmean2, 2)) / (pow(std1, 2)+pow(std2, 2));
+	float sigma_part =	pow(mean1-mean2, 2) * (pow(std1, 2)*pow(dstd1, 2) + pow(std2, 2)*pow(dstd2, 2)) / pow(pow(std1, 2) + pow(std2, 2), 3);
+	float err =			sqrt(2) * sqrt(mu_part + sigma_part);
+	return err;
+}
+
+double GetSeparationError(const TF1 *tf1_1, const TF1 *tf1_2){
+	float mean1 = tf1_1->GetParameter(1);
+	float std1 = tf1_1->GetParameter(2);
+	float dmean1 = tf1_1->GetParError(1);
+	float dstd1 = tf1_1->GetParError(2);
+	float mean2 = tf1_2->GetParameter(1);
+	float std2 = tf1_2->GetParameter(2);
+	float dmean2 = tf1_2->GetParError(1);
+	float dstd2 = tf1_2->GetParError(2);
+	return GetSeparationError(mean1, std1, dmean1, dstd1, mean2, std2, dmean2, dstd2);
+}
+
+
+
 
 double GetResoError(TF1* tf1){
 	return GetResoError(tf1, 1, 2) ;
@@ -151,8 +187,8 @@ void PrintResolution(TH1* th1, TCanvas* pCanvas, float NDCx, float NDCy, const f
 	float reso	= 			tf1->GetParameter(2)/tf1->GetParameter(1) * 100;
 	float dreso	= 			GetResoError(tf1);
 
-	pPaveText->				AddText(Form("%s (%d entries)", title.c_str(), (int)th1->GetEntries()));
-	// pPaveText->				AddText(Form("%s", title.c_str()));
+	// pPaveText->				AddText(Form("%s (%d entries)", title.c_str(), (int)th1->GetEntries()));
+	pPaveText->				AddText(Form("%s", title.c_str()));
 	pPaveText->				AddText(Form("#frac{#sigma}{#mu}	= %.2f #pm %.2f %%", reso, dreso));
 	pPaveText->				AddText(Form("#mu	= %.1f #pm %.1f", mu, dmu));
 	pPaveText->				AddText(Form("#sigma	= %.1f #pm %.1f", sigma, dsigma));

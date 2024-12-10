@@ -1,6 +1,7 @@
 #include "Draw.h"
 #include "Misc_Functions.h"
 #include "TFrame.h"
+#include "TPaveText.h"
 #include "SetStyle.h"
 
 #include <fstream>
@@ -343,7 +344,7 @@ void Draw::Run(const std::string &filepath){
 	gPad->							SetRightMargin(0.03);
 	Graphic_setup(pr.ptge_theta_std_pullmu, 2, 21, kBlue+1, 2, kBlue+1);
 	Graphic_setup(pr.ptge_theta_std_pullelec, 2, 20, kOrange+7, 2, kOrange+7);
-	pr.ptge_theta_std_pullmu->		SetTitle(";#theta (#circ);Pull's standard deviation");
+	pr.ptge_theta_std_pullmu->		SetTitle(";#theta (#circ);Pulls standard deviation");
 	float minpull =					0; 
 	float maxpull = 				(pr.ptge_theta_std_pullmu->GetHistogram()->GetMaximum() > pr.ptge_theta_std_pullelec->GetHistogram()->GetMaximum()) ? pr.ptge_theta_std_pullmu->GetHistogram()->GetMaximum() : pr.ptge_theta_std_pullelec->GetHistogram()->GetMaximum();
 	float diffpull =				maxpull - minpull;
@@ -368,15 +369,17 @@ void Draw::Run(const std::string &filepath){
 	fpCanvas->						Clear();
 	Graphic_setup(pr.ptge_theta_mean_pullmu, 2, 21, kBlue+1, 2, kBlue+1);
 	Graphic_setup(pr.ptge_theta_mean_pullelec, 2, 20, kOrange+7, 2, kOrange+7);
-	pr.ptge_theta_mean_pullmu->		SetTitle(";#theta (#circ);Pull's mean");
+	pr.ptge_theta_mean_pullmu->		SetTitle(";#theta (#circ);Pulls mean");
 	minpull = 						(pr.ptge_theta_mean_pullmu->GetHistogram()->GetMinimum() < pr.ptge_theta_mean_pullelec->GetHistogram()->GetMinimum()) ? pr.ptge_theta_mean_pullmu->GetHistogram()->GetMinimum() : pr.ptge_theta_mean_pullelec->GetHistogram()->GetMinimum();
 	maxpull = 						(pr.ptge_theta_mean_pullmu->GetHistogram()->GetMaximum() > pr.ptge_theta_mean_pullelec->GetHistogram()->GetMaximum()) ? pr.ptge_theta_mean_pullmu->GetHistogram()->GetMaximum() : pr.ptge_theta_mean_pullelec->GetHistogram()->GetMaximum();
 	pr.ptge_theta_mean_pullmu->		GetXaxis()->SetLimits(-90, 90);
 	pr.ptge_theta_mean_pullmu->		GetYaxis()->SetRangeUser(minpull-0.1*diffpull, maxpull+0.1*diffpull);
 	pr.ptge_theta_mean_pullmu->		Draw("AP");
 	pr.ptge_theta_mean_pullelec->	Draw("P same");
-	legpull.						SetY1NDC(0.2);
-	legpull.						SetY2NDC(0.4);
+	legpull.						SetX1NDC(0.15);
+	legpull.						SetX2NDC(0.35);
+	legpull.						SetY1NDC(0.1);
+	legpull.						SetY2NDC(0.3);
 	legpull.						Draw();
 	fpCanvas->						SaveAs(fRealpathPDF.c_str());
 
@@ -386,7 +389,7 @@ void Draw::Run(const std::string &filepath){
 	gPad->							SetRightMargin(0.03);
 	Graphic_setup(pr.ptge_mom_std_pullmu, 2, 21, kBlue+1, 2, kBlue+1);
 	Graphic_setup(pr.ptge_mom_std_pullelec, 2, 20, kOrange+7, 2, kOrange+7);
-	pr.ptge_mom_std_pullmu->		SetTitle(";Momentum (MeV/c);Pull's standard deviation");
+	pr.ptge_mom_std_pullmu->		SetTitle(";Momentum (MeV/c);Pulls standard deviation");
 	minpull =						0;
 	maxpull = 						(pr.ptge_mom_std_pullmu->GetHistogram()->GetMaximum() > pr.ptge_mom_std_pullelec->GetHistogram()->GetMaximum()) ? pr.ptge_mom_std_pullmu->GetHistogram()->GetMaximum() : pr.ptge_mom_std_pullelec->GetHistogram()->GetMaximum();
 	pr.ptge_mom_std_pullmu->		GetXaxis()->SetLimits(-momrange, momrange);
@@ -403,7 +406,7 @@ void Draw::Run(const std::string &filepath){
 	fpCanvas->						Clear();
 	Graphic_setup(pr.ptge_mom_mean_pullmu, 2, 21, kBlue+1, 2, kBlue+1);
 	Graphic_setup(pr.ptge_mom_mean_pullelec, 2, 20, kOrange+7, 2, kOrange+7);
-	pr.ptge_mom_mean_pullmu->		SetTitle(";Momentum (MeV/c);Pull's mean");
+	pr.ptge_mom_mean_pullmu->		SetTitle(";Momentum (MeV/c);Pulls mean");
 	minpull = 						(pr.ptge_mom_mean_pullmu->GetHistogram()->GetMinimum() < pr.ptge_mom_mean_pullelec->GetHistogram()->GetMinimum()) ? pr.ptge_mom_mean_pullmu->GetHistogram()->GetMinimum() : pr.ptge_mom_mean_pullelec->GetHistogram()->GetMinimum();
 	maxpull = 						(pr.ptge_mom_mean_pullmu->GetHistogram()->GetMaximum() > pr.ptge_mom_mean_pullelec->GetHistogram()->GetMaximum()) ? pr.ptge_mom_mean_pullmu->GetHistogram()->GetMaximum() : pr.ptge_mom_mean_pullelec->GetHistogram()->GetMaximum();
 	pr.ptge_mom_mean_pullmu->		GetXaxis()->SetLimits(-momrange, momrange);
@@ -422,24 +425,66 @@ void Draw::Run(const std::string &filepath){
 	// Pulls distribution 
 	fpCanvas->						Clear();
 	gPad->							SetRightMargin(0.03);
+	gPad->							SetTopMargin(0.05);
 	Graphic_setup(pr.fph1f_pullmu, 0.5, 1, kCyan+1, 2, kCyan-2, kCyan, 0.2);
 	Graphic_setup(pr.fph1f_pullelec, 0.5, 1, kOrange+7, 2, kOrange-2, kOrange, 0.2);
 	Graphic_setup(pr.fph1f_pullproton, 0.5, 1, kRed+1, 2, kRed-2, kRed, 0.2);
-	TLegend legpull2(0.7, 0.7, 0.9, 0.95);
-	legpull2.						AddEntry(pr.fph1f_pullmu, " #mu", "f");
-	legpull2.						AddEntry(pr.fph1f_pullelec, " electron", "f");
-	legpull2.						AddEntry(pr.fph1f_pullproton, " proton", "f");
+	TLegend legpull2(0.75, 0.7, 0.9, 0.93);
+	legpull2.						AddEntry(pr.fph1f_pullmu, " #mu hyp.", "f");
+	legpull2.						AddEntry(pr.fph1f_pullelec, " e hyp.", "f");
+	legpull2.						AddEntry(pr.fph1f_pullproton, " p hyp.", "f");
 	legpull2.						SetTextSize(0.06);
 	legpull2.						SetTextColor(kBlue-1);
+	pr.fph1f_pullmu->				SetXTitle("Pull");
 	pr.fph1f_pullmu->				Draw("HIST");
 	pr.fph1f_pullelec->				Draw("HIST same");
 	pr.fph1f_pullproton->			Draw("HIST same");
+	TF1 tf1_mu = 					*Fit1Gauss(pr.fph1f_pullmu);
+	TF1 tf1_elec = 					*Fit1Gauss(pr.fph1f_pullelec);
+	float meanmu = 					tf1_mu.GetParameter(1);
+	float dmeanmu = 				tf1_mu.GetParError(1);
+	float meanelec = 				tf1_elec.GetParameter(1);
+	float dmeanelec = 				tf1_elec.GetParError(1);
+	float stdmu = 					tf1_mu.GetParameter(2);
+	float dstdmu = 					tf1_mu.GetParError(2);
+	float stdelec = 				tf1_elec.GetParameter(2);
+	float dstdelec = 				tf1_elec.GetParError(2);
+	float separation = 				GetSeparation(&tf1_mu, &tf1_elec);
+	float dseparation = 			GetSeparationError(&tf1_mu, &tf1_elec);
+	TPaveText pavetextmu(0.6, 0.4, 0.93, 0.55, "NDC");
+	pavetextmu.						SetTextSize(0.05);
+	pavetextmu.						SetTextColor(kCyan+4);
+	pavetextmu.						SetFillColorAlpha(kCyan, 0.2);
+	pavetextmu.						SetLineWidth(2);
+	pavetextmu.						SetBorderSize(2);
+	pavetextmu.						SetLineColor(kCyan-2);
+	pavetextmu.						AddText(Form("#mu_{#mu} = %.3f #pm %.3f", meanmu, dmeanmu));
+	pavetextmu.						AddText(Form("#sigma_{#mu} = %.3f #pm %.3f", stdmu, dstdmu));
+
+	TPaveText pavetextelec(0.6, 0.2, 0.93, 0.35, "NDC");
+	pavetextelec.					SetTextSize(0.05);
+	pavetextelec.					SetTextColor(kOrange+3);
+	pavetextelec.					SetFillColorAlpha(kOrange, 0.2);
+	pavetextelec.					SetLineWidth(2);
+	pavetextelec.					SetBorderSize(2);
+	pavetextelec.					SetLineColor(kOrange-2);
+	pavetextelec.					AddText(Form("#mu_{e} = %.3f #pm %.3f", meanelec, dmeanelec));
+	pavetextelec.					AddText(Form("#sigma_{e} = %.3f #pm %.3f", stdelec, dstdelec));
+
+	TLatex latexpull;
+	latexpull.						SetNDC();
+	latexpull.						SetTextSize(0.06);
+	latexpull.						SetTextColor(kBlue-1);
+	latexpull.						DrawLatex(0.6, 0.6, Form("S(#mu/e) = %.2f #pm %.2f", separation, dseparation));
 	legpull2.						Draw();
+	pavetextmu.						Draw();
+	pavetextelec.					Draw();
 	fpCanvas->						SaveAs(fRealpathPDF.c_str());
 
 	// Geometry plots ----------------------------------------------------------------------------------------------------------------------------
 
 	fpCanvas->						Clear();
+	gPad->							SetTopMargin(0.02);
 	gPad->							SetLogz();
 	pr.fph2f_XZ->					Draw("colz");
 	fpCanvas->						SaveAs(fRealpathPDF.c_str());
