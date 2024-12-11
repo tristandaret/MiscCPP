@@ -9,3 +9,4 @@ CPP_Projects/*/dump.log
 CPP_Projects/Data_unprocessed
 CPP_Projects/*.root
 *.log
+CPP_Projects/LUT_Maker/Output_LUT/*.root

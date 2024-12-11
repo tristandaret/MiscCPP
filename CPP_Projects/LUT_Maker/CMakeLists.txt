@@ -17,6 +17,7 @@ include(${ROOT_USE_FILE})
 # Add source files
 file(GLOB SOURCES "src/*.cxx")
 file(GLOB SETTINGS_SOURCES "$ENV{HOME}/Documents/Code/CPP/CPP_Settings/src/*.cxx")
+list(APPEND SOURCES "$ENV{HOME}/Documents/Code/CPP/CPP_Projects/ERAM_Signal/src/TrackModel.cxx")
 list(APPEND SOURCES ${SETTINGS_SOURCES})
 
 # Add a library target
@@ -26,8 +27,8 @@ add_library(LUTMakerLib ${SOURCES})
 target_include_directories(LUTMakerLib PUBLIC 
     inc 
     "$ENV{HOME}/Documents/Code/CPP/CPP_Settings/inc"
+    "$ENV{HOME}/Documents/Code/CPP/CPP_Projects/ERAM_Signal/inc"
 )
-
 # Link the dictionary to the library
 target_link_libraries(LUTMakerLib PUBLIC ${ROOT_LIBRARIES})
 

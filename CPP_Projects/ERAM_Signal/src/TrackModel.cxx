@@ -1,67 +1,79 @@
 #include "TrackModel.h"
 
 #include <TROOT.h>
-#include <chrono>
+#include <TF1Convolution.h>
 
 // Constructor
 TrackModel::TrackModel(){
-    ptf1_ETF =                  new TF1(";time (ns); ADC counts/ns",   this, &TrackModel::ETF,  0, ftmax, 0);
+    TF1 tf1_ETF(";time (ns); ADC counts/ns",   this, &TrackModel::ETF,  0, ftmax, 0);
     ptf1_dETFdt =		        new TF1(";time (ns); ADC counts/ns",   this, &TrackModel::dETFdt,  0, ftmax, 0);
+    ETFmax =                    tf1_ETF.GetMaximum();
 }
 
 
 // Destructor
 TrackModel::~TrackModel(){
-    delete ptf1_ETF;
     delete ptf1_dETFdt;
-    delete ptf1_Charge;
-    delete ptf1_Convolution;
-    delete ptf1_Signal;
 }
 
-double TrackModel::GetRealCharge(const double &ADCmax, const double &length, const double &impact, 
-                                 const double &phi, const double &RC, const double &drift){
-    auto start = std::chrono::high_resolution_clock::now();
-    // Settings
-    fsignalreal =               ADCmax;
+
+// Initialize parameters
+void TrackModel::SetParameters( const double &length, const double &impact, 
+                                const double &phi, const double &RC, const double &drift, const double &Dt){
+    fDt =                       Dt;
+    fRC =                       RC;
+    fdrift =                    drift;
     flength =                   length;
     fimpact =                   impact;
     fphirad =                   phi/180*M_PI;
     // Safeguards for numerical instabilities
     if(phi < 1e-5) fphirad =    1e-5/180*M_PI;
     if(phi > 90-1e-5) fphirad = (90-1e-5)/180*M_PI;
-    fdrift =                    drift;
-    fRC =                       RC;
+    // Set parameters
     fm =                        std::tan(fphirad);
     fq =                        (cos(fphirad)*fxpad-sin(fphirad)*fxpad+fimpact)/cos(fphirad);
+}
 
-    ptf1_Charge =		        new TF1(";time (ns); Charge (fC)",     this, &TrackModel::Charge,  0, ftmax, 0);
-    ptf1_Convolution =	        new TF1Convolution(ptf1_Charge, ptf1_dETFdt, -ftmax, ftmax, true);
-    ptf1_Convolution->	        SetNofPointsFFT(fnconvolpoints);
-    ptf1_Signal =		        new TF1("", *ptf1_Convolution, 0, ftmax, ptf1_Convolution->GetNpar());
+// Initialize real signal
+void TrackModel::SetVariables(const double &signal){
+    fsignalreal =               signal;
+}
+
+
+void TrackModel::ComputeAmplitudeLoss(  const double &length, const double &impact, 
+                                        const double &phi, const double &RC, const double &drift, const double &Dt){
+    SetParameters(length, impact, phi, RC, drift, Dt);
+    ComputeAmplitudeLoss();
+}
+void TrackModel::ComputeAmplitudeLoss() {
+    // Initialize functions
+    TF1 tf1_Charge(";time (ns); Charge (fC)", this, &TrackModel::Charge, 0, ftmax, 0);
+    TF1Convolution tf1_Convolution(&tf1_Charge, ptf1_dETFdt, -ftmax, ftmax, true);
+    tf1_Convolution.SetNofPointsFFT(fnconvolpoints);
+    TF1 tf1_Signal("", tf1_Convolution, 0, ftmax, tf1_Convolution.GetNpar());
+    ptf1_Signal = new TF1(tf1_Signal);
+
+    fchargemodel = flength * ETFmax;
+    fsignalmodel = tf1_Signal.GetMaximum();
+    famplitudeloss = fsignalmodel / fchargemodel;
+}
+
+
+
+void TrackModel::ComputeRealCharge(const double &ADCmax, const double &length, const double &impact, 
+                                 const double &phi, const double &RC, const double &drift, const double &Dt){
+    SetParameters(length, impact, phi, RC, drift, Dt);
+    SetVariables(ADCmax);
+    ComputeRealCharge();
+}
+void TrackModel::ComputeRealCharge(){
+    ComputeAmplitudeLoss();
 
     // Compute charge
     /* The real charge deposited over the pad is linearly proportional to the length in the pad.
     A normalization has to be chosen; since the data signal depends on the electronics transfer 
     function, its max is a convenient choice */
-    fchargemodel =              flength * ptf1_ETF->GetMaximum();  
-    fsignalmodel =              ptf1_Signal->GetMaximum();
-    famplitudeloss =            fsignalmodel/fchargemodel;
     fchargereal =               fsignalreal/famplitudeloss;
-
-    // std::cout << fsignalreal << "/" << famplitudeloss << " = " << fchargereal << std::endl;
-
-    delete ptf1_Charge;
-    delete ptf1_Convolution;
-    delete ptf1_Signal;
-
-    // Calculate elapsed time in milliseconds
-    auto end = std::chrono::high_resolution_clock::now();
-    std::chrono::duration<double, std::milli> duration = end - start;
-    time += duration.count();
-    std::cout << "Time elapsed: " << duration.count() << " ms" << std::endl;
-
-    return fchargereal;
 }
 
 

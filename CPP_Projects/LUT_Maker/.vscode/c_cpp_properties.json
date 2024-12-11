@@ -5,7 +5,7 @@
             "includePath": [
                 "${workspaceFolder}/**",
                 "~/root/**",
-                "~/Documents/Code/CPP_style/**"
+                "~/Documents/Code/CPP/**"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/clang",

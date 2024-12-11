@@ -76,7 +76,8 @@
         "variant": "cpp",
         "regex": "cpp",
         "shared_mutex": "cpp",
-        "valarray": "cpp"
+        "valarray": "cpp",
+        "toyMC.C": "cpp"
     },
     "cmake.ignoreCMakeListsMissing": true
 }
