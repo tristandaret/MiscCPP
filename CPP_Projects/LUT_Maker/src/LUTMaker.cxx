@@ -71,6 +71,8 @@ void LUTMaker::ComputeLengthMap(){
 				arr_length[i][j] = std::sqrt(std::pow(v_x[1]-v_x[0], 2) + std::pow(v_y[1]-v_y[0], 2));	
 			}
 			else arr_length[i][j] = 0;
+			v_x.clear();
+			v_y.clear();
 		}
 	}
 
@@ -93,9 +95,9 @@ void LUTMaker::DrawLengthMap(){
 	c1->SaveAs("Output_PDF/length_map.pdf");
 }
 // Compute scale factor
-void LUTMaker::ComputeScaleFactor(){
+void LUTMaker::MakeLUT(){
 
-	TFile tfileLUT("Output_LUT/LUT_test.root", "RECREATE");
+	TFile tfileLUT("Output_LUT/LUT.root", "RECREATE");
 	TTree ttreeLUT("LUT", "LUT");
 	double d, phi;
 	float length, RC, Dt, drift, scalefactor;
@@ -107,34 +109,54 @@ void LUTMaker::ComputeScaleFactor(){
 	ttreeLUT.Branch("drift", &drift);
 	ttreeLUT.Branch("scalefactor", &scalefactor);
 
+	std::ofstream LUT_log("LUT.log");
     auto start = std::chrono::high_resolution_clock::now();
 	double time = 0;
 
-	Dt = v_Dt[0];
-	RC = v_RC[0];
-	drift = v_z[0];
-
-	for(int iphi = 0; iphi < SNSTEPS_PHI; iphi++){
-		phi = v_phi[iphi];
-		std::cout << "Computing phi: " << phi << "°" << std::endl;
-		for(int id = 0; id < SNSTEPS_D; id++){
-			d = v_d[id];
-			length = arr_length[iphi][id];
-			fp_trackmodel->ComputeAmplitudeLoss(length, v_d[id], v_phi[iphi], RC, drift, Dt);
-			scalefactor = 1/fp_trackmodel->GetAmplitudeLoss();
-			if (std::isnan(scalefactor) || std::isinf(scalefactor) || scalefactor <= 0) continue;
-			ttreeLUT.Fill();
+	for(int iDt = 0; iDt < SNSTEPS_TRANS; iDt++){
+		Dt = v_Dt[iDt];
+		auto start_Dt = std::chrono::high_resolution_clock::now();
+		for(int iRC = 0; iRC < SNSTEPS_RC; iRC++){
+			auto start_RC = std::chrono::high_resolution_clock::now();
+			RC = v_RC[iRC];
+			for(int iz = 0; iz < SNSTEPS_Z; iz++){
+				auto start_z = std::chrono::high_resolution_clock::now();
+				drift = v_z[iz];
+				for(int iphi = 0; iphi < SNSTEPS_PHI; iphi++){
+					phi = v_phi[iphi];
+					for(int id = 0; id < SNSTEPS_D; id++){
+						d = v_d[id];
+						length = arr_length[iphi][id];
+						fp_trackmodel->ComputeAmplitudeLoss(length, d, phi, RC, drift, Dt);
+						scalefactor = 1/fp_trackmodel->GetAmplitudeLoss();
+						if (std::isnan(scalefactor) || std::isinf(scalefactor) || scalefactor <= 0) continue;
+						ttreeLUT.Fill();
+					}
+				}
+				auto end_z = std::chrono::high_resolution_clock::now();
+				std::chrono::duration<double> duration_z = end_z - start_z;
+				time += duration_z.count();
+				LUT_log << "Dt " << Dt << " RC " << RC << " drift " << drift << " => " << duration_z.count() << " s" << std::endl;
+			}
+			auto end_RC = std::chrono::high_resolution_clock::now();
+			std::chrono::duration<double> duration_RC = end_RC - start_RC;
+			time += duration_RC.count();
+			LUT_log << "Dt " << Dt << " RC " << RC << " => " << duration_RC.count() << " s" << std::endl;
 		}
+		auto end_Dt = std::chrono::high_resolution_clock::now();
+		std::chrono::duration<double> duration_Dt = end_Dt - start_Dt;
+		time += duration_Dt.count();
+		LUT_log << "Dt " << Dt << " => " << duration_Dt.count() << " s" << std::endl;
 	}
 
 	tfileLUT.Write();
 	tfileLUT.Close();						
 
-    // Calculate elapsed time in milliseconds
     auto end = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> duration = end - start;
     time += duration.count();
-    std::cout << "LUT done in: " << duration.count() << " s" << std::endl;
+    LUT_log << "LUT done in: " << duration.count() << " s" << std::endl;
+	LUT_log.close();
 }
 
 

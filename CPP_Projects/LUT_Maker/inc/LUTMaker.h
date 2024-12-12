@@ -23,7 +23,7 @@ class LUTMaker
 	float Intercept(const double &phi_rad, const double &d) { return (cos(phi_rad)*SYHEIGHT/2-sin(phi_rad)*SXWIDTH/2+d)/cos(phi_rad); }
 
 	void ComputeLengthMap();
-	void ComputeScaleFactor();
+	void MakeLUT();
 
 	void LoadLUT(std::string LUTpath);
 	float GetFactorFromLUT(const double &phi, const double &d);

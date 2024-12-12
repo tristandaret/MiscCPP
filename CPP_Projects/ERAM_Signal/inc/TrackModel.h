@@ -29,8 +29,6 @@ class TrackModel
                             const double &phi, const double &RC, const double &drift, const double &Dt);
     double GetRealCharge() const { return fchargereal; }
 
-    TF1 *GetSignal() { return ptf1_Signal; }
-
     double time =                        0;
     
     private:
@@ -38,7 +36,6 @@ class TrackModel
     // Convolution
     double fnconvolpoints =             750;
     double ftmax =                      750; // Maximum time
-    TF1 *ptf1_Signal{nullptr};
 
     // Eletronics transfer function
     Double_t ETF    (Double_t *x, Double_t *par);

@@ -51,7 +51,6 @@ void TrackModel::ComputeAmplitudeLoss() {
     TF1Convolution tf1_Convolution(&tf1_Charge, ptf1_dETFdt, -ftmax, ftmax, true);
     tf1_Convolution.SetNofPointsFFT(fnconvolpoints);
     TF1 tf1_Signal("", tf1_Convolution, 0, ftmax, tf1_Convolution.GetNpar());
-    ptf1_Signal = new TF1(tf1_Signal);
 
     fchargemodel = flength * ETFmax;
     fsignalmodel = tf1_Signal.GetMaximum();
