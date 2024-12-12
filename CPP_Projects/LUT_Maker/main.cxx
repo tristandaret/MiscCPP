@@ -16,13 +16,16 @@ int main()
 {
 
 	LUTMaker *p_lutmaker = new LUTMaker();
-	// p_lutmaker->ComputeLengthMap();
+	p_lutmaker->ComputeLengthMap();
 	// p_lutmaker->DrawLengthMap();
 
 	// p_lutmaker->ComputeScaleFactor();
 
 	p_lutmaker->LoadLUT("Output_LUT/LUT_test.root");
-	p_lutmaker->DrawLUT(120, 0, 310/pow(10, 3.5));
+	// p_lutmaker->DrawLUT(120, 0, 310/pow(10, 	3.5));
+
+	float diag = p_lutmaker->GetDiag();
+	p_lutmaker->DrawDiffInterpolExact(0, 90, 0, diag/2);
 
 	delete p_lutmaker;
 

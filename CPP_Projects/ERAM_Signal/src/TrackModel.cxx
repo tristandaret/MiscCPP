@@ -60,8 +60,8 @@ void TrackModel::ComputeAmplitudeLoss() {
 
 
 
-void TrackModel::ComputeRealCharge(const double &ADCmax, const double &length, const double &impact, 
-                                 const double &phi, const double &RC, const double &drift, const double &Dt){
+void TrackModel::ComputeRealCharge( const double &ADCmax, const double &length, const double &impact, 
+                                    const double &phi, const double &RC, const double &drift, const double &Dt){
     SetParameters(length, impact, phi, RC, drift, Dt);
     SetVariables(ADCmax);
     ComputeRealCharge();

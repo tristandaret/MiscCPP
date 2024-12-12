@@ -5,6 +5,10 @@
 #include <vector>
 #include <string>
 
+#include "SetStyle.h"
+
+#include "TrackModel.h"
+
 class LUTMaker
 {
 	public:
@@ -12,19 +16,22 @@ class LUTMaker
 	LUTMaker();
 	virtual ~LUTMaker();
 
-	float GetX(const float &y, const float &phi_rad, const float &d) { return (y - (d-sin(phi_rad)*SXWIDTH/2+cos(phi_rad)*SYHEIGHT/2)/cos(phi_rad))/tan(phi_rad);}
-	float GetY(const float &x, const float &phi_rad, const float &d) { return tan(phi_rad)*x + (d-sin(phi_rad)*SXWIDTH/2+cos(phi_rad)*SYHEIGHT/2)/cos(phi_rad);}
-	float Slope(const float &phi_rad) { return tan(phi_rad); }
-	float Intercept(const float &phi_rad, const float &d) { return (cos(phi_rad)*SYHEIGHT/2-sin(phi_rad)*SXWIDTH/2+d)/cos(phi_rad); }
+	// Geometry
+	float GetX(const double &y, const double &phi_rad, const double &d) { return (y - (d-sin(phi_rad)*SXWIDTH/2+cos(phi_rad)*SYHEIGHT/2)/cos(phi_rad))/tan(phi_rad);}
+	float GetY(const double &x, const double &phi_rad, const double &d) { return tan(phi_rad)*x + (d-sin(phi_rad)*SXWIDTH/2+cos(phi_rad)*SYHEIGHT/2)/cos(phi_rad);}
+	float Slope(const double &phi_rad) { return tan(phi_rad); }
+	float Intercept(const double &phi_rad, const double &d) { return (cos(phi_rad)*SYHEIGHT/2-sin(phi_rad)*SXWIDTH/2+d)/cos(phi_rad); }
 
 	void ComputeLengthMap();
 	void ComputeScaleFactor();
 
 	void LoadLUT(std::string LUTpath);
-	float GetFactorFromLUT(const float &phi, const float &d);
+	float GetFactorFromLUT(const double &phi, const double &d);
+
+	void DrawDiffInterpolExact(const double &phimin, const double &phimax, const double &dmin, const double &dmax);
 
 	void DrawLengthMap();
-	void DrawLUT(const float &RC, const float &drift, const float &Dt);
+	void DrawLUT(const double &RC, const double &drift, const double &Dt);
 
 	// Getters
 	std::vector<std::vector<float>> GetLengthMap() { return arr_length; }
@@ -35,10 +42,17 @@ class LUTMaker
 
 	private:
 
+	// Graphics
+	TCanvas *c1;
+	TStyle* ptstyle;
+
 	// Pad dimensions
 	static constexpr float SXWIDTH =	11.28; // mm
 	static constexpr float SYHEIGHT =	10.19; // mm
 	const float fdiag = 				std::sqrt(std::pow(SXWIDTH, 2) + std::pow(SYHEIGHT, 2));
+
+	// Track model
+	TrackModel *fp_trackmodel;
 
 	// Vectors of discrete values for each dimension
 	std::vector<double> v_phi, v_d, v_z, v_RC, v_Dt;
