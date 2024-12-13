@@ -22,22 +22,23 @@ class LUTMaker
 	float Slope(const double &phi_rad) { return tan(phi_rad); }
 	float Intercept(const double &phi_rad, const double &d) { return (cos(phi_rad)*SYHEIGHT/2-sin(phi_rad)*SXWIDTH/2+d)/cos(phi_rad); }
 
+	double ComputeLength(const double &phi_rad, const double &d);
 	void ComputeLengthMap();
 	void MakeLUT();
 
 	void LoadLUT(std::string LUTpath);
-	float GetFactorFromLUT(const double &phi, const double &d);
+	float GetFactorFromLUT(const double &transvDiff, const double &RC, const double &drift, const double &d, const double &phi);
 
-	void DrawDiffInterpolExact(const double &phimin, const double &phimax, const double &dmin, const double &dmax);
-
+	void DrawDiffInterpolExact(	 const double &transvDiff,const double &RC, const double &drift,
+								const double &phimin, const double &phimax, const double &dmin, const double &dmax);
 	void DrawLengthMap();
-	void DrawLUT(const double &RC, const double &drift, const double &Dt);
+	void DrawLUT(const double &RC, const double &drift, const double &transvDiff);
 
 	// Getters
 	std::vector<std::vector<float>> GetLengthMap() { return arr_length; }
 	std::vector<double> GetVecPhi() { return v_phi; }
-	std::vector<double> GetVecD() { return v_d; }
-	std::vector<double> GetVecZ() { return v_z; }
+	std::vector<double> GetVecD() { return v_impact; }
+	std::vector<double> GetVecZ() { return v_drift; }
 	float GetDiag() { return fdiag; }
 
 	private:
@@ -55,26 +56,27 @@ class LUTMaker
 	TrackModel *fp_trackmodel;
 
 	// Vectors of discrete values for each dimension
-	std::vector<double> v_phi, v_d, v_z, v_RC, v_Dt;
+	std::vector<double> v_phi, v_impact, v_drift, v_RC, v_impactt;
 
 	// Number of discrete steps in each dimension of the Look Up Table
-	static const int SNSTEPS_PHI      = 250;
-	static const int SNSTEPS_D        = 250;
-	static const int SNSTEPS_Z        = 101;
-	static const int SNSTEPS_RC       = 2;
 	static const int SNSTEPS_TRANS    = 2;
+	static const int SNSTEPS_RC       = 2;
+	static const int SNSTEPS_DRIFT        = 101;
+	static const int SNSTEPS_D        = 250;
+	static const int SNSTEPS_PHI      = 250;
 
 	// Length map
 	std::vector<std::vector<float>> arr_length = std::vector<std::vector<float>>(SNSTEPS_PHI, std::vector<float>(SNSTEPS_D, 0));
 
 	// LUT loader
 	std::string fLUTpath =				"Output_LUT/LUT_test.root";
-	float LUTValues[SNSTEPS_PHI][SNSTEPS_D];
+	// float LUTValues[SNSTEPS_PHI][SNSTEPS_D];
+	static float LUTValues[SNSTEPS_TRANS][SNSTEPS_RC][SNSTEPS_DRIFT][SNSTEPS_D][SNSTEPS_PHI];
 	static constexpr float sSTEP_TRANS =	40; // 310->350, only 2 values
 	static constexpr float sSTEP_RC =		46; // 112->158, only 2 values
 	static constexpr float sSTEP_PHI =		90./(SNSTEPS_PHI-1);
-	const float sSTEP_D =					(fdiag/2)/(SNSTEPS_D-1);
-	static constexpr float sSTEP_Z =		1000./(SNSTEPS_Z-1);
+	const float sSTEP_IMPACT =					(fdiag/2)/(SNSTEPS_D-1);
+	static constexpr float sSTEP_DRIFT =		1000./(SNSTEPS_DRIFT-1);
 
 };
 
