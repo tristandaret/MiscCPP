@@ -230,10 +230,10 @@ void Process::SetCuts()
    // + "theta" + std::to_string(thetamax));
    chi2max = 5;
    fcutslist += ("_chi2ndf" + std::to_string(chi2max));
-   dxmin = 25;
-   fcutslist += ("_" + std::to_string(dxmin) + "dx");
-   momcutlow = 100, momcuthigh = 600;
-   fcutslist += ("_" + std::to_string(momcutlow) + "mom" + std::to_string(momcuthigh));
+   // dxmin = 25;
+   // fcutslist += ("_" + std::to_string(dxmin) + "dx");
+   // momcutlow = 100, momcuthigh = 600;
+   // fcutslist += ("_" + std::to_string(momcutlow) + "mom" + std::to_string(momcuthigh));
    fcutslist += "_dir1>0flip";
    // hat = -1;							fcutslist += std::string("_") + (hat == -1 ? "bHAT" : "tHAT");
 
