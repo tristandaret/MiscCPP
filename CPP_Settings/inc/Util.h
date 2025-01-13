@@ -1,9 +1,7 @@
 #ifndef Util_H
 #define Util_H
 
-
 #include "Includes.h"
-
 
 #include <TROOT.h>
 #include <TFile.h>
@@ -24,9 +22,8 @@
 #include <TH2.h>
 #include <TMultiGraph.h>
 
+TGraphErrors *Convert_TH2_TGE(const TH2 *pTH2);
 
-TGraphErrors* Convert_TH2_TGE(const TH2* pTH2);
-
-int MakeMyDir(const std::string& DirName);
+int MakeMyDir(const std::string &DirName);
 
 #endif

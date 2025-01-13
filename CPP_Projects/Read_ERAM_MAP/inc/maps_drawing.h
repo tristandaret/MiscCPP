@@ -5,22 +5,21 @@
 #include "TCanvas.h"
 #include "TLegend.h"
 
-class Drawing{
-    public:
-        Drawing();
-        virtual ~Drawing();
-        void maps_pdf();
-        void maps_csv();
-        void Distributions();
+class Drawing {
+public:
+   Drawing();
+   virtual ~Drawing();
+   void maps_pdf();
+   void maps_csv();
+   void Distributions();
 
-    private:
-        Reconstruction::ERAMMaps *pERAMMaps;
-        std::string OutputFile;
-        std::string OutputFile_Beg;
-        std::string OutputFile_End;
-        TCanvas* pTCanvas;
-        TLegend* pTLegend;
-
+private:
+   Reconstruction::ERAMMaps *pERAMMaps;
+   std::string OutputFile;
+   std::string OutputFile_Beg;
+   std::string OutputFile_End;
+   TCanvas *pTCanvas;
+   TLegend *pTLegend;
 };
 
 #endif

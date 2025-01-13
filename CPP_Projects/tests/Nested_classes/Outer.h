@@ -6,24 +6,24 @@
 
 class Outer {
 private:
-    int privateField1 = 0;                // Default value
-    std::string privateField2 = "default"; // Default value
-    double privateField3 = 3.14;           // Default value
+   int privateField1 = 0;                 // Default value
+   std::string privateField2 = "default"; // Default value
+   double privateField3 = 3.14;           // Default value
 
-    friend class Inner;  // Inner is a friend of Outer and can access private fields
+   friend class Inner; // Inner is a friend of Outer and can access private fields
 
 public:
-    Outer();  // Declaration of default constructor
+   Outer(); // Declaration of default constructor
 
-    class Inner {
-    private:
-        Outer& outer;  // Reference to Outer class
+   class Inner {
+   private:
+      Outer &outer; // Reference to Outer class
 
-    public:
-        Inner(Outer& o);  // Constructor declaration
+   public:
+      Inner(Outer &o); // Constructor declaration
 
-        void accessOuterPrivateFields();  // Method declaration
-    };
+      void accessOuterPrivateFields(); // Method declaration
+   };
 };
 
 #endif // OUTER_H

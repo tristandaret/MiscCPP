@@ -1,3 +1,3 @@
 #ifdef __ROOTCLING__
-#pragma link C++ class Process+;
+#pragma link C++ class Process + ;
 #endif

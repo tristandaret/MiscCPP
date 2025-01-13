@@ -5,6 +5,6 @@
 #pragma link off all classes;
 #pragma link off all functions;
 
-// For ERAM maps reading 
-#pragma link C++ class EramInfo+;
+// For ERAM maps reading
+#pragma link C++ class EramInfo + ;
 #endif

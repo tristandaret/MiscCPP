@@ -2,12 +2,12 @@
 
 int main()
 {
-	Drawing *pDrawing = new Drawing();
+   Drawing *pDrawing = new Drawing();
 
-	// pDrawing->maps_pdf();
-	// pDrawing->maps_csv();
-	pDrawing->Distributions();
+   // pDrawing->maps_pdf();
+   // pDrawing->maps_csv();
+   pDrawing->Distributions();
 
-	delete pDrawing;
-	return 0;
+   delete pDrawing;
+   return 0;
 }

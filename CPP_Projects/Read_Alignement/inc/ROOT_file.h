@@ -1,3 +1,3 @@
 #include <TROOT.h>
 
-void Reader(const char* filename) ;
+void Reader(const char *filename);

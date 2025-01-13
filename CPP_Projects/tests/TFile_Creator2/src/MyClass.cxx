@@ -6,10 +6,12 @@ ClassImp(MyClass);
 MyClass::MyClass(){};
 
 // Destructor
-MyClass::~MyClass() {
-	delete ph1f;
+MyClass::~MyClass()
+{
+   delete ph1f;
 }
 
-void MyClass::FillHistogram(double value) {
-	ph1f->Fill(value);
+void MyClass::FillHistogram(double value)
+{
+   ph1f->Fill(value);
 }
