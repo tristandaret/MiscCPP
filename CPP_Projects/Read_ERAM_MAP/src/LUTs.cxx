@@ -8,9 +8,7 @@
 
 ClassImp(EramInfo)
 
-   /* ERAM MAPS READING
-      ------------------------------------------------------------------------------------------------------------------
-    */
+   /* ERAM MAPS READING ---------------------------------------------------------------------------------------- */
    // Default constructor
    Reconstruction::ERAMMaps::ERAMMaps()
 {
@@ -187,6 +185,6 @@ void Reconstruction::ERAMMaps::FillHoles()
             }
             v_sides.clear();
          } // iY
-      }    // iX
+      } // iX
    }
 }

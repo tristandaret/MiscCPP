@@ -141,6 +141,9 @@ private:
                                 momrange, nbinsdEdx, 0, 1000);
    TH2F *fph2f_WFmom = new TH2F("fph2f_WFmom", ";momentum (MeV);dE/dx with WF (ADC counts/cm)", 5 * nmombins, -momrange,
                                 momrange, nbinsdEdx, 0, 1000);
+   // Systematics
+   TH1F *fph1f_systFitRelat = new TH1F("fph1f_systFitRelat", ";Relative fit systematic uncertainty (%);Count", 100, 0, 2.5);
+   TH1F *fph1f_systRCRelat = new TH1F("fph1f_systRCRelat", ";Relative RC systematic uncertainty (%);Count", 100, 0, 0.5);
    // Momentum
    TH1I *fph1i_mom = new TH1I("fph1i_mom", ";momentum (MeV);Count", 3 * nmombins, -momrange, momrange);
    TH1I *fph1i_mom_tHAT = new TH1I("fph1i_mom_thAT", ";momentum (MeV);Count", 3 * nmombins, -momrange, momrange);
@@ -184,6 +187,8 @@ private:
    // Tree variables
    Double_t wf;
    Double_t xp;
+   Double_t xpSystFitRelat;
+   Double_t xpSystRCRelat;
    Double_t dx;
    Double_t pos[3];
    Double_t dir[3];

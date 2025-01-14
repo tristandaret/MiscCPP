@@ -26,7 +26,7 @@ void Draw::Run(const std::string &filepath)
    std::cout << "drawout:" << fRealpathPDF << std::endl;
 
    // Plot setup
-   // ------------------------------------------------------------------------------------------------------------------------------
+   // -----------------------------------------------------------------------------------------------------------------
    int dEdxmax = pr.dEdxmax;
    int momrange = pr.momrange;
    int nmombins = pr.nmombins;
@@ -50,7 +50,7 @@ void Draw::Run(const std::string &filepath)
    float invX = 0;
 
    // Global dE/dx plot
-   // -------------------------------------------------------------------------------------------------------------------
+   // -----------------------------------------------------------------------------------------------------------------
    Graphic_setup(pr.fph1f_WF, 0.5, 1, kCyan + 1, 2, kCyan - 2, kCyan, 0.2);
    Graphic_setup(pr.fph1f_XP, 0.5, 1, kMagenta + 2, 2, kMagenta - 2, kMagenta, 0.2);
    pr.fph1f_WF->SetAxisRange(0, 1.1 * std::max({pr.fph1f_WF->GetMaximum(), pr.fph1f_XP->GetMaximum()}), "Y");
@@ -63,7 +63,7 @@ void Draw::Run(const std::string &filepath)
    fpCanvas->SaveAs((fRealpathPDF + "(").c_str());
 
    // dE/dx ERAM by ERAM
-   // ----------------------------------------------------------------------------------------------------------------------
+   // -----------------------------------------------------------------------------------------------------------------
    float maxdEdx = 0;
    for (TH1F *hist : pr.vmod_fph1f_WF)
       if (hist->GetMaximum() > maxdEdx)
@@ -110,8 +110,53 @@ void Draw::Run(const std::string &filepath)
    }
    fpCanvas->SaveAs(fRealpathPDF.c_str());
 
+   // dE/dx XP Systematics
+   // -----------------------------------------------------------------------------------------------------------------
+   TF1 tf1Syst;
+   tf1Syst.SetNpx(1000);
+   float meanSyst = 0, dmeanSyst = 0, stdSyst = 0, dstdSyst = 0;
+   TPaveText pavetextSyst(0.45, 0.45, 0.9, 0.7, "NDC");
+
+   fpCanvas->Clear();
+   Graphic_setup(pr.fph1f_systFitRelat, 0.5, 1, kMagenta + 2, 2, kMagenta - 2, kMagenta, 0.2);
+   tf1Syst = *Fit1Gauss(pr.fph1f_systFitRelat);
+   meanSyst = tf1Syst.GetParameter(1);
+   dmeanSyst = tf1Syst.GetParError(1);
+   stdSyst = tf1Syst.GetParameter(2);
+   dstdSyst = tf1Syst.GetParError(2);
+   pavetextSyst.SetTextSize(0.07);
+   pavetextSyst.SetTextColor(kMagenta + 4);
+   pavetextSyst.SetFillColorAlpha(kMagenta, 0.2);
+   pavetextSyst.SetLineWidth(2);
+   pavetextSyst.SetBorderSize(2);
+   pavetextSyst.SetLineColor(kMagenta - 2);
+   pavetextSyst.AddText(Form("#mu_{Fit} = %.3f #pm %.3f %%", meanSyst, dmeanSyst));
+   pavetextSyst.AddText(Form("#sigma_{Fit} = %.3f #pm %.3f %%", stdSyst, dstdSyst));
+   Graphic_setup(&tf1Syst, 3, kMagenta+3, 1);
+   pr.fph1f_systFitRelat->Draw("HIST");
+   tf1Syst.Draw("same");
+   pavetextSyst.Draw();
+   fpCanvas->SaveAs(fRealpathPDF.c_str());
+
+   fpCanvas->Clear();
+
+   Graphic_setup(pr.fph1f_systRCRelat, 0.5, 1, kMagenta + 2, 2, kMagenta - 2, kMagenta, 0.2);
+   pavetextSyst.Clear();
+   tf1Syst = *Fit1Gauss(pr.fph1f_systRCRelat);
+   meanSyst = tf1Syst.GetParameter(1);
+   dmeanSyst = tf1Syst.GetParError(1);
+   stdSyst = tf1Syst.GetParameter(2);
+   dstdSyst = tf1Syst.GetParError(2);
+   pavetextSyst.AddText(Form("#mu_{RC} = %.3f #pm %.3f %%", meanSyst, dmeanSyst));
+   pavetextSyst.AddText(Form("#sigma_{RC} = %.3f #pm %.3f %%", stdSyst, dstdSyst));
+   Graphic_setup(&tf1Syst, 3, kMagenta+3, 1);
+   pr.fph1f_systRCRelat->Draw("HIST");
+   tf1Syst.Draw("same");
+   pavetextSyst.Draw();
+   fpCanvas->SaveAs(fRealpathPDF.c_str());
+
    // dE/dx XP vs WF
-   // ---------------------------------------------------------------------------------------------------------------------------
+   // -----------------------------------------------------------------------------------------------------------------
    fpCanvas->Clear();
    gPad->SetRightMargin(0.13);
    gStyle->SetOptStat(111111);
@@ -121,7 +166,7 @@ void Draw::Run(const std::string &filepath)
    fpCanvas->SaveAs(fRealpathPDF.c_str());
 
    // dE/dx per time bin
-   // -----------------------------------------------------------------------------------------------------------------------
+   // -----------------------------------------------------------------------------------------------------------------
    // Resolution
    fpCanvas->Clear();
    gPad->SetRightMargin(0.03);
@@ -283,14 +328,14 @@ void Draw::Run(const std::string &filepath)
    fpCanvas->SaveAs(fRealpathPDF.c_str());
 
    // Both angles
-   // -----------------------------------------------------------------------------------------------------------------------------
+   // -----------------------------------------------------------------------------------------------------------------
    fpCanvas->Clear();
    gPad->SetRightMargin(0.13);
    pr.fph2f_phitheta->Draw("colz");
    fpCanvas->SaveAs(fRealpathPDF.c_str());
 
    // dEdx vs momentum
-   // --------------------------------------------------------------------------------------------------------------------
+   // -----------------------------------------------------------------------------------------------------------------
    // Resolution
    fpCanvas->Clear();
    gPad->SetRightMargin(0.03);
@@ -354,9 +399,9 @@ void Draw::Run(const std::string &filepath)
    fpCanvas->SaveAs(fRealpathPDF.c_str());
 
    // Pulls
-   // -----------------------------------------------------------------------------------------------------------------------
+   // -----------------------------------------------------------------------------------------------------------------
    // Pulls vs theta
-   // ---------------------------------------------------------------------------------------------------------------
+   // -----------------------------------------------------------------------------------------------------------------
    // Standard deviation
    fpCanvas->Clear();
    gPad->SetRightMargin(0.03);
@@ -411,7 +456,7 @@ void Draw::Run(const std::string &filepath)
    fpCanvas->SaveAs(fRealpathPDF.c_str());
 
    // Pulls vs momentum
-   // ---------------------------------------------------------------------------------------------------------------
+   // -----------------------------------------------------------------------------------------------------------------
    // Standard deviation
    fpCanvas->Clear();
    gPad->SetRightMargin(0.03);
@@ -525,7 +570,7 @@ void Draw::Run(const std::string &filepath)
    fpCanvas->SaveAs(fRealpathPDF.c_str());
 
    // Geometry plots
-   // ----------------------------------------------------------------------------------------------------------------------------
+   // -----------------------------------------------------------------------------------------------------------------
 
    fpCanvas->Clear();
    gPad->SetTopMargin(0.02);
@@ -552,7 +597,7 @@ void Draw::Run(const std::string &filepath)
    fpCanvas->SaveAs(fRealpathPDF.c_str());
 
    // Debugging
-   // ------------------------------------------------------------------------------------------------------------------------------
+   // -----------------------------------------------------------------------------------------------------------------
 
    fpCanvas->Clear();
    gPad->SetRightMargin(0.13);
@@ -564,7 +609,7 @@ void Draw::Run(const std::string &filepath)
    fpCanvas->SaveAs(fRealpathPDF.c_str());
 
    // dE/dx per momentum bin
-   // --------------------------------------------------------------------------------------------------------------------
+   // -----------------------------------------------------------------------------------------------------------------
    gPad->SetTopMargin(0.08);
    gPad->SetRightMargin(0.02);
    for (int i = 0; i < nmombins; i++) {
@@ -584,7 +629,7 @@ void Draw::Run(const std::string &filepath)
    }
 
    // dE/dx per theta bin
-   // --------------------------------------------------------------------------------------------------------------------
+   // -----------------------------------------------------------------------------------------------------------------
    gPad->SetTopMargin(0.08);
    gPad->SetRightMargin(0.02);
    for (int i = 0; i < nthetabins; i++) {
@@ -604,7 +649,7 @@ void Draw::Run(const std::string &filepath)
    }
 
    // Drift velocity plots
-   // ----------------------------------------------------------------------------------------------------------------------
+   // -----------------------------------------------------------------------------------------------------------------
    fpCanvas->Clear();
    gPad->SetRightMargin(0.02);
    int bins = 100;
@@ -776,7 +821,7 @@ void Draw::CompareRuns(const std::vector<std::string> &v_filepaths, const std::s
    }
 
    // Plot setup
-   // ------------------------------------------------------------------------------------------------------------------------------
+   // -----------------------------------------------------------------------------------------------------------------
    int dEdxmax = pr0->dEdxmax;
    int momrange = pr0->momrange;
    int nmombins = pr0->nmombins;
@@ -828,7 +873,7 @@ void Draw::CompareRuns(const std::vector<std::string> &v_filepaths, const std::s
    legEntries.push_back("+ 250 < P < 500 MeV/c");
 
    // Global dE/dx plot
-   // -------------------------------------------------------------------------------------------------------------------
+   // -----------------------------------------------------------------------------------------------------------------
    pr0->fph1f_XP->SetAxisRange(0, 1.1 * ampmax, "Y");
    for (int i = 0; i < ncomparisons; i++) {
       v_processes[i]->fph1f_XP->Draw(i == 0 ? "HIST" : "HIST same");
@@ -845,7 +890,7 @@ void Draw::CompareRuns(const std::vector<std::string> &v_filepaths, const std::s
    fpCanvas->Clear();
 
    // dE/dx vs momentum
-   // -------------------------------------------------------------------------------------------------------------------
+   // -----------------------------------------------------------------------------------------------------------------
    // Resolution
    pr0->ptge_mom_reso_XP->SetTitle(";Momentum (MeV/c);Resolution (%)");
    pr0->ptge_mom_reso_XP->GetXaxis()->SetLimits(-momrange, momrange);
@@ -871,7 +916,7 @@ void Draw::CompareRuns(const std::vector<std::string> &v_filepaths, const std::s
    fpCanvas->Clear();
 
    // dE/dx per time bins
-   // -------------------------------------------------------------------------------------------------------------------
+   // -----------------------------------------------------------------------------------------------------------------
    // Resolution
    pr0->ptge_dd_reso_XP->SetTitle(";Drift time (timebins);Resolution (%)");
    pr0->ptge_dd_reso_XP->GetXaxis()->SetLimits(0, 510);
@@ -896,7 +941,7 @@ void Draw::CompareRuns(const std::vector<std::string> &v_filepaths, const std::s
    fpCanvas->Clear();
 
    // dE/dx per phi bins
-   // -------------------------------------------------------------------------------------------------------------------
+   // -----------------------------------------------------------------------------------------------------------------
    // Resolution
    pr0->ptge_phi_reso_XP->SetTitle(";#varphi (#circ);Resolution (%)");
    pr0->ptge_phi_reso_XP->GetXaxis()->SetLimits(-90, 90);
@@ -921,7 +966,7 @@ void Draw::CompareRuns(const std::vector<std::string> &v_filepaths, const std::s
    fpCanvas->Clear();
 
    // dE/dx per theta bins
-   // -------------------------------------------------------------------------------------------------------------------
+   // -----------------------------------------------------------------------------------------------------------------
    // Resolution
    pr0->ptge_theta_reso_XP->SetTitle(";#theta (#circ);Resolution (%)");
    pr0->ptge_theta_reso_XP->GetXaxis()->SetLimits(-90, 90);

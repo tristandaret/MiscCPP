@@ -253,6 +253,8 @@ void Process::Run()
    // Tree branches
    fpInputTree->SetBranchAddress("dEdx_WF", &wf);
    fpInputTree->SetBranchAddress("dEdx_XP", &xp);
+   fpInputTree->SetBranchAddress("dEdx_XPSystFitRelat", &xpSystFitRelat);
+   fpInputTree->SetBranchAddress("dEdx_XPSystRCRelat", &xpSystRCRelat);
    fpInputTree->SetBranchAddress("track_length", &dx);
    fpInputTree->SetBranchAddress("pos", &pos);
    fpInputTree->SetBranchAddress("dir", &dir);
@@ -320,6 +322,9 @@ void Process::Run()
       fph2f_XPdrift->Fill(mean_time, xp);
       fph2f_XPphi->Fill(phi, xp);
       fph2f_XPtheta->Fill(theta, xp);
+
+      fph1f_systFitRelat->Fill(xpSystFitRelat*100);
+      fph1f_systRCRelat->Fill(xpSystRCRelat*100);
 
       vmod_fph2f_XPdrift[eram_channel]->Fill(mean_time, xp);
       vmod_fph1f_WF[eram_channel]->Fill(wf / 1.019);
