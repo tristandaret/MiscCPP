@@ -6,18 +6,22 @@
 int main()
 {
 
-   int do_run = 0;
-   int do_draw = 1;
+   int do_run = 1;
+   int do_draw = 0;
    int do_draw_compcuts = 0;
    // Output structure: type -> run -> comment -> fileName
    std::string type = "cosmics";
+   // std::string type = "MC";
    std::string run = "TreeMaker_dog1_00001022";
+   // std::string run = "TreeMaker_MC";
    // std::string run = "hattree_1148";
    std::string tag = "_0000";
+   // std::string tag = "_mu-_600MeV_x50_y75_z-275_phi0_theta0";
    // std::string tag = "_full";
    // std::vector<std::string> v_comments{"_RCHighLow", "_master_T04_GFixed"};
    // std::vector<std::string> v_comments{"_RCHighLow"};
-   std::vector<std::string> v_comments{"_systFitRCRelat"};
+   std::vector<std::string> v_comments{"_systRelat"};
+   // std::vector<std::string> v_comments{"_systRelat_N10000"};
    std::vector<std::string> v_filepaths;
 
    Draw draw;

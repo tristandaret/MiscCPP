@@ -19,24 +19,14 @@ int main()
    TrackModel trackmodel;
    LUTMaker lutmaker;
 
-   // => Exact: 356.422 | Amplitude: 358 | length: 10.1899 | d: -0.620518 | phi: -89.9624 | RC: 112 | X: 489
-   // Approx: 382.929 | Scalefactor: 1.06963 | relative difference: 7.43679
-   float amplitude = 358;
+   // Variables: Dt = 310 | RC = 112 | drift = 611.7 | impact = 4.89291 | phi = 44.5825 | amplitude = 239 | length = 5.39015
+   float amplitude = 239;
    float Dt = 310 / pow(10, 3.5);
-   float drift = 489;
+   float drift = 611.7;
    float RC = 112;
-   float impact = -0.620518;
-   float phi = -89.9624;
-   float length = 10.1899;
-   // => Exact: 744.208 | Amplitude: 697 | length: 10.1899 | d: -0.618579 | phi: 89.9842 | RC: 112 | X: 485.9
-   // Approx: 745.181 | Scalefactor: 1.06913 | relative difference: 0.130738
-   // float amplitude = 697;
-   // float Dt = 310/pow(10, 3.5);
-   // float drift = 485.9;
-   // float RC = 112;
-   // float impact = -0.618579;
-   // float phi = 89.9842;
-   // float length = 10.1899;
+   float impact = 4.89291;
+   float phi = 44.5825;
+   float length = 5.39015;
 
    float diag = lutmaker.GetDiag();
 
@@ -70,10 +60,6 @@ int main()
    // lutmaker.DrawDiffInterpolExact(Dt, RC, drift, 0, 90, 0, diag/2);
 
    lutmaker.PrintLUTcorners();
-
-   std::cout << lutmaker.GetDiag() << std::endl;
-   for (int i = 0; i < lutmaker.GetVecPhi().size(); i++)
-      std::cout << i << " " << lutmaker.GetVecPhi()[i] << std::endl;
 
    // modifyBranches();
 

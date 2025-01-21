@@ -307,6 +307,8 @@ void Drawing::Distributions()
    TH1F *ph1_rc = new TH1F("ph1_rc", "RC distribution;RC value (ns/mm^{2});Count", 200, 50, 275);
    TH1F *ph1_rchigh = new TH1F("ph1_rchigh", "High RC distribution;RC value (ns/mm^{2});Count", 200, 50, 275);
    TH1F *ph1_rclow = new TH1F("ph1_rclow", "Low RC distribution;RC value (ns/mm^{2});Count", 200, 50, 275);
+   TH1F *ph1_rchighdiff = new TH1F("ph1_rchighdiff", "difference to reference (158) for high RC pads;RC difference (ns/mm^{2});Count", 141, -60, 80);
+   TH1F *ph1_rclowdiff = new TH1F("ph1_rclowdiff", "difference to reference (112) for low RC pads;RC difference (ns/mm^{2});Count", 141, -60, 80);
    TH1F *ph1_rcbot = new TH1F("ph1_rcbot", "RC distribution (bHAT);RC value (ns/mm^{2});Count", 200, 50, 275);
    TH1F *ph1_rctop = new TH1F("ph1_rctop", "RC distribution (tHAT);RC value (ns/mm^{2});Count", 200, 50, 275);
    TH1F *ph1_rcdiff =
@@ -420,7 +422,13 @@ void Drawing::Distributions()
             ph2_GRC->Fill(rc, gain);
             v_ph2_GRC[i]->Fill(rc, gain);
             ph1_rc->Fill(rc);
-            v_eram_rc[i] < 130 ? ph1_rclow->Fill(rc) : ph1_rchigh->Fill(rc);
+            if (v_eram_rc[i] < 130){
+               ph1_rclow->Fill(rc);
+               ph1_rclowdiff->Fill(rc - 112);
+            } else {
+               ph1_rchigh->Fill(rc);
+               ph1_rchighdiff->Fill(rc - 158);
+            }
             ph1_gain->Fill(gain);
             if (j > 0)
                ph1_rcdiffhori->Fill(rc - pERAMMaps->RC(i, j - 1, k));
@@ -557,6 +565,35 @@ void Drawing::Distributions()
    ph1_rclow->GetFunction("gausn")->Draw("same");
    ph1_rchigh->GetFunction("gausn")->SetLineColor(kRed + 3);
    ph1_rchigh->GetFunction("gausn")->Draw("same");
+   pTCanvas->SaveAs(OutputFile.c_str());
+   pTCanvas->Clear();
+
+   // RC difference to reference distributions for low and high mean RC ERAMs
+   Graphic_setup(ph1_rchighdiff, 0.5, 1, kRed + 1, 2, kRed - 2, kRed, 0.2);
+   Graphic_setup(ph1_rclowdiff, 0.5, 1, kBlue + 1, 2, kBlue - 2, kBlue, 0.2);
+   ph1_rclowdiff->Draw("hist");
+   ph1_rchighdiff->Draw("hist same");
+   ph1_rclowdiff->SetTitle("RC difference wrt reference");
+   TPaveText paveTextRCDiffToRefHigh(0.65, 0.7, 0.93, 0.88, "NDC");
+   paveTextRCDiffToRefHigh.SetTextColor(kRed + 3);
+   paveTextRCDiffToRefHigh.SetFillColorAlpha(kRed, 0.2);
+   paveTextRCDiffToRefHigh.SetLineWidth(2);
+   paveTextRCDiffToRefHigh.SetBorderSize(2);
+   paveTextRCDiffToRefHigh.SetTextAlign(12);
+   paveTextRCDiffToRefHigh.SetLineColor(kRed + 3);
+   paveTextRCDiffToRefHigh.AddText("Low mean");
+   paveTextRCDiffToRefHigh.AddText(Form("#mu = %.1f, #sigma = %.1f", ph1_rchighdiff->GetMean(), ph1_rchighdiff->GetRMS()));
+   paveTextRCDiffToRefHigh.Draw();
+   TPaveText paveTextRCDiffToRefLow(0.65, 0.5, 0.93, 0.68, "NDC");
+   paveTextRCDiffToRefLow.SetTextColor(kBlue + 3);
+   paveTextRCDiffToRefLow.SetFillColorAlpha(kBlue, 0.2);
+   paveTextRCDiffToRefLow.SetLineWidth(2);
+   paveTextRCDiffToRefLow.SetBorderSize(2);
+   paveTextRCDiffToRefLow.SetTextAlign(12);
+   paveTextRCDiffToRefLow.SetLineColor(kBlue + 3);
+   paveTextRCDiffToRefLow.AddText("Low mean");
+   paveTextRCDiffToRefLow.AddText(Form("#mu = %.1f, #sigma = %.1f", ph1_rclowdiff->GetMean(), ph1_rclowdiff->GetRMS()));
+   paveTextRCDiffToRefLow.Draw();
    pTCanvas->SaveAs(OutputFile.c_str());
    pTCanvas->Clear();
 

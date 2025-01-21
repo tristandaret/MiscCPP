@@ -15,6 +15,9 @@ LUTMaker::LUTMaker()
    v_drift = linspace(0, 1000, SNSTEPS_DRIFT);
    v_RC = {112, 158};
    v_Dt = {310 / pow(10, 3.5), 350 / pow(10, 3.5)};
+   for(float val : v_phi)
+      std::cout << val << " ";
+   std::cout << std::endl;
 
    fp_trackmodel = new TrackModel();
 
@@ -331,11 +334,11 @@ void LUTMaker::PrintLUTcorners()
       transvDiff = v_Dt[itransvDiff];
       for (int iRC = 0; iRC < 1; iRC++) {
          RC = v_RC[iRC];
-         for (int idrift = 48; idrift < 50; idrift++) {
+         for (int idrift = 60; idrift < 62; idrift++) {
             drift = v_drift[idrift];
-            for (int iphi = 0; iphi < 10; iphi++) {
+            for (int iphi = 0; iphi < 250; iphi++) {
                phi = v_phi[iphi];
-               for (int id = 0; id < SNSTEPS_D; id++) {
+               for (int id = 150; id < SNSTEPS_D; id++) {
                   d = v_impact[id];
                   length = arr_length[iphi][id];
                   if (length <= 0)

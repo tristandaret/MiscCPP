@@ -142,8 +142,17 @@ private:
    TH2F *fph2f_WFmom = new TH2F("fph2f_WFmom", ";momentum (MeV);dE/dx with WF (ADC counts/cm)", 5 * nmombins, -momrange,
                                 momrange, nbinsdEdx, 0, 1000);
    // Systematics
-   TH1F *fph1f_systFitRelat = new TH1F("fph1f_systFitRelat", ";Relative fit systematic uncertainty (%);Count", 100, 0, 2.5);
-   TH1F *fph1f_systRCRelat = new TH1F("fph1f_systRCRelat", ";Relative RC systematic uncertainty (%);Count", 100, 0, 0.5);
+   TH1F *fph1f_systFitRelat =
+      new TH1F("fph1f_systFitRelat", ";Relative fit systematic uncertainty (%);Count", 100, 0, 1);
+   TH2F *fph2f_systFitMom = new TH2F("fph2f_systFitMom", ";momentum (MeV);Fit systematic uncertainty (%)", 100,
+                                     -momrange, momrange, 100, 0, 1);
+   TH2F *fph2f_systFitChi2ndf =
+      new TH2F("fph2f_systFitChi2ndf", ";#chi^{2}/NDF;Fit systematic uncertainty (%)", 100, 0, 50, 100, 0, 1);
+   TH2F *fph2f_systFitPhi =
+      new TH2F("fph2f_systFitPhi", ";#varphi;Fit systematic uncertainty (%)", 100, -90, 90, 100, 0, 1);
+   TH1F *fph1f_systRCRelat = new TH1F("fph1f_systRCRelat", ";Relative RC systematic uncertainty (%);Count", 100, 0, 1);
+   TH1F *fph1f_systLUTRelat =
+      new TH1F("fph1f_systLUTRelat", ";Relative LUT systematic uncertainty (%);Count", 100, 0, 0.03);
    // Momentum
    TH1I *fph1i_mom = new TH1I("fph1i_mom", ";momentum (MeV);Count", 3 * nmombins, -momrange, momrange);
    TH1I *fph1i_mom_tHAT = new TH1I("fph1i_mom_thAT", ";momentum (MeV);Count", 3 * nmombins, -momrange, momrange);
@@ -179,6 +188,8 @@ private:
    TH2F *fph2f_chi2ndfphi = new TH2F("ph2f_chi2ndfphi", ";#varphi;#chi^{2}/NDF", 100, -90, 90, 100, 0, 50);
    TH2F *fph2f_momtheta =
       new TH2F("ph2f_momtheta", ";#theta;momentum (MeV)", 5 * nthetabins, -90, 90, 5 * nmombins, -momrange, momrange);
+   TH2F *fph2f_momphi =
+      new TH2F("ph2f_momphi", ";#varphi;momentum (MeV)", 5 * nphibins, -90, 90, 5 * nmombins, -momrange, momrange);
    TH2F *fph2f_momR = new TH2F("ph2f_momR", ";R;momentum (MeV)", 300, -5e4, 5e4, 3 * nmombins, -momrange, momrange);
    TH2F *fph2f_chi2ndfR = new TH2F("ph2f_chi2ndfR", ";R;#chi^{2}/NDF", 300, -5e4, 5e4, 300, 0, 50);
    TH2F *fph2f_lentheta = new TH2F("ph2f_lentheta", ";#theta;track length (cm)", 5 * nthetabins, -90, 90, 171, 0, 170);
@@ -189,6 +200,7 @@ private:
    Double_t xp;
    Double_t xpSystFitRelat;
    Double_t xpSystRCRelat;
+   Double_t xpSystLUTRelat;
    Double_t dx;
    Double_t pos[3];
    Double_t dir[3];
@@ -212,17 +224,24 @@ private:
    Int_t eram_ID;
 
    // Cuts
-   int nclmin = 0, nclmax = 200;
-   int dxmin = 0;
-   int ddEdxmax = 2e3;
-   int ncroscut = 0;
-   int apmcutlow = 0, apmcuthigh = 20;
-   int momcutlow = 0, momcuthigh = 1e6;
-   int tcutmin = 0, tcutmax = 1e3;
-   int chi2max = 1e3;
-   int hat = 0, pullmumax = 100;
-   int phimin = -90, phimax = 90;
-   int thetamin = -90, thetamax = 90;
+   int nclmin{0};
+   int nclmax{1000};
+   int dxmin{0};
+   int ddEdxmax{1000000};
+   int ncroscut{0};
+   int apmcutlow{0};
+   int apmcuthigh{1000};
+   int momcutlow{0};
+   int momcuthigh{1000000000};
+   int tcutmin{0};
+   int tcutmax{1000};
+   int chi2max{1000000000};
+   int hat{0};
+   int pullmumax{1000000};
+   int phimin{-90};
+   int phimax{90};
+   int thetamin{-90};
+   int thetamax{90};
 
    // Friend declarations to allow inner classes to access private members
    friend class Draw;

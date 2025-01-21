@@ -218,16 +218,26 @@ Process::~Process()
 
 void Process::SetCuts()
 {
-   // nclmin = 32;							fcutslist += ("_" + std::to_string(nclmin)		+ "ncl");
-   // apmcutlow = 2, apmcuthigh = 4;		fcutslist += ("_" + sàtd::to_string(apmcutlow)	+ "apm" +
-   // std::to_string(apmcuthigh)); momcutlow = 1e2;						fcutslist += ("_" + std::to_string(momcutlow)	+
-   // "mom"); tcutmin = 0, tcutmax = 75;			fcutslist += ("_" + std::to_string(tcutmin)		+ "tmin" +
-   // std::to_string(tcutmax)); nclmin=50, nclmax = 150;				fcutslist += ("_" + std::to_string(nclmin)		+
-   // "ncl" + std::to_string(nclmax)); dxmin = 50, ddEdxmax = 150;			fcutslist += ("_" + std::to_string(dxmin)
-   // + "dx" + std::to_string(ddEdxmax)); pullmumax = 2;						fcutslist += ("_pullmu" +
-   // std::to_string(pullmumax)); phimin = 80; phimax = 90;			fcutslist += ("_" + std::to_string(phimin)		+
-   // "phi" + std::to_string(phimax)); thetamin = 0; thetamax = 10;			fcutslist += ("_" + std::to_string(thetamin)
-   // + "theta" + std::to_string(thetamax));
+   // nclmin = 32;
+   // fcutslist += ("_" + std::to_string(nclmin) + "ncl");
+   // apmcutlow = 2, apmcuthigh = 4;
+   // fcutslist += ("_" + std::to_string(apmcutlow) + "apm" + std::to_string(apmcuthigh));
+   // momcutlow = 1e2;
+   // fcutslist += ("_" + std::to_string(momcutlow) + "mom");
+   // tcutmin = 0, tcutmax = 75;
+   // fcutslist += ("_" + std::to_string(tcutmin) + "tmin" + std::to_string(tcutmax));
+   // nclmin = 50, nclmax = 150;
+   // fcutslist += ("_" + std::to_string(nclmin) + "ncl" + std::to_string(nclmax));
+   // dxmin = 50, ddEdxmax = 150;
+   // fcutslist += ("_" + std::to_string(dxmin) + "dx" + std::to_string(ddEdxmax));
+   // pullmumax = 2;
+   // fcutslist += ("_pullmu" + std::to_string(pullmumax));
+   // phimin = 80;
+   // phimax = 90;
+   // fcutslist += ("_" + std::to_string(phimin) + "phi" + std::to_string(phimax));
+   // thetamin = 0;
+   // thetamax = 10;
+   // fcutslist += ("_" + std::to_string(thetamin) + "theta" + std::to_string(thetamax));
    chi2max = 5;
    fcutslist += ("_chi2ndf" + std::to_string(chi2max));
    // dxmin = 25;
@@ -235,7 +245,8 @@ void Process::SetCuts()
    // momcutlow = 100, momcuthigh = 600;
    // fcutslist += ("_" + std::to_string(momcutlow) + "mom" + std::to_string(momcuthigh));
    fcutslist += "_dir1>0flip";
-   // hat = -1;							fcutslist += std::string("_") + (hat == -1 ? "bHAT" : "tHAT");
+   // hat = -1;
+   // fcutslist += std::string("_") + (hat == -1 ? "bHAT" : "tHAT");
 
    // Output files
    ffileName += fcutslist;
@@ -255,6 +266,7 @@ void Process::Run()
    fpInputTree->SetBranchAddress("dEdx_XP", &xp);
    fpInputTree->SetBranchAddress("dEdx_XPSystFitRelat", &xpSystFitRelat);
    fpInputTree->SetBranchAddress("dEdx_XPSystRCRelat", &xpSystRCRelat);
+   fpInputTree->SetBranchAddress("dEdx_XPSystLUTRelat", &xpSystLUTRelat);
    fpInputTree->SetBranchAddress("track_length", &dx);
    fpInputTree->SetBranchAddress("pos", &pos);
    fpInputTree->SetBranchAddress("dir", &dir);
@@ -273,6 +285,10 @@ void Process::Run()
    fpInputTree->SetBranchAddress("pull_muon", &pull_muon);
    fpInputTree->SetBranchAddress("pull_ele", &pull_ele);
    fpInputTree->SetBranchAddress("pull_prot", &pull_proton);
+
+   std::vector<double> v_systFit;
+   std::vector<double> v_systLUT;
+   std::vector<double> v_systRC;
 
    // Debugging variables
    int dirYnegbHAT = 0, dirYposbHAT = 0, dirYnegtHAT = 0, dirYpostHAT = 0;
@@ -323,8 +339,15 @@ void Process::Run()
       fph2f_XPphi->Fill(phi, xp);
       fph2f_XPtheta->Fill(theta, xp);
 
-      fph1f_systFitRelat->Fill(xpSystFitRelat*100);
-      fph1f_systRCRelat->Fill(xpSystRCRelat*100);
+      v_systFit.push_back(xpSystFitRelat);
+      v_systLUT.push_back(xpSystLUTRelat);
+      v_systRC.push_back(xpSystRCRelat);
+      fph1f_systFitRelat->Fill(xpSystFitRelat * 100);
+      fph2f_systFitMom->Fill(mom, xpSystFitRelat * 100);
+      fph2f_systFitChi2ndf->Fill(chi2 / NDF, xpSystFitRelat * 100);
+      fph2f_systFitPhi->Fill(phi, xpSystFitRelat * 100);
+      fph1f_systRCRelat->Fill(xpSystRCRelat * 100);
+      fph1f_systLUTRelat->Fill(xpSystLUTRelat * 100);
 
       vmod_fph2f_XPdrift[eram_channel]->Fill(mean_time, xp);
       vmod_fph1f_WF[eram_channel]->Fill(wf / 1.019);
@@ -425,6 +448,7 @@ void Process::Run()
       fph2f_pullelecmu->Fill(pull_muon, pull_ele);
       fph2f_chi2ndfphi->Fill(phi, chi2 / NDF);
       fph2f_momtheta->Fill(theta, mom);
+      fph2f_momphi->Fill(phi, mom);
       fph2f_momR->Fill(1 / curv, mom);
       fph2f_chi2ndfR->Fill(1 / curv, chi2 / NDF);
       fph2f_lentheta->Fill(theta, dx / 10);
@@ -448,7 +472,23 @@ void Process::Run()
    // << std::endl; std::cout << "Positive: " << ntoppos << " (top) => " << nbotpos << " (bottom) => top-bottom = " <<
    // ntoppos-nbotpos << std::endl;
 
-   // TGrafph filling
+   // Calculate the cutoff value including 95% of the elements in systematic vactors
+   std::sort(v_systFit.begin(), v_systFit.end());
+   int cutoff_index = static_cast<int>(0.95 * v_systFit.size());
+   double cutoff_valueFit = v_systFit[cutoff_index];
+   std::cout << "Cutoff value including 95% of the elements in v_systFit: " << cutoff_valueFit << std::endl;
+   std::sort(v_systRC.begin(), v_systRC.end());
+   cutoff_index = static_cast<int>(0.95 * v_systRC.size());
+   double cutoff_valueRC = v_systRC[cutoff_index];
+   std::cout << "Cutoff value including 95% of the elements in v_systRC: " << cutoff_valueRC << std::endl;
+   std::sort(v_systLUT.begin(), v_systLUT.end());
+   cutoff_index = static_cast<int>(0.95 * v_systLUT.size());
+   double cutoff_valueLUT = v_systLUT[cutoff_index];
+   std::cout << "Cutoff value including 95% of the elements in v_systLUT: " << cutoff_valueLUT << std::endl;
+   double cutoff_value = sqrt(pow(cutoff_valueFit, 2) + pow(cutoff_valueRC, 2) + pow(cutoff_valueLUT, 2));
+   std::cout << "Cutoff value including 95% of the elements in all systematic vectors: " << cutoff_value << std::endl;
+
+   // TGraph filling
    int ivalid = 0;
    // Momentum
    for (int i = 0; i < nmombins; i++) {

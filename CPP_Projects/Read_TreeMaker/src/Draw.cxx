@@ -113,13 +113,31 @@ void Draw::Run(const std::string &filepath)
    // dE/dx XP Systematics
    // -----------------------------------------------------------------------------------------------------------------
    TF1 tf1Syst;
-   tf1Syst.SetNpx(1000);
    float meanSyst = 0, dmeanSyst = 0, stdSyst = 0, dstdSyst = 0;
-   TPaveText pavetextSyst(0.45, 0.45, 0.9, 0.7, "NDC");
+   TPaveText pavetextSyst(0.3, 0.5, 0.94, 0.85, "NDC");
 
    fpCanvas->Clear();
+   gPad->SetRightMargin(0.13);
+   gStyle->SetOptStat("merou");
+   gStyle->SetStatX(0.87);
+   gStyle->SetStatY(0.95);
+   pr.fph2f_systFitMom->Draw("colz");
+   fpCanvas->SaveAs(fRealpathPDF.c_str());
+
+   fpCanvas->Clear();
+   pr.fph2f_systFitChi2ndf->Draw("colz");
+   fpCanvas->SaveAs(fRealpathPDF.c_str());
+
+   fpCanvas->Clear();
+   pr.fph2f_systFitPhi->Draw("colz");
+   fpCanvas->SaveAs(fRealpathPDF.c_str());
+
+   fpCanvas->Clear();
+   gPad->SetRightMargin(0.03);
+   gStyle->SetOptStat(0);
    Graphic_setup(pr.fph1f_systFitRelat, 0.5, 1, kMagenta + 2, 2, kMagenta - 2, kMagenta, 0.2);
-   tf1Syst = *Fit1Gauss(pr.fph1f_systFitRelat);
+   pr.fph1f_systFitRelat->Fit("landaun", "RQ", "", 0, 1);
+   tf1Syst = *pr.fph1f_systFitRelat->GetFunction("landaun");
    meanSyst = tf1Syst.GetParameter(1);
    dmeanSyst = tf1Syst.GetParError(1);
    stdSyst = tf1Syst.GetParameter(2);
@@ -130,27 +148,51 @@ void Draw::Run(const std::string &filepath)
    pavetextSyst.SetLineWidth(2);
    pavetextSyst.SetBorderSize(2);
    pavetextSyst.SetLineColor(kMagenta - 2);
-   pavetextSyst.AddText(Form("#mu_{Fit} = %.3f #pm %.3f %%", meanSyst, dmeanSyst));
-   pavetextSyst.AddText(Form("#sigma_{Fit} = %.3f #pm %.3f %%", stdSyst, dstdSyst));
+   pavetextSyst.AddText("Landau fit");
+   pavetextSyst.SetTextAlign(32);
+   pavetextSyst.AddText(Form("MPV_{Fit} = %.4f #pm %.4f %%", meanSyst, dmeanSyst));
+   pavetextSyst.AddText(Form("#sigma_{Fit} = %.4f #pm %.4f %%", stdSyst, dstdSyst));
    Graphic_setup(&tf1Syst, 3, kMagenta+3, 1);
    pr.fph1f_systFitRelat->Draw("HIST");
+   tf1Syst.SetNpx(1000);
    tf1Syst.Draw("same");
    pavetextSyst.Draw();
    fpCanvas->SaveAs(fRealpathPDF.c_str());
 
    fpCanvas->Clear();
-
    Graphic_setup(pr.fph1f_systRCRelat, 0.5, 1, kMagenta + 2, 2, kMagenta - 2, kMagenta, 0.2);
    pavetextSyst.Clear();
-   tf1Syst = *Fit1Gauss(pr.fph1f_systRCRelat);
+   pr.fph1f_systRCRelat->Fit("landaun", "RQ", "", 0, 0.5);
+   tf1Syst = *pr.fph1f_systRCRelat->GetFunction("landaun");
    meanSyst = tf1Syst.GetParameter(1);
    dmeanSyst = tf1Syst.GetParError(1);
    stdSyst = tf1Syst.GetParameter(2);
    dstdSyst = tf1Syst.GetParError(2);
-   pavetextSyst.AddText(Form("#mu_{RC} = %.3f #pm %.3f %%", meanSyst, dmeanSyst));
-   pavetextSyst.AddText(Form("#sigma_{RC} = %.3f #pm %.3f %%", stdSyst, dstdSyst));
+   pavetextSyst.AddText("Landau fit");
+   pavetextSyst.AddText(Form("MPV_{RC} = %.4f #pm %.4f %%", meanSyst, dmeanSyst));
+   pavetextSyst.AddText(Form("#sigma_{RC} = %.4f #pm %.4f %%", stdSyst, dstdSyst));
    Graphic_setup(&tf1Syst, 3, kMagenta+3, 1);
    pr.fph1f_systRCRelat->Draw("HIST");
+   tf1Syst.SetNpx(1000);
+   tf1Syst.Draw("same");
+   pavetextSyst.Draw();
+   fpCanvas->SaveAs(fRealpathPDF.c_str());
+
+   fpCanvas->Clear();
+   Graphic_setup(pr.fph1f_systLUTRelat, 0.5, 1, kMagenta + 2, 2, kMagenta - 2, kMagenta, 0.2);
+   pavetextSyst.Clear();
+   pr.fph1f_systLUTRelat->Fit("landaun", "RQ", "", 0, 0.015);
+   tf1Syst = *pr.fph1f_systLUTRelat->GetFunction("landaun");
+   meanSyst = tf1Syst.GetParameter(1);
+   dmeanSyst = tf1Syst.GetParError(1);
+   stdSyst = tf1Syst.GetParameter(2);
+   dstdSyst = tf1Syst.GetParError(2);
+   pavetextSyst.AddText("Landau fit");
+   pavetextSyst.AddText(Form("MPV_{LUT} = %.4f #pm %.4f %%", meanSyst, dmeanSyst));
+   pavetextSyst.AddText(Form("#sigma_{LUT} = %.4f #pm %.4f %%", stdSyst, dstdSyst));
+   Graphic_setup(&tf1Syst, 3, kMagenta+3, 1);
+   pr.fph1f_systLUTRelat->Draw("HIST");
+   tf1Syst.SetNpx(1000);
    tf1Syst.Draw("same");
    pavetextSyst.Draw();
    fpCanvas->SaveAs(fRealpathPDF.c_str());
@@ -159,7 +201,7 @@ void Draw::Run(const std::string &filepath)
    // -----------------------------------------------------------------------------------------------------------------
    fpCanvas->Clear();
    gPad->SetRightMargin(0.13);
-   gStyle->SetOptStat(111111);
+   gStyle->SetOptStat("merou");
    gStyle->SetStatX(0.33);
    gStyle->SetStatY(0.95);
    pr.fph2f_WFXP->Draw("colz");
@@ -271,6 +313,10 @@ void Draw::Run(const std::string &filepath)
 
    fpCanvas->Clear();
    pr.fph2f_chi2ndfphi->Draw("colz");
+   fpCanvas->SaveAs(fRealpathPDF.c_str());
+
+   fpCanvas->Clear();
+   pr.fph2f_momphi->Draw("colz");
    fpCanvas->SaveAs(fRealpathPDF.c_str());
 
    fpCanvas->Clear();
