@@ -30,8 +30,10 @@ ClassImp(Process)
    }
 
    for (int i = 0; i < nmombins; i++) {
-      int mommin = i * mombinwidth - momrange;
-      int mommax = (i + 1) * mombinwidth - momrange;
+      // int mommin = i * mombinwidth - momrange;
+      // int mommax = (i + 1) * mombinwidth - momrange;
+      int mommin = 0;
+      int mommax = momrange;
       vmom_fph1f_WF.push_back(new TH1F(Form("fph1f_mom_WF_%d_%d", mommin, mommax),
                                        Form("Energy loss | %d < p < %d; dE/dx (ADC counts/cm); Count", mommin, mommax),
                                        100, 0, dEdxmax));
@@ -238,8 +240,8 @@ void Process::SetCuts()
    // thetamin = 0;
    // thetamax = 10;
    // fcutslist += ("_" + std::to_string(thetamin) + "theta" + std::to_string(thetamax));
-   chi2max = 5;
-   fcutslist += ("_chi2ndf" + std::to_string(chi2max));
+   // chi2max = 5;
+   // fcutslist += ("_chi2ndf" + std::to_string(chi2max));
    // dxmin = 25;
    // fcutslist += ("_" + std::to_string(dxmin) + "dx");
    // momcutlow = 100, momcuthigh = 600;
@@ -264,9 +266,6 @@ void Process::Run()
    // Tree branches
    fpInputTree->SetBranchAddress("dEdx_WF", &wf);
    fpInputTree->SetBranchAddress("dEdx_XP", &xp);
-   fpInputTree->SetBranchAddress("dEdx_XPSystFitRelat", &xpSystFitRelat);
-   fpInputTree->SetBranchAddress("dEdx_XPSystRCRelat", &xpSystRCRelat);
-   fpInputTree->SetBranchAddress("dEdx_XPSystLUTRelat", &xpSystLUTRelat);
    fpInputTree->SetBranchAddress("track_length", &dx);
    fpInputTree->SetBranchAddress("pos", &pos);
    fpInputTree->SetBranchAddress("dir", &dir);
@@ -285,10 +284,6 @@ void Process::Run()
    fpInputTree->SetBranchAddress("pull_muon", &pull_muon);
    fpInputTree->SetBranchAddress("pull_ele", &pull_ele);
    fpInputTree->SetBranchAddress("pull_prot", &pull_proton);
-
-   std::vector<double> v_systFit;
-   std::vector<double> v_systLUT;
-   std::vector<double> v_systRC;
 
    // Debugging variables
    int dirYnegbHAT = 0, dirYposbHAT = 0, dirYnegtHAT = 0, dirYpostHAT = 0;
@@ -339,16 +334,6 @@ void Process::Run()
       fph2f_XPphi->Fill(phi, xp);
       fph2f_XPtheta->Fill(theta, xp);
 
-      v_systFit.push_back(xpSystFitRelat);
-      v_systLUT.push_back(xpSystLUTRelat);
-      v_systRC.push_back(xpSystRCRelat);
-      fph1f_systFitRelat->Fill(xpSystFitRelat * 100);
-      fph2f_systFitMom->Fill(mom, xpSystFitRelat * 100);
-      fph2f_systFitChi2ndf->Fill(chi2 / NDF, xpSystFitRelat * 100);
-      fph2f_systFitPhi->Fill(phi, xpSystFitRelat * 100);
-      fph1f_systRCRelat->Fill(xpSystRCRelat * 100);
-      fph1f_systLUTRelat->Fill(xpSystLUTRelat * 100);
-
       vmod_fph2f_XPdrift[eram_channel]->Fill(mean_time, xp);
       vmod_fph1f_WF[eram_channel]->Fill(wf / 1.019);
       vmod_fph1f_XP[eram_channel]->Fill(xp);
@@ -370,7 +355,7 @@ void Process::Run()
       fph2f_WFmom->Fill(mom, wf / 1.019);
       fph2f_XPmom->Fill(mom, xp);
 
-      momindex = (int)std::round(mom / mombinwidth) + nmombins / 2;
+      momindex = (int)std::round(fabs(mom) / mombinwidth);
       if (fabs(mom) < momrange) {
          vmom_fph1f_WF[momindex]->Fill(wf / 1.019);
          vmom_fph1f_XP[momindex]->Fill(xp);
@@ -472,22 +457,6 @@ void Process::Run()
    // << std::endl; std::cout << "Positive: " << ntoppos << " (top) => " << nbotpos << " (bottom) => top-bottom = " <<
    // ntoppos-nbotpos << std::endl;
 
-   // Calculate the cutoff value including 95% of the elements in systematic vactors
-   std::sort(v_systFit.begin(), v_systFit.end());
-   int cutoff_index = static_cast<int>(0.95 * v_systFit.size());
-   double cutoff_valueFit = v_systFit[cutoff_index];
-   std::cout << "Cutoff value including 95% of the elements in v_systFit: " << cutoff_valueFit << std::endl;
-   std::sort(v_systRC.begin(), v_systRC.end());
-   cutoff_index = static_cast<int>(0.95 * v_systRC.size());
-   double cutoff_valueRC = v_systRC[cutoff_index];
-   std::cout << "Cutoff value including 95% of the elements in v_systRC: " << cutoff_valueRC << std::endl;
-   std::sort(v_systLUT.begin(), v_systLUT.end());
-   cutoff_index = static_cast<int>(0.95 * v_systLUT.size());
-   double cutoff_valueLUT = v_systLUT[cutoff_index];
-   std::cout << "Cutoff value including 95% of the elements in v_systLUT: " << cutoff_valueLUT << std::endl;
-   double cutoff_value = sqrt(pow(cutoff_valueFit, 2) + pow(cutoff_valueRC, 2) + pow(cutoff_valueLUT, 2));
-   std::cout << "Cutoff value including 95% of the elements in all systematic vectors: " << cutoff_value << std::endl;
-
    // TGraph filling
    int ivalid = 0;
    // Momentum
@@ -524,19 +493,19 @@ void Process::Run()
       if (mean_WF == 0 || mean_XP == 0)
          continue;
 
-      ptge_mom_mean_WF->SetPoint(ivalid, i * mombinwidth - momrange, mean_WF);
+      ptge_mom_mean_WF->SetPoint(ivalid, i * mombinwidth, mean_WF);
       ptge_mom_mean_WF->SetPointError(ivalid, mombinwidth / 2, dmean_WF);
-      ptge_mom_mean_XP->SetPoint(ivalid, i * mombinwidth - momrange, mean_XP);
+      ptge_mom_mean_XP->SetPoint(ivalid, i * mombinwidth, mean_XP);
       ptge_mom_mean_XP->SetPointError(ivalid, mombinwidth / 2, dmean_XP);
       ptge_mom_mean_pullmu->SetPoint(ivalid, i * mombinwidth - momrange, mean_pullmu);
       ptge_mom_mean_pullmu->SetPointError(ivalid, mombinwidth / 2, dmean_pullmu);
       ptge_mom_mean_pullelec->SetPoint(ivalid, i * mombinwidth - momrange, mean_pullelec);
       ptge_mom_mean_pullelec->SetPointError(ivalid, mombinwidth / 2, dmean_pullelec);
 
-      ptge_mom_reso_WF->SetPoint(ivalid, i * mombinwidth - momrange, reso_WF);
-      ptge_mom_reso_WF->SetPointError(ivalid, mombinwidth / 2, dreso_WF);
-      ptge_mom_reso_XP->SetPoint(ivalid, i * mombinwidth - momrange, reso_XP);
-      ptge_mom_reso_XP->SetPointError(ivalid, mombinwidth / 2, dreso_XP);
+      ptge_mom_reso_WF->SetPoint(ivalid, (i * mombinwidth)/1000, reso_WF);
+      ptge_mom_reso_WF->SetPointError(ivalid, 0, 0);
+      ptge_mom_reso_XP->SetPoint(ivalid, (i * mombinwidth)/1000, reso_XP);
+      ptge_mom_reso_XP->SetPointError(ivalid, 0, 0);
       ptge_mom_std_pullmu->SetPoint(ivalid, i * mombinwidth - momrange, std_pullmu);
       ptge_mom_std_pullmu->SetPointError(ivalid, mombinwidth / 2, dstd_pullmu);
       ptge_mom_std_pullelec->SetPoint(ivalid, i * mombinwidth - momrange, std_pullelec);

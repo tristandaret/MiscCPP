@@ -10,7 +10,7 @@ TStyle *SetMyStyle()
    Int_t FontStyle = 132;
    Float_t FontSizeLabel = 0.045;
    Float_t FontSizeTitle = 0.055;
-   Color_t FontColor = kBlue - 1;
+   Color_t FontColor = kBlack;
 
    // Standard histogram decorations
    myStyle->SetOptTitle(1);

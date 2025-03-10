@@ -43,8 +43,8 @@ private:
    // Analysis settings
    int dEdxmax = 1300;
 
-   float nmombins = 101;
-   float momrange = 3000;
+   float nmombins = 60;
+   float momrange = 2000;
    float mombinwidth = 2 * momrange / (nmombins - 1);
    int momindex = 0;
 

@@ -307,8 +307,10 @@ void Drawing::Distributions()
    TH1F *ph1_rc = new TH1F("ph1_rc", "RC distribution;RC value (ns/mm^{2});Count", 200, 50, 275);
    TH1F *ph1_rchigh = new TH1F("ph1_rchigh", "High RC distribution;RC value (ns/mm^{2});Count", 200, 50, 275);
    TH1F *ph1_rclow = new TH1F("ph1_rclow", "Low RC distribution;RC value (ns/mm^{2});Count", 200, 50, 275);
-   TH1F *ph1_rchighdiff = new TH1F("ph1_rchighdiff", "difference to reference (158) for high RC pads;RC difference (ns/mm^{2});Count", 141, -60, 80);
-   TH1F *ph1_rclowdiff = new TH1F("ph1_rclowdiff", "difference to reference (112) for low RC pads;RC difference (ns/mm^{2});Count", 141, -60, 80);
+   TH1F *ph1_rchighdiff = new TH1F(
+      "ph1_rchighdiff", "difference to reference (158) for high RC pads;RC difference (ns/mm^{2});Count", 141, -60, 80);
+   TH1F *ph1_rclowdiff = new TH1F(
+      "ph1_rclowdiff", "difference to reference (112) for low RC pads;RC difference (ns/mm^{2});Count", 141, -60, 80);
    TH1F *ph1_rcbot = new TH1F("ph1_rcbot", "RC distribution (bHAT);RC value (ns/mm^{2});Count", 200, 50, 275);
    TH1F *ph1_rctop = new TH1F("ph1_rctop", "RC distribution (tHAT);RC value (ns/mm^{2});Count", 200, 50, 275);
    TH1F *ph1_rcdiff =
@@ -422,7 +424,7 @@ void Drawing::Distributions()
             ph2_GRC->Fill(rc, gain);
             v_ph2_GRC[i]->Fill(rc, gain);
             ph1_rc->Fill(rc);
-            if (v_eram_rc[i] < 130){
+            if (v_eram_rc[i] < 130) {
                ph1_rclow->Fill(rc);
                ph1_rclowdiff->Fill(rc - 112);
             } else {
@@ -582,7 +584,8 @@ void Drawing::Distributions()
    paveTextRCDiffToRefHigh.SetTextAlign(12);
    paveTextRCDiffToRefHigh.SetLineColor(kRed + 3);
    paveTextRCDiffToRefHigh.AddText("Low mean");
-   paveTextRCDiffToRefHigh.AddText(Form("#mu = %.1f, #sigma = %.1f", ph1_rchighdiff->GetMean(), ph1_rchighdiff->GetRMS()));
+   paveTextRCDiffToRefHigh.AddText(
+      Form("#mu = %.1f, #sigma = %.1f", ph1_rchighdiff->GetMean(), ph1_rchighdiff->GetRMS()));
    paveTextRCDiffToRefHigh.Draw();
    TPaveText paveTextRCDiffToRefLow(0.65, 0.5, 0.93, 0.68, "NDC");
    paveTextRCDiffToRefLow.SetTextColor(kBlue + 3);

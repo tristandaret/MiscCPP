@@ -40,8 +40,8 @@ private:
                               kMagenta + 2, kCyan + 2, kYellow + 2, kViolet + 2};
    std::vector<int> markers = {47, 34, 20, 21, 22, 23, 33, 43, 29};
 
-   int resomin = 0;
-   int resomax = 30;
+   float resomin = 8.5;
+   float resomax = 12.5;
    int meanmin = 200;
    int meanmax = 800;
    int stdmin = 0;

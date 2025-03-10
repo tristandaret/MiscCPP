@@ -7,28 +7,25 @@ int main()
 {
 
    int do_run = 1;
-   int do_draw = 0;
+   int do_draw = 1;
    int do_draw_compcuts = 0;
    // Output structure: type -> run -> comment -> fileName
    std::string type = "cosmics";
    // std::string type = "MC";
-   std::string run = "TreeMaker_dog1_00001022";
-   // std::string run = "TreeMaker_MC";
-   // std::string run = "hattree_1148";
-   std::string tag = "_0000";
-   // std::string tag = "_mu-_600MeV_x50_y75_z-275_phi0_theta0";
-   // std::string tag = "_full";
+   std::string run = "TreeMaker_dog1_00001148";
+   // std::string tag = "_0000-45";
+   std::string tag = "";
    // std::vector<std::string> v_comments{"_RCHighLow", "_master_T04_GFixed"};
-   // std::vector<std::string> v_comments{"_RCHighLow"};
-   std::vector<std::string> v_comments{"_systRelat"};
-   // std::vector<std::string> v_comments{"_systRelat_N10000"};
+   std::vector<std::string> v_comments{"nd280_14.29"};
    std::vector<std::string> v_filepaths;
 
    Draw draw;
    draw.SetOutputComparisonFolder("Output_PDF/" + type + "/" + run);
 
    for (std::string comment : v_comments) {
-      std::string fileName = run + tag + comment;
+      std::string fileName = run;
+      if(tag != "") fileName += "_" + tag;
+      if(comment != "") fileName += "_" + comment;
 
       // data
       std::string inputFolderPath = "/local/home/td263283/Documents/Code/CPP/CPP_Projects/Read_TreeMaker/ROOT_files/" +
@@ -82,14 +79,20 @@ int main()
    if (!do_draw_compcuts)
       return 0;
    v_filepaths.clear();
-   v_filepaths.push_back("Output_ROOT/cosmics/TreeMaker_dog1_00001022/_RCHighLow/"
-                         "TreeMaker_dog1_00001022_0000-45_RCHighLow_dir1>0flip.root");
-   v_filepaths.push_back("Output_ROOT/cosmics/TreeMaker_dog1_00001022/_RCHighLow/"
-                         "TreeMaker_dog1_00001022_0000-45_RCHighLow_chi2ndf5_25dx_dir1>0flip.root");
-   v_filepaths.push_back("Output_ROOT/cosmics/TreeMaker_dog1_00001022/_RCHighLow/"
-                         "TreeMaker_dog1_00001022_0000-45_RCHighLow_chi2ndf5_25dx_200mom1000_dir1>0flip.root");
-   v_filepaths.push_back("Output_ROOT/cosmics/TreeMaker_dog1_00001022/_RCHighLow/"
-                         "TreeMaker_dog1_00001022_0000-45_RCHighLow_chi2ndf5_25dx_250mom500_dir1>0flip.root");
+   // v_filepaths.push_back("Output_ROOT/cosmics/TreeMaker_dog1_00001022/_RCHighLow/"
+   //                       "TreeMaker_dog1_00001022_0000-45_RCHighLow_dir1>0flip.root");
+   // v_filepaths.push_back("Output_ROOT/cosmics/TreeMaker_dog1_00001022/_RCHighLow/"
+   //                       "TreeMaker_dog1_00001022_0000-45_RCHighLow_chi2ndf5_25dx_dir1>0flip.root");
+   // v_filepaths.push_back("Output_ROOT/cosmics/TreeMaker_dog1_00001022/_RCHighLow/"
+   //                       "TreeMaker_dog1_00001022_0000-45_RCHighLow_chi2ndf5_25dx_200mom1000_dir1>0flip.root");
+   // v_filepaths.push_back("Output_ROOT/cosmics/TreeMaker_dog1_00001022/_RCHighLow/"
+   //                       "TreeMaker_dog1_00001022_0000-45_RCHighLow_chi2ndf5_25dx_250mom500_dir1>0flip.root");
+   v_filepaths.push_back(
+      "Output_ROOT/cosmics/TreeMaker_dog1_00001022/_Trunc60/TreeMaker_dog1_00001022_0000_s0_n28000_Trunc60.root");
+   v_filepaths.push_back(
+      "Output_ROOT/cosmics/TreeMaker_dog1_00001022/_Trunc65/TreeMaker_dog1_00001022_0000_s0_n28000_Trunc65.root");
+   v_filepaths.push_back(
+      "Output_ROOT/cosmics/TreeMaker_dog1_00001022/_Trunc70/TreeMaker_dog1_00001022_0000_s0_n28000_Trunc70.root");
    draw.CompareRuns(v_filepaths, "cuts");
 
    return 0;
