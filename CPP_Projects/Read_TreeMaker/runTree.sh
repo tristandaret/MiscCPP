@@ -4,4 +4,4 @@ cd build
 cmake ..
 cmake --build . -j12
 cd ..
-time ./build/TreeMakerReader
+time ./build/TREEREADER

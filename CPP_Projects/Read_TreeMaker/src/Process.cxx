@@ -9,81 +9,116 @@ ClassImp(Process)
    Process::Process()
 {
 
-   std::vector<int> channel2iD = {24, 30, 28, 19, 21, 13, 9,  2,  26, 17, 23, 29, 1,  10, 11, 3,   /*bottom HATPC*/
-                                  47, 16, 14, 15, 42, 45, 37, 36, 20, 38, 7,  44, 43, 39, 41, 46}; /*top	HATPC*/
+   std::vector<int> channel2iD = {
+      24, 30, 28, 19, 21, 13, 9,  2,  26, 17, 23, 29, 1,  10, 11, 3,   /*bottom HATPC*/
+      47, 16, 14, 15, 42, 45, 37, 36, 20, 38, 7,  44, 43, 39, 41, 46}; /*top	HATPC*/
 
+   // dEdx per ERAM module
    for (int i = 0; i < 32; i++) {
-      vmod_fph1f_XP.push_back(new TH1F(Form("fph1f_XP_%d", i),
-                                       Form("Energy loss in ERAM %i;dE/dx (ADC counts/cm);Count", channel2iD[i]), 100,
-                                       0, dEdxmax));
-      vmod_fph1f_WF.push_back(new TH1F(Form("fph1f_WF_%d", i),
-                                       Form("Energy loss in ERAM %i;dE/dx (ADC counts/cm);Count", channel2iD[i]), 100,
-                                       0, dEdxmax));
-      vmod_fph2f_XPtmean.push_back(
-         new TH2F(Form("fph2f_XPtmean_%d", i),
-                  Form("Energy loss (XP) vs mean time in ERAM %i;mean time (ns);dE/dx (ADC counts/cm)", channel2iD[i]),
+      vmod_fph1f_XP.push_back(new TH1F(
+         Form("fph1f_XP_%d", i),
+         Form("Energy loss in ERAM %i;dE/dx (ADC counts/cm);Count", channel2iD[i]), 100,
+         0, dEdxmax));
+      vmod_fph1f_WF.push_back(new TH1F(
+         Form("fph1f_WF_%d", i),
+         Form("Energy loss in ERAM %i;dE/dx (ADC counts/cm);Count", channel2iD[i]), 100,
+         0, dEdxmax));
+      vmod_fph2f_XPdrift.push_back(
+         new TH2F(Form("fph2f_XPdrift_%d", i),
+                  Form("Energy loss (XP) vs drift time in ERAM %i;drift time "
+                       "(timebins);dE/dx (ADC counts/cm)",
+                       channel2iD[i]),
                   510, 0, 510, 100, 0, dEdxmax));
-      vmod_fph2f_XPdrift.push_back(new TH2F(
-         Form("fph2f_XPdrift_%d", i),
-         Form("Energy loss (XP) vs drift time in ERAM %i;drift time (timebins);dE/dx (ADC counts/cm)", channel2iD[i]),
-         510, 0, 510, 100, 0, dEdxmax));
    }
 
+   // dEdx and pulls vs momentum
    for (int i = 0; i < nmombins; i++) {
-      // int mommin = i * mombinwidth - momrange;
-      // int mommax = (i + 1) * mombinwidth - momrange;
-      int mommin = 0;
-      int mommax = momrange;
-      vmom_fph1f_WF.push_back(new TH1F(Form("fph1f_mom_WF_%d_%d", mommin, mommax),
-                                       Form("Energy loss | %d < p < %d; dE/dx (ADC counts/cm); Count", mommin, mommax),
-                                       100, 0, dEdxmax));
-      vmom_fph1f_XP.push_back(new TH1F(Form("fph1f_mom_XP_%d_%d", mommin, mommax),
-                                       Form("Energy loss | %d < p < %d; dE/dx (ADC counts/cm); Count", mommin, mommax),
-                                       100, 0, dEdxmax));
-      vmom_fph1f_pullmu.push_back(new TH1F(Form("fph1f_pull_%d_%d", mommin, mommax),
-                                           Form("Muon pull | %d < p < %d; Pull; Count", mommin, mommax), 100, -20, 20));
-      vmom_fph1f_pullelec.push_back(new TH1F(Form("fph1f_pullelec_%d_%d", mommin, mommax),
-                                             Form("Electron pull | %d < p < %d; Pull; Count", mommin, mommax), 100, -20,
-                                             20));
+      int mommin = i * mombinwidth - momrange;
+      int mommax = (i + 1) * mombinwidth - momrange;
+      vmom_fph1f_WF.push_back(new TH1F(
+         Form("fph1f_mom_WF_%d_%d", mommin, mommax),
+         Form("Energy loss | %d < p < %d; dE/dx (ADC counts/cm); Count", mommin, mommax),
+         100, 0, dEdxmax));
+      vmom_fph1f_XP.push_back(new TH1F(
+         Form("fph1f_mom_XP_%d_%d", mommin, mommax),
+         Form("Energy loss | %d < p < %d; dE/dx (ADC counts/cm); Count", mommin, mommax),
+         100, 0, dEdxmax));
+      vmom_fph1f_pullmu.push_back(new TH1F(
+         Form("fph1f_pull_%d_%d", mommin, mommax),
+         Form("Muon pull | %d < p < %d; Pull; Count", mommin, mommax), 100, -20, 20));
+      vmom_fph1f_pullelec.push_back(new TH1F(
+         Form("fph1f_pullelec_%d_%d", mommin, mommax),
+         Form("Electron pull | %d < p < %d; Pull; Count", mommin, mommax), 100, -20, 20));
    }
 
+   // dEdx vs X position
+   for (int i = 0; i < nxposbins; i++) {
+      int Xmin = i * xposbinwidth - xposrange;
+      int Xmax = (i + 1) * xposbinwidth - xposrange;
+      vX_fph1f_WF.push_back(new TH1F(
+         Form("fph1f_X_WF_%d_%d", Xmin, Xmax),
+         Form("Energy loss | %d < X < %d; dE/dx (ADC counts/cm); Count", Xmin, Xmax), 100,
+         0, dEdxmax));
+      vX_fph1f_XP.push_back(new TH1F(
+         Form("fph1f_X_XP_%d_%d", Xmin, Xmax),
+         Form("Energy loss | %d < X < %d; dE/dx (ADC counts/cm); Count", Xmin, Xmax), 100,
+         0, dEdxmax));
+   }
+
+   // dEdx vs drift time
    for (int i = 0; i < nddbins; i++) {
       int ddmin = i * ddbinwidth;
       int ddmax = (i + 1) * ddbinwidth;
       vdd_fph1f_WF.push_back(new TH1F(
          Form("ph1f_dd_WF_%d_%d", ddmin, ddmax),
-         Form("Energy loss | %d < drift distance < %d; dE/dx (ADC counts/cm); Count", ddmin, ddmax), 100, 0, dEdxmax));
+         Form("Energy loss | %d < drift distance < %d; dE/dx (ADC counts/cm); Count",
+              ddmin, ddmax),
+         100, 0, dEdxmax));
       vdd_fph1f_XP.push_back(new TH1F(
          Form("ph1f_dd_XP_%d_%d", ddmin, ddmax),
-         Form("Energy loss | %d < drift distance < %d; dE/dx (ADC counts/cm); Count", ddmin, ddmax), 100, 0, dEdxmax));
+         Form("Energy loss | %d < drift distance < %d; dE/dx (ADC counts/cm); Count",
+              ddmin, ddmax),
+         100, 0, dEdxmax));
    }
 
+   // dEdx vs phi angle
    for (int i = 0; i < nphibins; i++) {
       int phimin = i * phibinwidth - phirange;
       int phimax = (i + 1) * phibinwidth - phirange;
-      vphi_fph1f_WF.push_back(new TH1F(
-         Form("fph1f_phi_WF_%d_%d", phimin, phimax),
-         Form("Energy loss | %d < #varphi < %d; dE/dx (ADC counts/cm); Count", phimin, phimax), 100, 0, dEdxmax));
-      vphi_fph1f_XP.push_back(new TH1F(
-         Form("fph1f_phi_XP_%d_%d", phimin, phimax),
-         Form("Energy loss | %d < #varphi < %d; dE/dx (ADC counts/cm); Count", phimin, phimax), 100, 0, dEdxmax));
+      vphi_fph1f_WF.push_back(
+         new TH1F(Form("fph1f_phi_WF_%d_%d", phimin, phimax),
+                  Form("Energy loss | %d < #varphi < %d; dE/dx (ADC counts/cm); Count",
+                       phimin, phimax),
+                  100, 0, dEdxmax));
+      vphi_fph1f_XP.push_back(
+         new TH1F(Form("fph1f_phi_XP_%d_%d", phimin, phimax),
+                  Form("Energy loss | %d < #varphi < %d; dE/dx (ADC counts/cm); Count",
+                       phimin, phimax),
+                  100, 0, dEdxmax));
    }
 
+   // dEdx vs theta angle
    for (int i = 0; i < nthetabins; i++) {
       int thetamin = i * thetabinwidth - thetarange;
       int thetamax = (i + 1) * thetabinwidth - thetarange;
-      vtheta_fph1f_WF.push_back(new TH1F(
-         Form("fph1f_theta_WF_%d_%d", thetamin, thetamax),
-         Form("Energy loss | %d < #theta < %d; dE/dx (ADC counts/cm); Count", thetamin, thetamax), 100, 0, dEdxmax));
-      vtheta_fph1f_XP.push_back(new TH1F(
-         Form("fph1f_theta_XP_%d_%d", thetamin, thetamax),
-         Form("Energy loss | %d < #theta < %d; dE/dx (ADC counts/cm); Count", thetamin, thetamax), 100, 0, dEdxmax));
-      vtheta_fph1f_pullmu.push_back(new TH1F(Form("fph1f_pullmu_%d_%d", thetamin, thetamax),
-                                             Form("Muon pull | %d < #theta < %d; Pull; Count", thetamin, thetamax), 100,
-                                             -20, 20));
-      vtheta_fph1f_pullelec.push_back(
-         new TH1F(Form("fph1f_pullelec_%d_%d", thetamin, thetamax),
-                  Form("Electron pull | %d < #theta < %d; Pull; Count", thetamin, thetamax), 100, -20, 20));
+      vtheta_fph1f_WF.push_back(
+         new TH1F(Form("fph1f_theta_WF_%d_%d", thetamin, thetamax),
+                  Form("Energy loss | %d < #theta < %d; dE/dx (ADC counts/cm); Count",
+                       thetamin, thetamax),
+                  100, 0, dEdxmax));
+      vtheta_fph1f_XP.push_back(
+         new TH1F(Form("fph1f_theta_XP_%d_%d", thetamin, thetamax),
+                  Form("Energy loss | %d < #theta < %d; dE/dx (ADC counts/cm); Count",
+                       thetamin, thetamax),
+                  100, 0, dEdxmax));
+      vtheta_fph1f_pullmu.push_back(
+         new TH1F(Form("fph1f_pullmu_%d_%d", thetamin, thetamax),
+                  Form("Muon pull | %d < #theta < %d; Pull; Count", thetamin, thetamax),
+                  100, -20, 20));
+      vtheta_fph1f_pullelec.push_back(new TH1F(
+         Form("fph1f_pullelec_%d_%d", thetamin, thetamax),
+         Form("Electron pull | %d < #theta < %d; Pull; Count", thetamin, thetamax), 100,
+         -20, 20));
    }
 }
 
@@ -105,6 +140,11 @@ Process::~Process()
    delete ptge_mom_mean_pullelec;
    delete ptge_mom_std_pullmu;
    delete ptge_mom_std_pullelec;
+
+   delete ptge_X_mean_WF;
+   delete ptge_X_mean_XP;
+   delete ptge_X_reso_WF;
+   delete ptge_X_reso_XP;
 
    delete ptge_dd_mean_WF;
    delete ptge_dd_mean_XP;
@@ -129,7 +169,10 @@ Process::~Process()
    delete fph1f_WF;
    delete fph1f_XP;
    delete fph2f_WFXP;
+   delete fph2f_WFdrift;
    delete fph2f_XPdrift;
+   delete fph2f_WFX;
+   delete fph2f_XPX;
    delete fph2f_XPlen;
    delete fph2f_XPphi;
    delete fph2f_XPtheta;
@@ -170,8 +213,6 @@ Process::~Process()
       delete ptr;
    for (auto ptr : vmod_fph1f_WF)
       delete ptr;
-   for (auto ptr : vmod_fph2f_XPtmean)
-      delete ptr;
    for (auto ptr : vmod_fph2f_XPdrift)
       delete ptr;
    for (auto ptr : vmom_fph1f_WF)
@@ -181,6 +222,10 @@ Process::~Process()
    for (auto ptr : vmom_fph1f_pullmu)
       delete ptr;
    for (auto ptr : vmom_fph1f_pullelec)
+      delete ptr;
+   for (auto ptr : vX_fph1f_WF)
+      delete ptr;
+   for (auto ptr : vX_fph1f_XP)
       delete ptr;
    for (auto ptr : vdd_fph1f_WF)
       delete ptr;
@@ -202,12 +247,13 @@ Process::~Process()
    // Clear vectors after deleting
    vmod_fph1f_XP.clear();
    vmod_fph1f_WF.clear();
-   vmod_fph2f_XPtmean.clear();
    vmod_fph2f_XPdrift.clear();
    vmom_fph1f_WF.clear();
    vmom_fph1f_XP.clear();
    vmom_fph1f_pullmu.clear();
    vmom_fph1f_pullelec.clear();
+   vX_fph1f_WF.clear();
+   vX_fph1f_XP.clear();
    vdd_fph1f_WF.clear();
    vdd_fph1f_XP.clear();
    vphi_fph1f_WF.clear();
@@ -222,31 +268,53 @@ void Process::SetCuts()
 {
    // nclmin = 32;
    // fcutslist += ("_" + std::to_string(nclmin) + "ncl");
-   // apmcutlow = 2, apmcuthigh = 4;
-   // fcutslist += ("_" + std::to_string(apmcutlow) + "apm" + std::to_string(apmcuthigh));
-   // momcutlow = 1e2;
-   // fcutslist += ("_" + std::to_string(momcutlow) + "mom");
-   // tcutmin = 0, tcutmax = 75;
-   // fcutslist += ("_" + std::to_string(tcutmin) + "tmin" + std::to_string(tcutmax));
+
    // nclmin = 50, nclmax = 150;
    // fcutslist += ("_" + std::to_string(nclmin) + "ncl" + std::to_string(nclmax));
+
+   // apmcutlow = 2, apmcuthigh = 4;
+   // fcutslist += ("_" + std::to_string(apmcutlow) + "apm" + std::to_string(apmcuthigh));
+
+   // momcutlow = 1e2;
+   // fcutslist += ("_" + std::to_string(momcutlow) + "mom");
+
+   // tcutmin = 0, tcutmax = 75;
+   // fcutslist += ("_" + std::to_string(tcutmin) + "tmin" + std::to_string(tcutmax));
+
    // dxmin = 50, ddEdxmax = 150;
    // fcutslist += ("_" + std::to_string(dxmin) + "dx" + std::to_string(ddEdxmax));
+
    // pullmumax = 2;
    // fcutslist += ("_pullmu" + std::to_string(pullmumax));
+
    // phimin = 80;
    // phimax = 90;
    // fcutslist += ("_" + std::to_string(phimin) + "phi" + std::to_string(phimax));
-   // thetamin = 0;
-   // thetamax = 10;
-   // fcutslist += ("_" + std::to_string(thetamin) + "theta" + std::to_string(thetamax));
-   // chi2max = 5;
-   // fcutslist += ("_chi2ndf" + std::to_string(chi2max));
-   // dxmin = 25;
-   // fcutslist += ("_" + std::to_string(dxmin) + "dx");
+
+   chi2max = 5;
+   fcutslist += ("_chi2ndf" + std::to_string(chi2max));
+
+   dxmin = 0;
+   if (ffileName.find("dog1") != std::string::npos or
+       ffileName.find("cosmics") != std::string::npos)
+      dxmin = 60;
+   else if (ffileName.find("beam") != std::string::npos or
+            ffileName.find("sandmu") != std::string::npos)
+      dxmin = 140;
+   fcutslist += ("_" + std::to_string(dxmin) + "dx");
+
+   xcutmin = -1000, xcutmax = 1000;
+   fcutslist += ("_" + std::to_string(xcutmin) + "x" + std::to_string(xcutmax));
+
+   thetamin = 0;
+   thetamax = 2;
+   fcutslist += ("_" + std::to_string(thetamin) + "theta" + std::to_string(thetamax));
+
    // momcutlow = 100, momcuthigh = 600;
    // fcutslist += ("_" + std::to_string(momcutlow) + "mom" + std::to_string(momcuthigh));
-   fcutslist += "_dir1>0flip";
+
+   // fcutslist += "_dir1>0flip";
+
    // hat = -1;
    // fcutslist += std::string("_") + (hat == -1 ? "bHAT" : "tHAT");
 
@@ -293,7 +361,7 @@ void Process::Run()
       fpInputTree->GetEntry(i);
       mom = mom_og;
       // FOR COSMICS if the track is going up, the sign must be flipped
-      if (fRealpathROOT.find("cosmic") != std::string::npos and fcutslist.find("dir1>0flip") != std::string::npos)
+      if (fRealpathROOT.find("cosmic") != std::string::npos)
          dir[1] > 0 ? mom = -mom_og : mom = mom_og;
       float dirxy = TMath::Sqrt(dir[0] * dir[0] + dir[1] * dir[1]);
       float diryz = TMath::Sqrt(dir[1] * dir[1] + dir[2] * dir[2]);
@@ -318,6 +386,8 @@ void Process::Run()
          continue;
       if (mean_time < tcutmin or mean_time > tcutmax)
          continue;
+      if (pos[0] < xcutmin or pos[0] > xcutmax)
+         continue;
       if (chi2 / NDF > chi2max)
          continue;
       if (hat != 0 and sign(hat) != sign(pos[1]))
@@ -330,14 +400,16 @@ void Process::Run()
       fph1f_XP->Fill(xp);
       fph2f_WFXP->Fill(wf / 1.019, xp);
       fph2f_XPlen->Fill(dx / 10, xp);
+      fph2f_WFdrift->Fill(mean_time, wf / 1.019);
       fph2f_XPdrift->Fill(mean_time, xp);
+      fph2f_WFX->Fill(pos[0], wf / 1.019);
+      fph2f_XPX->Fill(pos[0], xp);
       fph2f_XPphi->Fill(phi, xp);
       fph2f_XPtheta->Fill(theta, xp);
 
       vmod_fph2f_XPdrift[eram_channel]->Fill(mean_time, xp);
       vmod_fph1f_WF[eram_channel]->Fill(wf / 1.019);
       vmod_fph1f_XP[eram_channel]->Fill(xp);
-      vmod_fph2f_XPtmean[eram_channel]->Fill(mean_time, xp);
 
       fph2f_XZ->Fill(dir[0], dir[2]);
       fph1f_phi->Fill(phi);
@@ -355,7 +427,8 @@ void Process::Run()
       fph2f_WFmom->Fill(mom, wf / 1.019);
       fph2f_XPmom->Fill(mom, xp);
 
-      momindex = (int)std::round(fabs(mom) / mombinwidth);
+      // dEdx vs momentum
+      momindex = (int)std::round(mom / mombinwidth) + nmombins / 2;
       if (fabs(mom) < momrange) {
          vmom_fph1f_WF[momindex]->Fill(wf / 1.019);
          vmom_fph1f_XP[momindex]->Fill(xp);
@@ -363,18 +436,28 @@ void Process::Run()
          vmom_fph1f_pullelec[momindex]->Fill(pull_ele);
       }
 
+      // dEdx vs X position
+      xposindex = (int)std::round(pos[0] / xposbinwidth) + nxposbins / 2;
+      if (xposindex < nxposbins) {
+         vX_fph1f_WF[xposindex]->Fill(wf / 1.019);
+         vX_fph1f_XP[xposindex]->Fill(xp);
+      }
+
+      // dEdx vs drift time
       ddindex = (int)std::round(mean_time / ddbinwidth);
       if (ddindex < nddbins) {
          vdd_fph1f_WF[ddindex]->Fill(wf / 1.019);
          vdd_fph1f_XP[ddindex]->Fill(xp);
       }
 
+      // dEdx vs phi angle
       phiindex = (int)std::round(phi / phibinwidth) + nphibins / 2;
       if (phiindex < nphibins) {
          vphi_fph1f_WF[phiindex]->Fill(wf / 1.019);
          vphi_fph1f_XP[phiindex]->Fill(xp);
       }
 
+      // dEdx vs theta angle
       thetaindex = (int)std::round(theta / thetabinwidth) + nthetabins / 2;
       if (thetaindex < nthetabins) {
          vtheta_fph1f_WF[thetaindex]->Fill(wf / 1.019);
@@ -441,21 +524,26 @@ void Process::Run()
       fph1f_pullmu->Fill(pull_muon);
       fph1f_pullelec->Fill(pull_ele);
       fph1f_pullproton->Fill(pull_proton);
+      fph2f_timeX->Fill(pos[0], mean_time);
    }
    // std::cout << "Y direction:" << std::endl;
-   // std::cout << "tHAT: negative => " << dirYnegtHAT << " (" << dirYnegtHAT*100.0/(dirYnegtHAT+dirYpostHAT) << "%)
-   // positive => " << dirYpostHAT << " (" << dirYpostHAT*100.0/(dirYnegtHAT+dirYpostHAT) << "%)" << std::endl;
-   // std::cout << "bHAT: negative => " << dirYnegbHAT << " (" << dirYnegbHAT*100.0/(dirYnegbHAT+dirYposbHAT) << "%)
-   // positive => " << dirYposbHAT << " (" << dirYposbHAT*100.0/(dirYnegbHAT+dirYposbHAT) << "%)" << std::endl;
-   // std::cout << "Total: negative => " << dirYnegbHAT+dirYnegtHAT << " (" <<
-   // (dirYnegbHAT+dirYnegtHAT)*100.0/(dirYnegbHAT+dirYposbHAT+dirYnegtHAT+dirYpostHAT) << "%) positive => " <<
-   // dirYposbHAT+dirYpostHAT << " (" <<
-   // (dirYposbHAT+dirYpostHAT)*100.0/(dirYnegbHAT+dirYposbHAT+dirYnegtHAT+dirYpostHAT) << "%)" << std::endl;
+   // std::cout << "tHAT: negative => " << dirYnegtHAT << " (" <<
+   // dirYnegtHAT*100.0/(dirYnegtHAT+dirYpostHAT) << "%) positive => " << dirYpostHAT << "
+   // (" << dirYpostHAT*100.0/(dirYnegtHAT+dirYpostHAT) << "%)" << std::endl; std::cout <<
+   // "bHAT: negative => " << dirYnegbHAT << " (" <<
+   // dirYnegbHAT*100.0/(dirYnegbHAT+dirYposbHAT) << "%) positive => " << dirYposbHAT << "
+   // (" << dirYposbHAT*100.0/(dirYnegbHAT+dirYposbHAT) << "%)" << std::endl; std::cout <<
+   // "Total: negative => " << dirYnegbHAT+dirYnegtHAT << " (" <<
+   // (dirYnegbHAT+dirYnegtHAT)*100.0/(dirYnegbHAT+dirYposbHAT+dirYnegtHAT+dirYpostHAT) <<
+   // "%) positive => " << dirYposbHAT+dirYpostHAT << " (" <<
+   // (dirYposbHAT+dirYpostHAT)*100.0/(dirYnegbHAT+dirYposbHAT+dirYnegtHAT+dirYpostHAT) <<
+   // "%)" << std::endl;
 
    // std::cout << "Momentum:" << std::endl;
-   // std::cout << "Negative: " << ntopneg << " (top) => " << nbotneg << " (bottom) => top-bottom = " << ntopneg-nbotneg
-   // << std::endl; std::cout << "Positive: " << ntoppos << " (top) => " << nbotpos << " (bottom) => top-bottom = " <<
-   // ntoppos-nbotpos << std::endl;
+   // std::cout << "Negative: " << ntopneg << " (top) => " << nbotneg << " (bottom) =>
+   // top-bottom = " << ntopneg-nbotneg
+   // << std::endl; std::cout << "Positive: " << ntoppos << " (top) => " << nbotpos << "
+   // (bottom) => top-bottom = " << ntoppos-nbotpos << std::endl;
 
    // TGraph filling
    int ivalid = 0;
@@ -493,23 +581,60 @@ void Process::Run()
       if (mean_WF == 0 || mean_XP == 0)
          continue;
 
-      ptge_mom_mean_WF->SetPoint(ivalid, i * mombinwidth, mean_WF);
+      ptge_mom_mean_WF->SetPoint(ivalid, i * mombinwidth - momrange, mean_WF);
       ptge_mom_mean_WF->SetPointError(ivalid, mombinwidth / 2, dmean_WF);
-      ptge_mom_mean_XP->SetPoint(ivalid, i * mombinwidth, mean_XP);
+      ptge_mom_mean_XP->SetPoint(ivalid, i * mombinwidth - momrange, mean_XP);
       ptge_mom_mean_XP->SetPointError(ivalid, mombinwidth / 2, dmean_XP);
       ptge_mom_mean_pullmu->SetPoint(ivalid, i * mombinwidth - momrange, mean_pullmu);
       ptge_mom_mean_pullmu->SetPointError(ivalid, mombinwidth / 2, dmean_pullmu);
       ptge_mom_mean_pullelec->SetPoint(ivalid, i * mombinwidth - momrange, mean_pullelec);
       ptge_mom_mean_pullelec->SetPointError(ivalid, mombinwidth / 2, dmean_pullelec);
 
-      ptge_mom_reso_WF->SetPoint(ivalid, (i * mombinwidth)/1000, reso_WF);
-      ptge_mom_reso_WF->SetPointError(ivalid, 0, 0);
-      ptge_mom_reso_XP->SetPoint(ivalid, (i * mombinwidth)/1000, reso_XP);
-      ptge_mom_reso_XP->SetPointError(ivalid, 0, 0);
+      ptge_mom_reso_WF->SetPoint(ivalid, i * mombinwidth - momrange, reso_WF);
+      ptge_mom_reso_WF->SetPointError(ivalid, mombinwidth / 2, dreso_WF);
+      ptge_mom_reso_XP->SetPoint(ivalid, i * mombinwidth - momrange, reso_XP);
+      ptge_mom_reso_XP->SetPointError(ivalid, mombinwidth / 2, dreso_XP);
       ptge_mom_std_pullmu->SetPoint(ivalid, i * mombinwidth - momrange, std_pullmu);
       ptge_mom_std_pullmu->SetPointError(ivalid, mombinwidth / 2, dstd_pullmu);
       ptge_mom_std_pullelec->SetPoint(ivalid, i * mombinwidth - momrange, std_pullelec);
       ptge_mom_std_pullelec->SetPointError(ivalid, mombinwidth / 2, dstd_pullelec);
+      ivalid++;
+   }
+
+   // X postion
+   ivalid = 0;
+   for (int i = 0; i < nxposbins; i++) {
+      int nentries_here = vX_fph1f_WF[i]->GetEntries();
+      if (nentries_here < 50)
+         continue;
+      fptf1_WF = Fit1Gauss(vX_fph1f_WF[i]);
+      fptf1_XP = Fit1Gauss(vX_fph1f_XP[i]);
+
+      float mean_WF = fptf1_WF->GetParameter(1);
+      float mean_XP = fptf1_XP->GetParameter(1);
+      float dmean_WF = fptf1_WF->GetParError(1);
+      float dmean_XP = fptf1_XP->GetParError(1);
+
+      float std_WF = fptf1_WF->GetParameter(2);
+      float std_XP = fptf1_XP->GetParameter(2);
+
+      float reso_WF = std_WF / mean_WF * 100;
+      float reso_XP = std_XP / mean_XP * 100;
+      float dreso_WF = GetResoError(fptf1_WF);
+      float dreso_XP = GetResoError(fptf1_XP);
+
+      if (mean_WF == 0 || mean_XP == 0)
+         continue;
+
+      ptge_X_mean_WF->SetPoint(ivalid, i * xposbinwidth - xposrange, mean_WF);
+      ptge_X_mean_WF->SetPointError(ivalid, xposbinwidth / 2, dmean_WF);
+      ptge_X_mean_XP->SetPoint(ivalid, i * xposbinwidth - xposrange, mean_XP);
+      ptge_X_mean_XP->SetPointError(ivalid, xposbinwidth / 2, dmean_XP);
+
+      ptge_X_reso_WF->SetPoint(ivalid, i * xposbinwidth - xposrange, reso_WF);
+      ptge_X_reso_WF->SetPointError(ivalid, xposbinwidth / 2, dreso_WF);
+      ptge_X_reso_XP->SetPoint(ivalid, i * xposbinwidth - xposrange, reso_XP);
+      ptge_X_reso_XP->SetPointError(ivalid, xposbinwidth / 2, dreso_XP);
       ivalid++;
    }
 
@@ -626,9 +751,11 @@ void Process::Run()
       ptge_theta_mean_WF->SetPointError(ivalid, thetabinwidth / 2, dmean_WF);
       ptge_theta_mean_XP->SetPoint(ivalid, i * thetabinwidth - thetarange, mean_XP);
       ptge_theta_mean_XP->SetPointError(ivalid, thetabinwidth / 2, dmean_XP);
-      ptge_theta_mean_pullmu->SetPoint(ivalid, i * thetabinwidth - thetarange, mean_pullmu);
+      ptge_theta_mean_pullmu->SetPoint(ivalid, i * thetabinwidth - thetarange,
+                                       mean_pullmu);
       ptge_theta_mean_pullmu->SetPointError(ivalid, thetabinwidth / 2, dmean_pullmu);
-      ptge_theta_mean_pullelec->SetPoint(ivalid, i * thetabinwidth - thetarange, mean_pullelec);
+      ptge_theta_mean_pullelec->SetPoint(ivalid, i * thetabinwidth - thetarange,
+                                         mean_pullelec);
       ptge_theta_mean_pullelec->SetPointError(ivalid, thetabinwidth / 2, dmean_pullelec);
 
       ptge_theta_reso_WF->SetPoint(ivalid, i * thetabinwidth - thetarange, reso_WF);
@@ -637,7 +764,8 @@ void Process::Run()
       ptge_theta_reso_XP->SetPointError(ivalid, thetabinwidth / 2, dreso_XP);
       ptge_theta_std_pullmu->SetPoint(ivalid, i * thetabinwidth - thetarange, std_pullmu);
       ptge_theta_std_pullmu->SetPointError(ivalid, thetabinwidth / 2, dstd_pullmu);
-      ptge_theta_std_pullelec->SetPoint(ivalid, i * thetabinwidth - thetarange, std_pullelec);
+      ptge_theta_std_pullelec->SetPoint(ivalid, i * thetabinwidth - thetarange,
+                                        std_pullelec);
       ptge_theta_std_pullelec->SetPointError(ivalid, thetabinwidth / 2, dstd_pullelec);
       ivalid++;
    }

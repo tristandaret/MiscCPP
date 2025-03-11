@@ -31,7 +31,7 @@ TStyle *SetMyStyle()
    myStyle->SetFrameBorderMode(0);
 
    // Pad
-   float left = 0.11;
+   float left = 0.115;
    float right = 0.02;
    float middle = (1 - right + left) / 2;
    float top = 0.08;

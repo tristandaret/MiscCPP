@@ -14,12 +14,19 @@ public:
    {
       foutputComparisonFolder = outputComparisonFolder;
    }
-   void SetOutputPDFFolder(const std::string &outputPDFfolder) { foutputPDFFolder = outputPDFfolder; }
-   void SetOutputPDFrealpath(const std::string &outputPDFrealpath) { fRealpathPDF = outputPDFrealpath; }
+   void SetOutputPDFFolder(const std::string &outputPDFfolder)
+   {
+      foutputPDFFolder = outputPDFfolder;
+   }
+   void SetOutputPDFrealpath(const std::string &outputPDFrealpath)
+   {
+      fRealpathPDF = outputPDFrealpath;
+   }
 
    // Member functions
    void Run(const std::string &filepath);
-   void CompareRuns(const std::vector<std::string> &v_filepaths, const std::string &type);
+   void Compare(const std::vector<std::string> &v_filepaths, const std::string &type);
+   void PaperPlots(const std::vector<std::string> &v_filepaths, const std::string &type);
 
 private:
    std::string frun;
@@ -40,8 +47,8 @@ private:
                               kMagenta + 2, kCyan + 2, kYellow + 2, kViolet + 2};
    std::vector<int> markers = {47, 34, 20, 21, 22, 23, 33, 43, 29};
 
-   float resomin = 8.5;
-   float resomax = 12.5;
+   float resomin = 5;
+   float resomax = 30;
    int meanmin = 200;
    int meanmax = 800;
    int stdmin = 0;
