@@ -47,6 +47,12 @@ private:
    // Analysis settings
    int dEdxmax = 1300;
 
+   // Absolute momentum
+   float nabsmombins = 51;
+   float absmomrange = 2000;
+   float absmombinwidth = absmomrange / (nabsmombins - 1);
+   int absmomindex = 0;
+
    // Momentum
    float nmombins = 101;
    float momrange = 2000;
@@ -65,11 +71,23 @@ private:
    float ddbinwidth = ddrange / (nddbins - 1);
    int ddindex = 0;
 
+   // absolute phi angle
+   float nabsphibins = 91;
+   float absphirange = 90;
+   float absphibinwidth = 2 * absphirange / (nabsphibins - 1);
+   int absphiindex = 0;
+
    // phi angle
    float nphibins = 91;
    float phirange = 90;
    float phibinwidth = 2 * phirange / (nphibins - 1);
    int phiindex = 0;
+
+   // absolute theta angle
+   float nabsthetabins = 91;
+   float absthetarange = 90;
+   float absthetabinwidth = 2 * absthetarange / (nabsthetabins - 1);
+   int absthetaindex = 0;
 
    // theta angle
    float nthetabins = 91;
@@ -86,6 +104,14 @@ private:
    std::vector<TH1F *> vmod_fph1f_XP;
    std::vector<TH1F *> vmod_fph1f_WF;
    std::vector<TH2F *> vmod_fph2f_XPdrift;
+
+   // Vectors for dE/dx vs absolute momentum bin
+   std::vector<TH1F *> vabsmom_fph1f_WF;
+   std::vector<TH1F *> vabsmom_fph1f_XP;
+   TGraphErrors *ptge_absmom_mean_WF = new TGraphErrors();
+   TGraphErrors *ptge_absmom_mean_XP = new TGraphErrors();
+   TGraphErrors *ptge_absmom_reso_WF = new TGraphErrors();
+   TGraphErrors *ptge_absmom_reso_XP = new TGraphErrors();
 
    // Vectors for dE/dx vs momentum bin
    std::vector<TH1F *> vmom_fph1f_WF;
@@ -119,6 +145,14 @@ private:
    TGraphErrors *ptge_dd_reso_WF = new TGraphErrors();
    TGraphErrors *ptge_dd_reso_XP = new TGraphErrors();
 
+   // Vectors for dE/dx vs absolute phi angle bin
+   std::vector<TH1F *> vabsphi_fph1f_WF;
+   std::vector<TH1F *> vabsphi_fph1f_XP;
+   TGraphErrors *ptge_absphi_mean_WF = new TGraphErrors();
+   TGraphErrors *ptge_absphi_mean_XP = new TGraphErrors();
+   TGraphErrors *ptge_absphi_reso_WF = new TGraphErrors();
+   TGraphErrors *ptge_absphi_reso_XP = new TGraphErrors();
+
    // Vectors for dE/dx vs phi angle bin
    std::vector<TH1F *> vphi_fph1f_WF;
    std::vector<TH1F *> vphi_fph1f_XP;
@@ -126,6 +160,14 @@ private:
    TGraphErrors *ptge_phi_mean_XP = new TGraphErrors();
    TGraphErrors *ptge_phi_reso_WF = new TGraphErrors();
    TGraphErrors *ptge_phi_reso_XP = new TGraphErrors();
+
+   // Vectors for dE/dx vs absolute theta angle bin
+   std::vector<TH1F *> vabstheta_fph1f_WF;
+   std::vector<TH1F *> vabstheta_fph1f_XP;
+   TGraphErrors *ptge_abstheta_mean_WF = new TGraphErrors();
+   TGraphErrors *ptge_abstheta_mean_XP = new TGraphErrors();
+   TGraphErrors *ptge_abstheta_reso_WF = new TGraphErrors();
+   TGraphErrors *ptge_abstheta_reso_XP = new TGraphErrors();
 
    // Vectors for dE/dx vs theta angle bin
    std::vector<TH1F *> vtheta_fph1f_WF;
@@ -171,6 +213,12 @@ private:
    TH2F *fph2f_XPtheta =
       new TH2F("fph2f_XPtheta", ";#theta; dE/dx with XP (ADC counts/cm)", 5 * nthetabins,
                -90, 90, nbinsdEdx, 0, 1000);
+   TH2F *fph2f_XPabsmom =
+      new TH2F("fph2f_XPabsmom", ";Absolute momentum (MeV/c);dE/dx with XP (ADC counts/cm)",
+               5 * nabsmombins, 0, absmomrange, nbinsdEdx, 0, 1000);
+   TH2F *fph2f_WFabsmom =
+      new TH2F("fph2f_WFabsmom", ";Absolute momentum (MeV/c);dE/dx with WF (ADC counts/cm)",
+               5 * nabsmombins, 0, absmomrange, nbinsdEdx, 0, 1000);
    TH2F *fph2f_XPmom =
       new TH2F("fph2f_XPmom", ";momentum (MeV);dE/dx with XP (ADC counts/cm)",
                5 * nmombins, -momrange, momrange, nbinsdEdx, 0, 1000);

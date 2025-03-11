@@ -43,7 +43,7 @@ private:
    TStyle *fpStyle;
    TCanvas *fpCanvas;
    TLegend *fpLegend;
-   std::vector<int> colors = {kRed + 2,     kBlue + 2, kGreen + 3,  kOrange + 7,
+   std::vector<int> colors = {kOrange + 2, kBlue + 2, kRed + 3,  kGreen + 2,
                               kMagenta + 2, kCyan + 2, kYellow + 2, kViolet + 2};
    std::vector<int> markers = {47, 34, 20, 21, 22, 23, 33, 43, 29};
 

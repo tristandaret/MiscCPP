@@ -85,7 +85,7 @@ private:
    std::string fLUTpath = "Output_LUT/LUT_test.root";
    // float LUTValues[SNSTEPS_PHI][SNSTEPS_D];
    static float LUTValues[SNSTEPS_TRANS][SNSTEPS_RC][SNSTEPS_DRIFT][SNSTEPS_D][SNSTEPS_PHI];
-   static constexpr float sSTEP_TRANS = 40; // 310->350, only 2 values
+   static constexpr float sSTEP_TRANS = 37; // 323->286, only 2 values
    static constexpr float sSTEP_RC = 46;    // 112->158, only 2 values
    static constexpr float sSTEP_PHI = 90. / (SNSTEPS_PHI - 1);
    // const float sSTEP_IMPACT =				(PAD_DIAG/2)/(SNSTEPS_D-1);

@@ -14,10 +14,7 @@ LUTMaker::LUTMaker()
    v_impact = linspace(0, PAD_DIAG / 2, SNSTEPS_D);
    v_drift = linspace(0, 1000, SNSTEPS_DRIFT);
    v_RC = {112, 158};
-   v_Dt = {310 / pow(10, 3.5), 350 / pow(10, 3.5)};
-   for(float val : v_phi)
-      std::cout << val << " ";
-   std::cout << std::endl;
+   v_Dt = {286 / pow(10, 3.5), 323 / pow(10, 3.5)};
 
    fp_trackmodel = new TrackModel();
 
@@ -71,6 +68,7 @@ double LUTMaker::ComputeLength(const double &phi_rad, const double &d)
    } else
       return 0;
 }
+
 // Compute the length in the pad for all (phi, d) pairs
 void LUTMaker::ComputeLengthMap()
 {
@@ -78,11 +76,12 @@ void LUTMaker::ComputeLengthMap()
       for (int j = 0; j < SNSTEPS_D; j++)
          arr_length[i][j] = ComputeLength(v_phi[i] / 180 * M_PI, v_impact[j]);
 }
+
 // Compute scale factor
 void LUTMaker::MakeLUT()
 {
 
-   TFile tfileLUT("Output_LUT/LUT.root", "RECREATE");
+   TFile tfileLUT("Output_LUT/LUT_v4.root", "RECREATE");
    TTree ttreeLUT("treeLUTdEdx", "treeLUTdEdx");
    double d, phi;
    float length, RC, transvDiff, drift, scalefactor;
@@ -171,7 +170,7 @@ void LUTMaker::LoadLUT(std::string LUTpath)
    // std::ofstream debug_log("debug1.log");
    for (int i = 0; i < ptree.GetEntries(); i++) {
       ptree.GetEntry(i);
-      int itransvDiff = (int)std::round((transvDiff * pow(10, 3.5) - 310) / sSTEP_TRANS);
+      int itransvDiff = (int)std::round((transvDiff * pow(10, 3.5) - 286) / sSTEP_TRANS);
       int iRC = (int)std::round((RC - 112) / sSTEP_RC);
       int idrift = (int)std::round(drift / sSTEP_DRIFT);
       int iphi = (int)std::round(phi / sSTEP_PHI);
@@ -192,7 +191,7 @@ void LUTMaker::LoadLUT(std::string LUTpath)
 float LUTMaker::GetFactorFromLUT(const double &transvDiff, const double &RC, const double &drift, const double &d,
                                  const double &phi)
 { // keep double
-   int itransvDiff = (int)(transvDiff * pow(10, 3.5) - 310) / sSTEP_TRANS;
+   int itransvDiff = (int)(transvDiff * pow(10, 3.5) - 286) / sSTEP_TRANS;
    int iRC = (int)(RC - 112) / sSTEP_RC;
    float idrift = drift / sSTEP_DRIFT;
    float idrift_min = std::min(std::floor(drift / sSTEP_DRIFT), (double)SNSTEPS_DRIFT - 1);
@@ -219,14 +218,14 @@ float LUTMaker::GetFactorFromLUT(const double &transvDiff, const double &RC, con
    else
       w_phi = 1 - (iphi - iphi_min) / (iphi_max - iphi_min);
 
-   std::cout << "transvDiff =    " << transvDiff << " | itransvDiff = " << itransvDiff << std::endl;
-   std::cout << "RC =    " << RC << " | iRC = " << iRC << std::endl;
-   std::cout << "drift = " << drift << " | idrift_min = " << idrift_min << " | idrift = " << idrift
-             << " | idrift_max = " << idrift_max << " | w_drift = " << w_drift << std::endl;
-   std::cout << "d =     " << d << " | id_min = " << id_min << " | id = " << id << " | id_max = " << id_max
-             << " | w_d = " << w_d << std::endl;
-   std::cout << "phi =   " << phi << " | iphi_min = " << iphi_min << " | iphi = " << iphi
-             << " | iphi_max = " << iphi_max << " | w_phi = " << w_phi << std::endl;
+   // std::cout << "transvDiff =    " << transvDiff << " | itransvDiff = " << itransvDiff << std::endl;
+   // std::cout << "RC =    " << RC << " | iRC = " << iRC << std::endl;
+   // std::cout << "drift = " << drift << " | idrift_min = " << idrift_min << " | idrift = " << idrift
+   //           << " | idrift_max = " << idrift_max << " | w_drift = " << w_drift << std::endl;
+   // std::cout << "d =     " << d << " | id_min = " << id_min << " | id = " << id << " | id_max = " << id_max
+   //           << " | w_d = " << w_d << std::endl;
+   // std::cout << "phi =   " << phi << " | iphi_min = " << iphi_min << " | iphi = " << iphi
+   //           << " | iphi_max = " << iphi_max << " | w_phi = " << w_phi << std::endl;
 
    // Interpolation
    float factor = 0;
@@ -243,17 +242,17 @@ float LUTMaker::GetFactorFromLUT(const double &transvDiff, const double &RC, con
    factor += (1 - w_drift) * (1 - w_d) * (1 - w_phi) *
              LUTValues[itransvDiff][iRC][(int)idrift_max][(int)id_max][(int)iphi_max];
 
-   std::cout << std::endl;
-   std::cout << LUTValues[itransvDiff][iRC][(int)idrift_min + 0][(int)id_min + 1][(int)iphi_min + 1] << "  "
-             << LUTValues[itransvDiff][iRC][(int)idrift_min + 1][(int)id_min + 1][(int)iphi_min + 1] << std::endl;
-   std::cout << LUTValues[itransvDiff][iRC][(int)idrift_min + 0][(int)id_min + 0][(int)iphi_min + 1] << "  "
-             << LUTValues[itransvDiff][iRC][(int)idrift_min + 1][(int)id_min + 0][(int)iphi_min + 1] << std::endl;
-   std::cout << std::endl;
-   std::cout << LUTValues[itransvDiff][iRC][(int)idrift_min + 0][(int)id_min + 1][(int)iphi_min + 0] << "  "
-             << LUTValues[itransvDiff][iRC][(int)idrift_min + 1][(int)id_min + 1][(int)iphi_min + 0] << std::endl;
-   std::cout << LUTValues[itransvDiff][iRC][(int)idrift_min + 0][(int)id_min + 0][(int)iphi_min + 0] << "  "
-             << LUTValues[itransvDiff][iRC][(int)idrift_min + 1][(int)id_min + 0][(int)iphi_min + 0] << std::endl;
-   std::cout << std::endl;
+   // std::cout << std::endl;
+   // std::cout << LUTValues[itransvDiff][iRC][(int)idrift_min + 0][(int)id_min + 1][(int)iphi_min + 1] << "  "
+   //           << LUTValues[itransvDiff][iRC][(int)idrift_min + 1][(int)id_min + 1][(int)iphi_min + 1] << std::endl;
+   // std::cout << LUTValues[itransvDiff][iRC][(int)idrift_min + 0][(int)id_min + 0][(int)iphi_min + 1] << "  "
+   //           << LUTValues[itransvDiff][iRC][(int)idrift_min + 1][(int)id_min + 0][(int)iphi_min + 1] << std::endl;
+   // std::cout << std::endl;
+   // std::cout << LUTValues[itransvDiff][iRC][(int)idrift_min + 0][(int)id_min + 1][(int)iphi_min + 0] << "  "
+   //           << LUTValues[itransvDiff][iRC][(int)idrift_min + 1][(int)id_min + 1][(int)iphi_min + 0] << std::endl;
+   // std::cout << LUTValues[itransvDiff][iRC][(int)idrift_min + 0][(int)id_min + 0][(int)iphi_min + 0] << "  "
+   //           << LUTValues[itransvDiff][iRC][(int)idrift_min + 1][(int)id_min + 0][(int)iphi_min + 0] << std::endl;
+   // std::cout << std::endl;
 
    return factor;
 }

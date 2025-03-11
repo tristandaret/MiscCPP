@@ -20,19 +20,19 @@ int main()
    LUTMaker lutmaker;
 
    // Variables: Dt = 310 | RC = 112 | drift = 611.7 | impact = 4.89291 | phi = 44.5825 | amplitude = 239 | length = 5.39015
-   float amplitude = 239;
-   float Dt = 310 / pow(10, 3.5);
-   float drift = 611.7;
-   float RC = 112;
-   float impact = 4.89291;
-   float phi = 44.5825;
-   float length = 5.39015;
+   // float amplitude = 239;
+   // float Dt = 310 / pow(10, 3.5);
+   // float drift = 611.7;
+   // float RC = 112;
+   // float impact = 4.89291;
+   // float phi = 44.5825;
+   // float length = 5.39015;
 
-   float diag = lutmaker.GetDiag();
+   // float diag = lutmaker.GetDiag();
 
    lutmaker.ComputeLengthMap();
    // lutmaker.DrawLengthMap();
-   // lutmaker.MakeLUT();
+   lutmaker.MakeLUT();
    // lutmaker.DrawLUT(120, 0, 310/pow(10, 3.5));
 
    // lutmaker.LoadLUT("Output_LUT/dEdx_XP_LUT_v2.root");
@@ -59,7 +59,7 @@ int main()
 
    // lutmaker.DrawDiffInterpolExact(Dt, RC, drift, 0, 90, 0, diag/2);
 
-   lutmaker.PrintLUTcorners();
+   // lutmaker.PrintLUTcorners();
 
    // modifyBranches();
 

@@ -60,9 +60,9 @@ void TrackModel::ComputeAmplitudeLoss()
    fchargemodel = flength * ETFmax;
    fsignalmodel = tf1_Signal.GetMaximum();
    famplitudeloss = fsignalmodel / fchargemodel;
-   std::cout << "Dt = " << fDt << " | RC = " << fRC << " | drift = " << fdrift << " | d = " << fimpact
-             << " | phi = " << fphirad * 180 / M_PI << " | length = " << flength
-             << " | scalefactor = " << 1 / famplitudeloss << std::endl;
+   // std::cout << "Dt = " << fDt << " | RC = " << fRC << " | drift = " << fdrift << " | d = " << fimpact
+   //           << " | phi = " << fphirad * 180 / M_PI << " | length = " << flength
+   //           << " | scalefactor = " << 1 / famplitudeloss << std::endl;
 }
 
 void TrackModel::ComputeRealCharge(const double &ADCmax, const double &length, const double &impact, const double &phi,
