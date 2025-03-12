@@ -198,28 +198,28 @@ void Draw::Run(const std::string &filepath)
    fpCanvas->Clear();
    fpCanvas->SetGrid(1, 1);
    gPad->SetRightMargin(0.035);
-   Graphic_setup(pr.ptge_dd_reso_WF, 2, 33, kCyan + 2, 2, kCyan + 2);
-   Graphic_setup(pr.ptge_dd_reso_XP, 2, 47, kMagenta + 2, 2, kMagenta + 2);
-   pr.ptge_dd_reso_XP->SetTitle(";Drift time (timebins);dE/dx resolution (%)");
-   pr.ptge_dd_reso_XP->GetXaxis()->SetLimits(0, 510);
-   pr.ptge_dd_reso_XP->GetYaxis()->SetRangeUser(resomin, resomax);
-   pr.ptge_dd_reso_XP->DrawClone("AP");
-   pr.ptge_dd_reso_WF->DrawClone("P same");
-   pr.ptge_dd_reso_XP->SetMarkerSize(7);
-   pr.ptge_dd_reso_WF->SetMarkerSize(7);
+   Graphic_setup(pr.ptge_dt_reso_WF, 2, 33, kCyan + 2, 2, kCyan + 2);
+   Graphic_setup(pr.ptge_dt_reso_XP, 2, 47, kMagenta + 2, 2, kMagenta + 2);
+   pr.ptge_dt_reso_XP->SetTitle(";Drift time (timebins);dE/dx resolution (%)");
+   pr.ptge_dt_reso_XP->GetXaxis()->SetLimits(0, 510);
+   pr.ptge_dt_reso_XP->GetYaxis()->SetRangeUser(resomin, resomax);
+   pr.ptge_dt_reso_XP->DrawClone("AP");
+   pr.ptge_dt_reso_WF->DrawClone("P same");
+   pr.ptge_dt_reso_XP->SetMarkerSize(7);
+   pr.ptge_dt_reso_WF->SetMarkerSize(7);
    fpLegend->Draw();
    fpCanvas->SaveAs(fRealpathPDF.c_str());
 
    // Mean
    fpCanvas->Clear();
    fpCanvas->SetGrid(1, 1);
-   Graphic_setup(pr.ptge_dd_mean_WF, 0, 33, kCyan + 2, 2, kCyan + 2);
-   Graphic_setup(pr.ptge_dd_mean_XP, 0, 47, kMagenta + 2, 2, kMagenta + 2);
-   pr.ptge_dd_mean_XP->SetTitle(";Drift time (timebins);Mean (ADC counts/cm)");
-   pr.ptge_dd_mean_XP->GetXaxis()->SetLimits(0, 510);
-   pr.ptge_dd_mean_XP->GetYaxis()->SetRangeUser(meanmin, meanmax);
-   pr.ptge_dd_mean_XP->Draw("AP");
-   pr.ptge_dd_mean_WF->Draw("P same");
+   Graphic_setup(pr.ptge_dt_mean_WF, 0, 33, kCyan + 2, 2, kCyan + 2);
+   Graphic_setup(pr.ptge_dt_mean_XP, 0, 47, kMagenta + 2, 2, kMagenta + 2);
+   pr.ptge_dt_mean_XP->SetTitle(";Drift time (timebins);Mean (ADC counts/cm)");
+   pr.ptge_dt_mean_XP->GetXaxis()->SetLimits(0, 510);
+   pr.ptge_dt_mean_XP->GetYaxis()->SetRangeUser(meanmin, meanmax);
+   pr.ptge_dt_mean_XP->Draw("AP");
+   pr.ptge_dt_mean_WF->Draw("P same");
    fpLegend->Draw();
    fpCanvas->SaveAs(fRealpathPDF.c_str());
 
@@ -255,7 +255,7 @@ void Draw::Run(const std::string &filepath)
    pavetext.DrawClone();
    fpCanvas->SaveAs(fRealpathPDF.c_str());
 
-   // heatmap XP vs time bin module per module
+   // heatmap XP vs time bin module VS module
    pavetext.SetY1NDC(0.7);
    pavetext.SetY2NDC(0.9);
    std::vector<TF1> vlinearFit;
@@ -463,7 +463,7 @@ void Draw::Run(const std::string &filepath)
    gPad->SetTopMargin(0.03);
    Graphic_setup(pr.ptge_absmom_reso_WF, 3, 33, kCyan + 2, 1, kCyan + 2);
    Graphic_setup(pr.ptge_absmom_reso_XP, 3, 47, kMagenta + 2, 1, kMagenta + 2);
-   pr.ptge_absmom_reso_XP->SetTitle(";Absolute momentum (MeV/c);dE/dx resolution (%)");
+   pr.ptge_absmom_reso_XP->SetTitle(";Momentum (MeV/c);dE/dx resolution (%)");
    pr.ptge_absmom_reso_XP->GetXaxis()->SetLimits(0, absmomrange);
    pr.ptge_absmom_reso_XP->GetYaxis()->SetRangeUser(resomin, resomax);
    pr.ptge_absmom_reso_XP->DrawClone("AP");
@@ -475,8 +475,8 @@ void Draw::Run(const std::string &filepath)
    fpCanvas->Clear();
    Graphic_setup(pr.ptge_absmom_mean_WF, 0, 33, kCyan + 2, 1, kCyan + 2);
    Graphic_setup(pr.ptge_absmom_mean_XP, 0, 47, kMagenta + 2, 1, kMagenta + 2);
-   pr.ptge_absmom_mean_XP->SetTitle(";Absolute momentum (MeV/c);Mean (ADC counts/cm)");
-   pr.ptge_absmom_mean_XP->GetXaxis()->SetLimits(0 , absmomrange);
+   pr.ptge_absmom_mean_XP->SetTitle(";Momentum (MeV/c);Mean (ADC counts/cm)");
+   pr.ptge_absmom_mean_XP->GetXaxis()->SetLimits(0, absmomrange);
    pr.ptge_absmom_mean_XP->GetYaxis()->SetRangeUser(meanmin, meanmax);
    pr.ptge_absmom_mean_XP->Draw("APL");
    pr.ptge_absmom_mean_WF->Draw("PL same");
@@ -768,7 +768,7 @@ void Draw::Run(const std::string &filepath)
    pr.fph2f_chi2ndfR->Draw("colz");
    fpCanvas->SaveAs(fRealpathPDF.c_str());
 
-   // dE/dx per momentum bin
+   // dE/dx VS momentum bin
    // -----------------------------------------------------------------------------------------------------------------
    gPad->SetTopMargin(0.08);
    gPad->SetRightMargin(0.02);
@@ -793,7 +793,7 @@ void Draw::Run(const std::string &filepath)
       fpCanvas->SaveAs(fRealpathPDF.c_str());
    }
 
-   // dE/dx per theta bin
+   // dE/dx VS theta bin
    // -----------------------------------------------------------------------------------------------------------------
    gPad->SetTopMargin(0.08);
    gPad->SetRightMargin(0.02);
@@ -860,8 +860,8 @@ void Draw::Run(const std::string &filepath)
    // float dTdrift =				sqrt(dTmin*dTmin + dTmax*dTmax);
    // std::cout << "Drift time in bHATPC: " << Tdrift << " +/- " << dTdrift << " ns" <<
    // std::endl; float driftVel =			98.5/Tdrift;
-   // float ddriftVel =			driftVel * dTdrift/Tdrift;
-   // std::cout << "Drift velocity in bHATPC: " << driftVel << " +/- " << ddriftVel << "
+   // float dtriftVel =			driftVel * dTdrift/Tdrift;
+   // std::cout << "Drift velocity in bHATPC: " << driftVel << " +/- " << dtriftVel << "
    // cm/µs" << std::endl;
 
    // Tmin =						ptf1_tminEP2->GetParameter(1)*40/1000;
@@ -872,8 +872,8 @@ void Draw::Run(const std::string &filepath)
    // dTdrift =					sqrt(dTmin*dTmin + dTmax*dTmax);
    // std::cout << "Drift time in tHATPC: " << Tdrift << " +/- " << dTdrift << " ns" <<
    // std::endl; driftVel =					98.5/Tdrift;
-   // ddriftVel =					driftVel * dTdrift/Tdrift;
-   // std::cout << "Drift velocity in tHATPC: " << driftVel << " +/- " << ddriftVel << "
+   // dtriftVel =					driftVel * dTdrift/Tdrift;
+   // std::cout << "Drift velocity in tHATPC: " << driftVel << " +/- " << dtriftVel << "
    // cm/µs" << std::endl;
 
    pr.fph1i_tminBotCath->SetAxisRange(
@@ -1014,59 +1014,128 @@ void Draw::Compare(const std::vector<std::string> &v_filepaths, const std::strin
    gPad->SetTopMargin(0.05);
    gPad->SetRightMargin(0.035);
 
-   float resominhere = 4;
-   float resomaxhere = 17;
+   int resominmom = 2;
+   int resomaxmom = 12;
+   int dedxminmom = 350;
+   int dedxmaxmom = 650;
+   int resominX = 1;
+   int resomaxX = 12;
+   int dedxminX = 350;
+   int dedxmaxX = 500;
+   int resominphi = 2;
+   int resomaxphi = 12;
+   int dedxminphi = 350;
+   int dedxmaxphi = 500;
+   int resomintheta = 3;
+   int resomaxtheta = 13;
+   int dedxmintheta = 350;
+   int dedxmaxtheta = 500;
+   if (pr0->ffileName.find("dog1") != std::string::npos or
+       pr0->ffileName.find("cosmics") != std::string::npos) {
+      resominmom = 6;
+      resomaxmom = 14;
+      dedxminmom = 350;
+      dedxmaxmom = 650;
+      resominX = 4;
+      resomaxX = 16;
+      dedxminX = 300;
+      dedxmaxX = 550;
+      resominphi = 4;
+      resomaxphi = 14;
+      dedxminphi = 350;
+      dedxmaxphi = 500;
+      resomintheta = 4;
+      resomaxtheta = 16;
+      dedxmintheta = 300;
+      dedxmaxtheta = 550;
+   }
 
    // Legend
-   fpLegend = new TLegend(0.6, 0.85 - 0.06 * ncomparisons, 0.91, 0.92);
+   fpLegend = new TLegend(0.65, 0.85 - 0.06 * ncomparisons, 0.9, 0.92);
    fpLegend->SetTextSize(0.06 - 0.005 * ncomparisons);
    // fpLegend->						SetFillStyle(0);
    fpLegend->SetTextColor(kBlue - 1);
+   fpLegend->SetFillColorAlpha(kWhite, 0.8);
 
    float ampmax = 0;
    for (int i = 0; i < ncomparisons; i++) {
       Process *pr_tmp = v_processes[i];
-      Graphic_setup(pr_tmp->fph1f_WF, 0.5, 1, colors[i], 2, colors[i], colors[i] - 2,
+      Graphic_setup(pr_tmp->fph1f_WF, 0.5, 1, colors[i] + 1, 2, colors[i] + 1, colors[i],
                     0.2);
-      Graphic_setup(pr_tmp->fph1f_XP, 0.5, 1, colors[i], 2, colors[i], colors[i] - 2,
+      Graphic_setup(pr_tmp->fph1f_XP, 0.5, 1, colors[i] + 1, 2, colors[i] + 1, colors[i],
                     0.2);
       if (pr_tmp->fph1f_WF->GetMaximum() > ampmax)
          ampmax = pr_tmp->fph1f_WF->GetMaximum();
       if (pr_tmp->fph1f_XP->GetMaximum() > ampmax)
          ampmax = pr_tmp->fph1f_XP->GetMaximum();
-      Graphic_setup(pr_tmp->ptge_absmom_reso_WF, 3, markers[i], colors[2+i], 2, colors[2+i]);
+      Graphic_setup(pr_tmp->ptge_absmom_reso_WF, 3, markers[i], colors[2 + i], 2,
+                    colors[2 + i]);
       Graphic_setup(pr_tmp->ptge_absmom_reso_XP, 3, markers[i], colors[i], 2, colors[i]);
-      Graphic_setup(pr_tmp->ptge_absmom_mean_WF, 2, markers[i], colors[2+i], 2, colors[2+i]);
+      Graphic_setup(pr_tmp->ptge_absmom_mean_WF, 2, markers[i], colors[2 + i], 2,
+                    colors[2 + i]);
       Graphic_setup(pr_tmp->ptge_absmom_mean_XP, 2, markers[i], colors[i], 2, colors[i]);
-      Graphic_setup(pr_tmp->ptge_dd_reso_WF, 3, markers[i], colors[2+i], 2, colors[2+i]);
+      Graphic_setup(pr_tmp->ptge_dd_reso_WF, 3, markers[i], colors[2 + i], 2,
+                    colors[2 + i]);
       Graphic_setup(pr_tmp->ptge_dd_reso_XP, 3, markers[i], colors[i], 2, colors[i]);
-      Graphic_setup(pr_tmp->ptge_dd_mean_WF, 2, markers[i], colors[2+i], 2, colors[2+i]);
+      Graphic_setup(pr_tmp->ptge_dd_mean_WF, 2, markers[i], colors[2 + i], 2,
+                    colors[2 + i]);
       Graphic_setup(pr_tmp->ptge_dd_mean_XP, 2, markers[i], colors[i], 2, colors[i]);
-      Graphic_setup(pr_tmp->ptge_absphi_reso_WF, 3, markers[i], colors[2+i], 2, colors[2+i]);
+      Graphic_setup(pr_tmp->ptge_absphi_reso_WF, 3, markers[i], colors[2 + i], 2,
+                    colors[2 + i]);
       Graphic_setup(pr_tmp->ptge_absphi_reso_XP, 3, markers[i], colors[i], 2, colors[i]);
-      Graphic_setup(pr_tmp->ptge_absphi_mean_WF, 2, markers[i], colors[2+i], 2, colors[2+i]);
+      Graphic_setup(pr_tmp->ptge_absphi_mean_WF, 2, markers[i], colors[2 + i], 2,
+                    colors[2 + i]);
       Graphic_setup(pr_tmp->ptge_absphi_mean_XP, 2, markers[i], colors[i], 2, colors[i]);
-      Graphic_setup(pr_tmp->ptge_abstheta_reso_WF, 3, markers[i], colors[2+i], 2, colors[2+i]);
-      Graphic_setup(pr_tmp->ptge_abstheta_reso_XP, 3, markers[i], colors[i], 2, colors[i]);
-      Graphic_setup(pr_tmp->ptge_abstheta_mean_WF, 2, markers[i], colors[2+i], 2, colors[2+i]);
-      Graphic_setup(pr_tmp->ptge_abstheta_mean_XP, 2, markers[i], colors[i], 2, colors[i]);
+      Graphic_setup(pr_tmp->ptge_abstheta_reso_WF, 3, markers[i], colors[2 + i], 2,
+                    colors[2 + i]);
+      Graphic_setup(pr_tmp->ptge_abstheta_reso_XP, 3, markers[i], colors[i], 2,
+                    colors[i]);
+      Graphic_setup(pr_tmp->ptge_abstheta_mean_WF, 2, markers[i], colors[2 + i], 2,
+                    colors[2 + i]);
+      Graphic_setup(pr_tmp->ptge_abstheta_mean_XP, 2, markers[i], colors[i], 2,
+                    colors[i]);
    }
 
    std::vector<std::string> legEntries;
    if (pr0->ffileName.find("dog1") != std::string::npos or
        pr0->ffileName.find("cosmics") != std::string::npos) {
-      legEntries.push_back("Cosmics rays");
-      legEntries.push_back("Simulation");
+      legEntries.push_back("Cosmic rays");
    } else if (pr0->ffileName.find("beam") != std::string::npos or
               pr0->ffileName.find("sandmu") != std::string::npos) {
-      legEntries.push_back("Beam particles");
-      legEntries.push_back("Simulation");
+      legEntries.push_back("Beam data");
    }
+   legEntries.push_back("Simulation");
 
-   // Global dE/dx plot
    // -----------------------------------------------------------------------------------------------------------------
+   // Bethe Bloch fit on data
+   const char *formula =
+      "[0]/pow(x/sqrt(x*x+[5]*[5]),[3]) * ( [1] - pow(x/sqrt(x*x+[5]*[5]),[3]) - log([2] "
+      "+ 1 / pow(x/[5], [4])) )";
+   TF1 *bethefitmuon = new TF1("bethefitmuon", formula, 0, 2000, "");
+   // bethefitmuon->SetParameter(0, 1.65179e+02);
+   bethefitmuon->SetParameter(1, 3.62857e+00);
+   bethefitmuon->SetParameter(2, 3.18209e-02);
+   bethefitmuon->SetParameter(3, 2.07081e+00);
+   bethefitmuon->SetParameter(4, 7.14413e-01);
+   bethefitmuon->FixParameter(5, 105.658);
+   pr0->ptge_absmom_mean_XP->Fit(bethefitmuon, "R", "", 100, 2000);
+   pr0->ptge_absmom_mean_XP->GetFunction("bethefitmuon")->SetLineColor(kBlack);
+   pr0->ptge_absmom_mean_XP->GetFunction("bethefitmuon")->SetLineWidth(2);
+   pr0->ptge_absmom_mean_XP->GetFunction("bethefitmuon")->SetRange(0, 2000);
+
+   // -----------------------------------------------------------------------------------------------------------------
+   // Global dE/dx plot
    pr0->fph1f_XP->SetAxisRange(0, 1.1 * ampmax, "Y");
+   for (int i = 1; i < ncomparisons; i++)
+      v_processes[i]->fph1f_XP->Scale(pr0->fph1f_XP->Integral() /
+                                      v_processes[i]->fph1f_XP->Integral());
+   float maxcount =
+      std::max(pr0->fph1f_XP->GetMaximum(), v_processes[1]->fph1f_XP->GetMaximum());
+   std::vector<std::string> legEntriesDistrib;
+   legEntriesDistrib.push_back(legEntries[0]);
+   legEntriesDistrib.push_back("MC (scaled)");
    for (int i = 0; i < ncomparisons; i++) {
+      v_processes[i]->fph1f_XP->SetAxisRange(0, 1.1 * maxcount, "Y");
       v_processes[i]->fph1f_XP->Draw(i == 0 ? "HIST" : "HIST same");
       float xwidth = 0.23;
       float xright = 0.94;
@@ -1075,7 +1144,7 @@ void Draw::Compare(const std::vector<std::string> &v_filepaths, const std::strin
       std::cout << i << " " << xright - xwidth << " < x < " << xright << " | "
                 << ytop - ywidth << " < y < " << ytop << std::endl;
       PrintResolution(v_processes[i]->fph1f_XP, fpCanvas, xright, ytop, xwidth, ywidth,
-                      "north east", colors[i], legEntries[i]);
+                      "north east", colors[i], legEntriesDistrib[i]);
    }
    fpCanvas->SaveAs((OutputFile + "(").c_str());
    fpCanvas->Clear();
@@ -1084,137 +1153,263 @@ void Draw::Compare(const std::vector<std::string> &v_filepaths, const std::strin
    // -----------------------------------------------------------------------------------------------------------------
    // Resolution
    pr0->ptge_absmom_reso_XP->SetTitle(";Momentum (MeV/c);dE/dx resolution (%)");
-   pr0->ptge_absmom_reso_XP->GetXaxis()->SetLimits(0, momrange);
-   pr0->ptge_absmom_reso_XP->GetYaxis()->SetRangeUser(0, 12);
+   pr0->ptge_absmom_reso_XP->GetXaxis()->SetLimits(0, momrange * 1.05);
+   pr0->ptge_absmom_reso_XP->GetYaxis()->SetRangeUser(resominmom, resomaxmom);
    for (int i = 0; i < ncomparisons; i++) {
       v_processes[i]->ptge_absmom_reso_XP->DrawClone(i == 0 ? "AP" : "P same");
       v_processes[i]->ptge_absmom_reso_XP->SetMarkerSize(7);
-      fpLegend->AddEntry(v_processes[i]->ptge_absmom_reso_XP, ("XP " + legEntries[i]).c_str(), "p");
+      fpLegend->AddEntry(v_processes[i]->ptge_absmom_reso_XP, legEntries[i].c_str(), "p");
    }
    fpLegend->Draw();
    fpCanvas->SaveAs(OutputFile.c_str());
    fpCanvas->Clear();
    // Add WF
+   fpLegend->Clear();
    pr0->ptge_absmom_reso_XP->SetTitle(";Momentum (MeV/c);dE/dx resolution (%)");
-   pr0->ptge_absmom_reso_XP->GetXaxis()->SetLimits(0, momrange);
-   pr0->ptge_absmom_reso_XP->GetYaxis()->SetRangeUser(0, 12);
+   pr0->ptge_absmom_reso_XP->GetXaxis()->SetLimits(0, momrange * 1.05);
+   pr0->ptge_absmom_reso_XP->GetYaxis()->SetRangeUser(resominmom, resomaxmom);
    for (int i = 0; i < ncomparisons; i++) {
       v_processes[i]->ptge_absmom_reso_XP->SetMarkerSize(3);
       v_processes[i]->ptge_absmom_reso_XP->DrawClone(i == 0 ? "AP" : "P same");
       v_processes[i]->ptge_absmom_reso_WF->DrawClone("P same");
       v_processes[i]->ptge_absmom_reso_XP->SetMarkerSize(7);
       v_processes[i]->ptge_absmom_reso_WF->SetMarkerSize(7);
-      fpLegend->AddEntry(v_processes[i]->ptge_absmom_reso_WF, ("WF " + legEntries[i]).c_str(), "p");
+      fpLegend->AddEntry(v_processes[i]->ptge_absmom_reso_XP,
+                         ("XP " + legEntries[i]).c_str(), "p");
+      fpLegend->AddEntry(v_processes[i]->ptge_absmom_reso_WF,
+                         ("WF " + legEntries[i]).c_str(), "p");
    }
    fpLegend->Draw();
    fpCanvas->SaveAs(OutputFile.c_str());
    fpCanvas->Clear();
 
    // Mean
-   pr0->ptge_absmom_mean_XP->SetTitle(";Momentum (MeV/c);Mean (ADC counts/cm)");
-   pr0->ptge_absmom_mean_XP->GetXaxis()->SetLimits(0, momrange);
-   pr0->ptge_absmom_mean_XP->GetYaxis()->SetRangeUser(meanmin, meanmax);
+   fpLegend->Clear();
+   pr0->ptge_absmom_mean_XP->SetTitle(";Momentum (MeV/c);dE/dx (ADC counts/cm)");
+   pr0->ptge_absmom_mean_XP->GetXaxis()->SetLimits(0, momrange * 1.05);
+   pr0->ptge_absmom_mean_XP->GetYaxis()->SetRangeUser(dedxminmom, dedxmaxmom);
    for (int i = 0; i < ncomparisons; i++) {
       v_processes[i]->ptge_absmom_mean_XP->DrawClone(i == 0 ? "AP" : "P same");
+      fpLegend->AddEntry(v_processes[i]->ptge_absmom_reso_XP, legEntries[i].c_str(), "p");
    }
    fpLegend->Draw();
    fpCanvas->SaveAs(OutputFile.c_str());
    fpCanvas->Clear();
    // Add WF
-   pr0->ptge_absmom_mean_XP->SetTitle(";Momentum (MeV/c);Mean (ADC counts/cm)");
-   pr0->ptge_absmom_mean_XP->GetXaxis()->SetLimits(0, momrange);
-   pr0->ptge_absmom_mean_XP->GetYaxis()->SetRangeUser(meanmin, meanmax);
+   fpLegend->Clear();
+   pr0->ptge_absmom_mean_XP->SetTitle(";Momentum (MeV/c);dE/dx (ADC counts/cm)");
+   pr0->ptge_absmom_mean_XP->GetXaxis()->SetLimits(0, momrange * 1.05);
+   pr0->ptge_absmom_mean_XP->GetYaxis()->SetRangeUser(dedxminmom, dedxmaxmom);
    for (int i = 0; i < ncomparisons; i++) {
       v_processes[i]->ptge_absmom_mean_XP->DrawClone(i == 0 ? "AP" : "P same");
       v_processes[i]->ptge_absmom_mean_WF->DrawClone("P same");
+      fpLegend->AddEntry(v_processes[i]->ptge_absmom_reso_XP,
+                         ("XP " + legEntries[i]).c_str(), "p");
+      fpLegend->AddEntry(v_processes[i]->ptge_absmom_reso_WF,
+                         ("WF " + legEntries[i]).c_str(), "p");
    }
    fpLegend->Draw();
    fpCanvas->SaveAs(OutputFile.c_str());
    fpCanvas->Clear();
 
-   // dE/dx per time bins
+   // Heatmap
+   gPad->SetRightMargin(0.11);
+   pr0->fph2f_XPabsmom->GetYaxis()->SetRangeUser(200, 1000);
+   pr0->fph2f_XPabsmom->Draw("colz");
+   bethefitmuon->SetLineColor(kCyan);
+   bethefitmuon->Draw("same");
+   TF1 *bethefitproton = (TF1 *)bethefitmuon->Clone("bethefitproton");
+   bethefitproton->SetLineColor(kRed);
+   bethefitproton->SetParameter(5, 938.272);
+   bethefitproton->Draw("same");
+   TLegend legbethe(0.6, 0.75, 0.83, 0.9);
+   legbethe.SetFillColorAlpha(kWhite, 0.8);
+   legbethe.SetTextSize(0.06);
+   legbethe.AddEntry(bethefitmuon, "Muon fit", "l");
+   legbethe.AddEntry(bethefitproton, "Proton fit", "l");
+   legbethe.Draw();
+   fpCanvas->SaveAs(OutputFile.c_str());
+   fpCanvas->Clear();
+   gPad->SetRightMargin(0.035);
+
+   // dE/dx vs drift distance
    // -----------------------------------------------------------------------------------------------------------------
    // Resolution
-   pr0->ptge_dd_reso_XP->SetTitle(";Drift time (timebins);dE/dx resolution (%)");
-   pr0->ptge_dd_reso_XP->GetXaxis()->SetLimits(0, 510);
-   pr0->ptge_dd_reso_XP->GetYaxis()->SetRangeUser(resominhere, resomaxhere);
+   fpLegend->Clear();
+   pr0->ptge_dd_reso_XP->SetTitle(";Drift distance (mm);dE/dx resolution (%)");
+   pr0->ptge_dd_reso_XP->GetXaxis()->SetLimits(-50, 1050);
+   pr0->ptge_dd_reso_XP->GetYaxis()->SetRangeUser(resominX, resomaxX);
    for (int i = 0; i < ncomparisons; i++) {
       v_processes[i]->ptge_dd_reso_XP->DrawClone(i == 0 ? "AP" : "P same");
-      v_processes[i]->ptge_dd_reso_XP->SetMarkerSize(7);
+      fpLegend->AddEntry(v_processes[i]->ptge_absmom_reso_XP, legEntries[i].c_str(), "p");
+   }
+   fpLegend->Draw();
+   fpCanvas->SaveAs(OutputFile.c_str());
+   fpCanvas->Clear();
+   // Add WF
+   fpLegend->Clear();
+   pr0->ptge_dd_reso_XP->SetTitle(";Drift distance (mm);dE/dx resolution (%)");
+   pr0->ptge_dd_reso_XP->GetXaxis()->SetLimits(-50, 1050);
+   pr0->ptge_dd_reso_XP->GetYaxis()->SetRangeUser(resominX, resomaxX);
+   for (int i = 0; i < ncomparisons; i++) {
+      v_processes[i]->ptge_dd_reso_XP->DrawClone(i == 0 ? "AP" : "P same");
       v_processes[i]->ptge_dd_reso_WF->DrawClone("P same");
-      v_processes[i]->ptge_dd_reso_WF->SetMarkerSize(7);
+      fpLegend->AddEntry(v_processes[i]->ptge_absmom_reso_XP,
+                         ("XP " + legEntries[i]).c_str(), "p");
+      fpLegend->AddEntry(v_processes[i]->ptge_absmom_reso_WF,
+                         ("WF " + legEntries[i]).c_str(), "p");
    }
    fpLegend->Draw();
    fpCanvas->SaveAs(OutputFile.c_str());
    fpCanvas->Clear();
 
-   // Resolution's mean
-   pr0->ptge_dd_mean_XP->SetTitle(";Drift time (timebins);Mean (ADC counts/cm)");
-   pr0->ptge_dd_mean_XP->GetXaxis()->SetLimits(0, 510);
-   pr0->ptge_dd_mean_XP->GetYaxis()->SetRangeUser(meanmin, meanmax);
+   // Mean
+   fpLegend->Clear();
+   pr0->ptge_dd_mean_XP->SetTitle(";Drift distance (mm);dE/dx (ADC counts/cm)");
+   pr0->ptge_dd_mean_XP->GetXaxis()->SetLimits(-50, 1050);
+   pr0->ptge_dd_mean_XP->GetYaxis()->SetRangeUser(dedxminX, dedxmaxX);
+   for (int i = 0; i < ncomparisons; i++) {
+      v_processes[i]->ptge_dd_mean_XP->DrawClone(i == 0 ? "AP" : "P same");
+      fpLegend->AddEntry(v_processes[i]->ptge_absmom_reso_XP, legEntries[i].c_str(), "p");
+   }
+   fpLegend->Draw();
+   fpCanvas->SaveAs(OutputFile.c_str());
+   fpCanvas->Clear();
+   // Add WF
+   fpLegend->Clear();
+   pr0->ptge_dd_mean_XP->SetTitle(";Drift distance (mm);dE/dx (ADC counts/cm)");
+   pr0->ptge_dd_mean_XP->GetXaxis()->SetLimits(-50, 1050);
+   pr0->ptge_dd_mean_XP->GetYaxis()->SetRangeUser(dedxminX, dedxmaxX);
    for (int i = 0; i < ncomparisons; i++) {
       v_processes[i]->ptge_dd_mean_XP->DrawClone(i == 0 ? "AP" : "P same");
       v_processes[i]->ptge_dd_mean_WF->DrawClone("P same");
+      fpLegend->AddEntry(v_processes[i]->ptge_absmom_reso_XP,
+                         ("XP " + legEntries[i]).c_str(), "p");
+      fpLegend->AddEntry(v_processes[i]->ptge_absmom_reso_WF,
+                         ("WF " + legEntries[i]).c_str(), "p");
    }
    fpLegend->Draw();
    fpCanvas->SaveAs(OutputFile.c_str());
    fpCanvas->Clear();
 
-   // dE/dx per phi bins
+   // dE/dx VS phi bins
    // -----------------------------------------------------------------------------------------------------------------
    // Resolution
+   fpLegend->Clear();
    pr0->ptge_absphi_reso_XP->SetTitle(";#varphi (#circ);dE/dx resolution (%)");
-   pr0->ptge_absphi_reso_XP->GetXaxis()->SetLimits(0, 90);
-   pr0->ptge_absphi_reso_XP->GetYaxis()->SetRangeUser(resominhere, resomaxhere);
+   pr0->ptge_absphi_reso_XP->GetXaxis()->SetLimits(-3, 90);
+   pr0->ptge_absphi_reso_XP->GetYaxis()->SetRangeUser(resominphi, resomaxphi);
    for (int i = 0; i < ncomparisons; i++) {
       v_processes[i]->ptge_absphi_reso_XP->DrawClone(i == 0 ? "AP" : "P same");
-      v_processes[i]->ptge_absphi_reso_XP->SetMarkerSize(7);
+      fpLegend->AddEntry(v_processes[i]->ptge_absmom_reso_XP, legEntries[i].c_str(), "p");
+   }
+   fpLegend->Draw();
+   fpCanvas->SaveAs(OutputFile.c_str());
+   fpCanvas->Clear();
+   // Add WF
+   fpLegend->Clear();
+   pr0->ptge_absphi_reso_XP->SetTitle(";#varphi (#circ);dE/dx resolution (%)");
+   pr0->ptge_absphi_reso_XP->GetXaxis()->SetLimits(-3, 90);
+   pr0->ptge_absphi_reso_XP->GetYaxis()->SetRangeUser(resominphi, resomaxphi);
+   for (int i = 0; i < ncomparisons; i++) {
+      v_processes[i]->ptge_absphi_reso_XP->DrawClone(i == 0 ? "AP" : "P same");
       v_processes[i]->ptge_absphi_reso_WF->DrawClone("P same");
-      v_processes[i]->ptge_absphi_reso_WF->SetMarkerSize(7);
+      fpLegend->AddEntry(v_processes[i]->ptge_absmom_reso_XP,
+                         ("XP " + legEntries[i]).c_str(), "p");
+      fpLegend->AddEntry(v_processes[i]->ptge_absmom_reso_WF,
+                         ("WF " + legEntries[i]).c_str(), "p");
    }
    fpLegend->Draw();
    fpCanvas->SaveAs(OutputFile.c_str());
    fpCanvas->Clear();
 
-   // Resolution's mean
-   pr0->ptge_absphi_mean_XP->SetTitle(";#varphi (#circ);Mean (ADC counts/cm)");
-   pr0->ptge_absphi_mean_XP->GetXaxis()->SetLimits(0, 90);
-   pr0->ptge_absphi_mean_XP->GetYaxis()->SetRangeUser(meanmin, meanmax);
+   // Mean
+   fpLegend->Clear();
+   pr0->ptge_absphi_mean_XP->SetTitle(";#varphi (#circ);dE/dx (ADC counts/cm)");
+   pr0->ptge_absphi_mean_XP->GetXaxis()->SetLimits(-3, 90);
+   pr0->ptge_absphi_mean_XP->GetYaxis()->SetRangeUser(dedxminphi, dedxmaxphi);
+   for (int i = 0; i < ncomparisons; i++) {
+      v_processes[i]->ptge_absphi_mean_XP->DrawClone(i == 0 ? "AP" : "P same");
+      fpLegend->AddEntry(v_processes[i]->ptge_absmom_reso_XP, legEntries[i].c_str(), "p");
+   }
+   fpLegend->Draw();
+   fpCanvas->SaveAs(OutputFile.c_str());
+   fpCanvas->Clear();
+   // Add WF
+   fpLegend->Clear();
+   pr0->ptge_absphi_mean_XP->SetTitle(";#varphi (#circ);dE/dx (ADC counts/cm)");
+   pr0->ptge_absphi_mean_XP->GetXaxis()->SetLimits(-3, 90);
+   pr0->ptge_absphi_mean_XP->GetYaxis()->SetRangeUser(dedxminphi, dedxmaxphi);
    for (int i = 0; i < ncomparisons; i++) {
       v_processes[i]->ptge_absphi_mean_XP->DrawClone(i == 0 ? "AP" : "P same");
       v_processes[i]->ptge_absphi_mean_WF->DrawClone("P same");
+      fpLegend->AddEntry(v_processes[i]->ptge_absmom_reso_XP,
+                         ("XP " + legEntries[i]).c_str(), "p");
+      fpLegend->AddEntry(v_processes[i]->ptge_absmom_reso_WF,
+                         ("WF " + legEntries[i]).c_str(), "p");
    }
    fpLegend->Draw();
    fpCanvas->SaveAs(OutputFile.c_str());
    fpCanvas->Clear();
 
-   // dE/dx per theta bins
+   // dE/dx VS theta bins
    // -----------------------------------------------------------------------------------------------------------------
    // Resolution
+   fpLegend->Clear();
    pr0->ptge_abstheta_reso_XP->SetTitle(";#theta (#circ);dE/dx resolution (%)");
-   pr0->ptge_abstheta_reso_XP->GetXaxis()->SetLimits(0, 90);
-   pr0->ptge_abstheta_reso_XP->GetYaxis()->SetRangeUser(resominhere, resomaxhere);
+   pr0->ptge_abstheta_reso_XP->GetXaxis()->SetLimits(-3, 90);
+   pr0->ptge_abstheta_reso_XP->GetYaxis()->SetRangeUser(resomintheta, resomaxtheta);
    for (int i = 0; i < ncomparisons; i++) {
       v_processes[i]->ptge_abstheta_reso_XP->DrawClone(i == 0 ? "AP" : "P same");
-      v_processes[i]->ptge_abstheta_reso_XP->SetMarkerSize(7);
+      fpLegend->AddEntry(v_processes[i]->ptge_absmom_reso_XP, legEntries[i].c_str(), "p");
+   }
+   fpLegend->Draw();
+   fpCanvas->SaveAs(OutputFile.c_str());
+   fpCanvas->Clear();
+   // Add WF
+   fpLegend->Clear();
+   pr0->ptge_abstheta_reso_XP->SetTitle(";#theta (#circ);dE/dx resolution (%)");
+   pr0->ptge_abstheta_reso_XP->GetXaxis()->SetLimits(-3, 90);
+   pr0->ptge_abstheta_reso_XP->GetYaxis()->SetRangeUser(resomintheta, resomaxtheta);
+   for (int i = 0; i < ncomparisons; i++) {
+      v_processes[i]->ptge_abstheta_reso_XP->DrawClone(i == 0 ? "AP" : "P same");
       v_processes[i]->ptge_abstheta_reso_WF->DrawClone("P same");
-      v_processes[i]->ptge_abstheta_reso_WF->SetMarkerSize(7);
+      fpLegend->AddEntry(v_processes[i]->ptge_absmom_reso_XP,
+                         ("XP " + legEntries[i]).c_str(), "p");
+      fpLegend->AddEntry(v_processes[i]->ptge_absmom_reso_WF,
+                         ("WF " + legEntries[i]).c_str(), "p");
    }
    fpLegend->Draw();
    fpCanvas->SaveAs(OutputFile.c_str());
    fpCanvas->Clear();
 
-   // Resolution's mean
-   pr0->ptge_abstheta_mean_XP->SetTitle(";#theta (#circ);Mean (ADC counts/cm)");
-   pr0->ptge_abstheta_mean_XP->GetXaxis()->SetLimits(0, 90);
-   pr0->ptge_abstheta_mean_XP->GetYaxis()->SetRangeUser(meanmin, meanmax);
+   // Mean
+   fpLegend->Clear();
+   pr0->ptge_abstheta_mean_XP->SetTitle(";#theta (#circ);dE/dx (ADC counts/cm)");
+   pr0->ptge_abstheta_mean_XP->GetXaxis()->SetLimits(-3, 90);
+   pr0->ptge_abstheta_mean_XP->GetYaxis()->SetRangeUser(dedxmintheta, dedxmaxtheta);
+   for (int i = 0; i < ncomparisons; i++) {
+      v_processes[i]->ptge_abstheta_mean_XP->DrawClone(i == 0 ? "AP" : "P same");
+      fpLegend->AddEntry(v_processes[i]->ptge_absmom_reso_XP, legEntries[i].c_str(), "p");
+   }
+   fpLegend->Draw();
+   fpCanvas->SaveAs(OutputFile.c_str());
+   fpCanvas->Clear();
+   // Add WF
+   fpLegend->Clear();
+   pr0->ptge_abstheta_mean_XP->SetTitle(";#theta (#circ);dE/dx (ADC counts/cm)");
+   pr0->ptge_abstheta_mean_XP->GetXaxis()->SetLimits(-3, 90);
+   pr0->ptge_abstheta_mean_XP->GetYaxis()->SetRangeUser(dedxmintheta, dedxmaxtheta);
    for (int i = 0; i < ncomparisons; i++) {
       v_processes[i]->ptge_abstheta_mean_XP->DrawClone(i == 0 ? "AP" : "P same");
       v_processes[i]->ptge_abstheta_mean_WF->DrawClone("P same");
+      fpLegend->AddEntry(v_processes[i]->ptge_absmom_reso_XP,
+                         ("XP " + legEntries[i]).c_str(), "p");
+      fpLegend->AddEntry(v_processes[i]->ptge_absmom_reso_WF,
+                         ("WF " + legEntries[i]).c_str(), "p");
    }
    fpLegend->Draw();
    fpCanvas->SaveAs((OutputFile + ")").c_str());
-   fpCanvas->Clear();
 
    for (Process *pr : v_processes)
       delete pr;

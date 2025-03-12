@@ -81,7 +81,7 @@ ClassImp(Process)
          0, dEdxmax));
    }
 
-   // dEdx vs drift time
+   // dEdx vs drift distance
    for (int i = 0; i < nddbins; i++) {
       int ddmin = i * ddbinwidth;
       int ddmax = (i + 1) * ddbinwidth;
@@ -94,6 +94,22 @@ ClassImp(Process)
          Form("ph1f_dd_XP_%d_%d", ddmin, ddmax),
          Form("Energy loss | %d < drift distance < %d; dE/dx (ADC counts/cm); Count",
               ddmin, ddmax),
+         100, 0, dEdxmax));
+   }
+
+   // dEdx vs drift time
+   for (int i = 0; i < ndtbins; i++) {
+      int dtmin = i * dtbinwidth;
+      int dtmax = (i + 1) * dtbinwidth;
+      vdt_fph1f_WF.push_back(new TH1F(
+         Form("ph1f_dt_WF_%d_%d", dtmin, dtmax),
+         Form("Energy loss | %d < drift distance < %d; dE/dx (ADC counts/cm); Count",
+              dtmin, dtmax),
+         100, 0, dEdxmax));
+      vdt_fph1f_XP.push_back(new TH1F(
+         Form("ph1f_dt_XP_%d_%d", dtmin, dtmax),
+         Form("Energy loss | %d < drift distance < %d; dE/dx (ADC counts/cm); Count",
+              dtmin, dtmax),
          100, 0, dEdxmax));
    }
 
@@ -204,6 +220,11 @@ Process::~Process()
    delete ptge_dd_reso_WF;
    delete ptge_dd_reso_XP;
 
+   delete ptge_dt_mean_WF;
+   delete ptge_dt_mean_XP;
+   delete ptge_dt_reso_WF;
+   delete ptge_dt_reso_XP;
+
    delete ptge_absphi_mean_WF;
    delete ptge_absphi_mean_XP;
    delete ptge_absphi_reso_WF;
@@ -265,6 +286,11 @@ Process::~Process()
    delete fph1i_tmaxTopCath;
    delete fph1i_tmaxEP2;
    delete fph1i_tmaxEP3;
+   delete fph1f_pullmu;
+   delete fph1f_pullelec;
+   delete fph1f_pullproton;
+   delete fph2f_momphi;
+   delete fph2f_timeX;
    delete fph2f_pullelecmu;
    delete fph2f_chi2ndfphi;
    delete fph2f_momtheta;
@@ -300,6 +326,10 @@ Process::~Process()
       delete ptr;
    for (auto ptr : vdd_fph1f_XP)
       delete ptr;
+   for (auto ptr : vdt_fph1f_WF)
+      delete ptr;
+   for (auto ptr : vdt_fph1f_XP)
+      delete ptr;
    for (auto ptr : vabsphi_fph1f_WF)
       delete ptr;
    for (auto ptr : vabsphi_fph1f_XP)
@@ -333,8 +363,8 @@ Process::~Process()
    vmom_fph1f_pullelec.clear();
    vX_fph1f_WF.clear();
    vX_fph1f_XP.clear();
-   vdd_fph1f_WF.clear();
-   vdd_fph1f_XP.clear();
+   vdt_fph1f_WF.clear();
+   vdt_fph1f_XP.clear();
    vabsphi_fph1f_WF.clear();
    vabsphi_fph1f_XP.clear();
    vphi_fph1f_WF.clear();
@@ -349,17 +379,12 @@ Process::~Process()
 
 void Process::SetCuts()
 {
-   // nclmin = 32;
-   // fcutslist += ("_" + std::to_string(nclmin) + "ncl");
 
    // nclmin = 50, nclmax = 150;
    // fcutslist += ("_" + std::to_string(nclmin) + "ncl" + std::to_string(nclmax));
 
    // apmcutlow = 2, apmcuthigh = 4;
    // fcutslist += ("_" + std::to_string(apmcutlow) + "apm" + std::to_string(apmcuthigh));
-
-   // momcutlow = 1e2;
-   // fcutslist += ("_" + std::to_string(momcutlow) + "mom");
 
    // tcutmin = 0, tcutmax = 75;
    // fcutslist += ("_" + std::to_string(tcutmin) + "tmin" + std::to_string(tcutmax));
@@ -377,24 +402,36 @@ void Process::SetCuts()
    chi2max = 5;
    fcutslist += ("_chi2ndf" + std::to_string(chi2max));
 
-   dxmin = 0;
+   nclmin = 0;
    if (ffileName.find("dog1") != std::string::npos or
        ffileName.find("cosmics") != std::string::npos)
-      dxmin = 30;
+      nclmin = 32;
    else if (ffileName.find("beam") != std::string::npos or
             ffileName.find("sandmu") != std::string::npos)
-      dxmin = 140;
-   fcutslist += ("_" + std::to_string(dxmin) + "dx");
+      nclmin = 72;
+   fcutslist += ("_" + std::to_string(nclmin) + "dx");
 
-   xcutmin = -1000, xcutmax = 1000;
+   // dxmin = 0;
+   // if (ffileName.find("dog1") != std::string::npos or
+   //     ffileName.find("cosmics") != std::string::npos)
+   //    dxmin = 60;
+   // else if (ffileName.find("beam") != std::string::npos or
+   //          ffileName.find("sandmu") != std::string::npos)
+   //    dxmin = 60;
+   // fcutslist += ("_" + std::to_string(dxmin) + "dx");
+
+   xcutmin = -981, xcutmax = 981;
    fcutslist += ("_" + std::to_string(xcutmin) + "x" + std::to_string(xcutmax));
 
    // thetamin = 0;
    // thetamax = 2;
    // fcutslist += ("_" + std::to_string(thetamin) + "theta" + std::to_string(thetamax));
 
-   // momcutlow = 550, momcuthigh = 650;
-   // fcutslist += ("_" + std::to_string(momcutlow) + "mom" + std::to_string(momcuthigh));
+   // momcutlow = 100;
+   // fcutslist += ("_" + std::to_string(momcutlow) + "mom");
+
+   momcutlow = 400, momcuthigh = 800;
+   fcutslist += ("_" + std::to_string(momcutlow) + "mom" + std::to_string(momcuthigh));
 
    // fcutslist += "_dir1>0flip";
 
@@ -402,6 +439,7 @@ void Process::SetCuts()
    // fcutslist += std::string("_") + (hat == -1 ? "bHAT" : "tHAT");
 
    // Output files
+   fcutslist += "_" + std::to_string((int)nbins) + "bins";
    ffileName += fcutslist;
    fRealpathROOT = foutputROOTfolder + "/" + ffileName + ".root";
 }
@@ -444,8 +482,16 @@ void Process::Run()
       fpInputTree->GetEntry(i);
       mom = mom_og;
       // FOR COSMICS if the track is going up, the sign must be flipped
-      if (ffileName.find("cosmic") != std::string::npos)
+      if (ffileName.find("dog1") != std::string::npos or
+          ffileName.find("cosmic") != std::string::npos)
          dir[1] > 0 ? mom = -mom_og : mom = mom_og;
+      else if (ffileName.find("beam") != std::string::npos or
+               ffileName.find("sandmu") != std::string::npos) {
+         int sgn = curv / fabs(curv);
+         mom = sgn * fabs(mom_og);
+      }
+      // dir[1] > 0 ? mom = fabs(mom_og) : mom = -fabs(mom_og);
+
       float dirxy = TMath::Sqrt(dir[0] * dir[0] + dir[1] * dir[1]);
       float diryz = TMath::Sqrt(dir[1] * dir[1] + dir[2] * dir[2]);
       phi = TMath::ATan(dirxy / dir[2]) * 180 / TMath::Pi();
@@ -535,11 +581,18 @@ void Process::Run()
          vX_fph1f_XP[xposindex]->Fill(xp);
       }
 
-      // dEdx vs drift time
-      ddindex = (int)std::round(mean_time / ddbinwidth);
-      if (ddindex < nddbins) {
+      // dEdx vs drift distance
+      ddindex = (int)std::round((981 - fabs(pos[0])) / ddbinwidth);
+      if (ddindex < nddbins and ddindex >= 0) {
          vdd_fph1f_WF[ddindex]->Fill(wf / 1.019);
          vdd_fph1f_XP[ddindex]->Fill(xp);
+      }
+
+      // dEdx vs drift time
+      dtindex = (int)std::round(mean_time / dtbinwidth);
+      if (dtindex < ndtbins) {
+         vdt_fph1f_WF[dtindex]->Fill(wf / 1.019);
+         vdt_fph1f_XP[dtindex]->Fill(xp);
       }
 
       // dEdx vs absolute phi angle
@@ -728,11 +781,20 @@ void Process::Run()
       ptge_mom_mean_WF->SetPointError(ivalid, mombinwidth / 2, dmean_WF);
       ptge_mom_mean_XP->SetPoint(ivalid, i * mombinwidth - momrange, mean_XP);
       ptge_mom_mean_XP->SetPointError(ivalid, mombinwidth / 2, dmean_XP);
+      ptge_mom_mean_pullmu->SetPoint(ivalid, i * mombinwidth - momrange, mean_pullmu);
+      ptge_mom_mean_pullmu->SetPointError(ivalid, mombinwidth / 2, dmean_pullmu);
+      ptge_mom_mean_pullelec->SetPoint(ivalid, i * mombinwidth - momrange, mean_pullelec);
+      ptge_mom_mean_pullelec->SetPointError(ivalid, mombinwidth / 2, dmean_pullelec);
 
       ptge_mom_reso_WF->SetPoint(ivalid, i * mombinwidth - momrange, reso_WF);
       ptge_mom_reso_WF->SetPointError(ivalid, mombinwidth / 2, dreso_WF);
       ptge_mom_reso_XP->SetPoint(ivalid, i * mombinwidth - momrange, reso_XP);
       ptge_mom_reso_XP->SetPointError(ivalid, mombinwidth / 2, dreso_XP);
+      ptge_mom_std_pullmu->SetPoint(ivalid, i * mombinwidth - momrange, std_pullmu);
+      ptge_mom_std_pullmu->SetPointError(ivalid, mombinwidth / 2, dstd_pullmu);
+      ptge_mom_std_pullelec->SetPoint(ivalid, i * mombinwidth - momrange, std_pullelec);
+      ptge_mom_std_pullelec->SetPointError(ivalid, mombinwidth / 2, dstd_pullelec);
+
       ivalid++;
    }
 
@@ -807,6 +869,43 @@ void Process::Run()
       ptge_dd_reso_WF->SetPointError(ivalid, ddbinwidth / 2, dreso_WF);
       ptge_dd_reso_XP->SetPoint(ivalid, i * ddbinwidth, reso_XP);
       ptge_dd_reso_XP->SetPointError(ivalid, ddbinwidth / 2, dreso_XP);
+      ivalid++;
+   }
+
+   // Drift time
+   ivalid = 0;
+   for (int i = 0; i < ndtbins; i++) {
+      int nentries_here = vdt_fph1f_WF[i]->GetEntries();
+      if (nentries_here < 50)
+         continue;
+      fptf1_WF = Fit1Gauss(vdt_fph1f_WF[i]);
+      fptf1_XP = Fit1Gauss(vdt_fph1f_XP[i]);
+
+      float mean_WF = fptf1_WF->GetParameter(1);
+      float mean_XP = fptf1_XP->GetParameter(1);
+      float dmean_WF = fptf1_WF->GetParError(1);
+      float dmean_XP = fptf1_XP->GetParError(1);
+
+      float std_WF = fptf1_WF->GetParameter(2);
+      float std_XP = fptf1_XP->GetParameter(2);
+
+      float reso_WF = std_WF / mean_WF * 100;
+      float reso_XP = std_XP / mean_XP * 100;
+      float dreso_WF = GetResoError(fptf1_WF);
+      float dreso_XP = GetResoError(fptf1_XP);
+
+      if (mean_WF == 0 || mean_XP == 0)
+         continue;
+
+      ptge_dt_mean_WF->SetPoint(ivalid, i * dtbinwidth, mean_WF);
+      ptge_dt_mean_WF->SetPointError(ivalid, dtbinwidth / 2, dmean_WF);
+      ptge_dt_mean_XP->SetPoint(ivalid, i * dtbinwidth, mean_XP);
+      ptge_dt_mean_XP->SetPointError(ivalid, dtbinwidth / 2, dmean_XP);
+
+      ptge_dt_reso_WF->SetPoint(ivalid, i * dtbinwidth, reso_WF);
+      ptge_dt_reso_WF->SetPointError(ivalid, dtbinwidth / 2, dreso_WF);
+      ptge_dt_reso_XP->SetPoint(ivalid, i * dtbinwidth, reso_XP);
+      ptge_dt_reso_XP->SetPointError(ivalid, dtbinwidth / 2, dreso_XP);
       ivalid++;
    }
 

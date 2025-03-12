@@ -46,30 +46,37 @@ private:
 
    // Analysis settings
    int dEdxmax = 1300;
+   float nbins = 101;
 
    // Absolute momentum
-   float nabsmombins = 51;
+   float nabsmombins = nbins;
    float absmomrange = 2000;
    float absmombinwidth = absmomrange / (nabsmombins - 1);
    int absmomindex = 0;
 
    // Momentum
-   float nmombins = 101;
+   float nmombins = nbins;
    float momrange = 2000;
    float mombinwidth = 2 * momrange / (nmombins - 1);
    int momindex = 0;
 
    // X position
-   float nxposbins = 101;
+   float nxposbins = nbins;
    float xposrange = 2400;
    float xposbinwidth = 2 * xposrange / (nxposbins - 1);
    int xposindex = 0;
 
-   // drift time
-   float nddbins = 101;
-   float ddrange = 510;
+   // drift distance
+   float nddbins = nbins;
+   float ddrange = 1000;
    float ddbinwidth = ddrange / (nddbins - 1);
    int ddindex = 0;
+
+   // drift time
+   float ndtbins = nbins;
+   float dtrange = 510;
+   float dtbinwidth = dtrange / (ndtbins - 1);
+   int dtindex = 0;
 
    // absolute phi angle
    float nabsphibins = 91;
@@ -145,6 +152,14 @@ private:
    TGraphErrors *ptge_dd_reso_WF = new TGraphErrors();
    TGraphErrors *ptge_dd_reso_XP = new TGraphErrors();
 
+   // Vectors for dE/dx vs drift time bin
+   std::vector<TH1F *> vdt_fph1f_WF;
+   std::vector<TH1F *> vdt_fph1f_XP;
+   TGraphErrors *ptge_dt_mean_WF = new TGraphErrors();
+   TGraphErrors *ptge_dt_mean_XP = new TGraphErrors();
+   TGraphErrors *ptge_dt_reso_WF = new TGraphErrors();
+   TGraphErrors *ptge_dt_reso_XP = new TGraphErrors();
+
    // Vectors for dE/dx vs absolute phi angle bin
    std::vector<TH1F *> vabsphi_fph1f_WF;
    std::vector<TH1F *> vabsphi_fph1f_XP;
@@ -187,8 +202,8 @@ private:
 
    // Base
    int nbinsdEdx = 500;
-   TH1F *fph1f_WF = new TH1F("fph1f_WF", ";dE/dx(ADC counts/cm);Count", 100, 0, dEdxmax);
-   TH1F *fph1f_XP = new TH1F("fph1f_XP", ";dE/dx(ADC counts/cm);Count", 100, 0, dEdxmax);
+   TH1F *fph1f_WF = new TH1F("fph1f_WF", ";dE/dx (ADC counts/cm);Count", 100, 0, dEdxmax);
+   TH1F *fph1f_XP = new TH1F("fph1f_XP", ";dE/dx (ADC counts/cm);Count", 100, 0, dEdxmax);
    // 2D with dE/dx
    TH2F *fph2f_WFXP = new TH2F(
       "fph1f_WFXP", ";dE/dx with WF (ADC counts/cm);dE/dx with XP (ADC counts/cm)", 100,
@@ -213,12 +228,12 @@ private:
    TH2F *fph2f_XPtheta =
       new TH2F("fph2f_XPtheta", ";#theta; dE/dx with XP (ADC counts/cm)", 5 * nthetabins,
                -90, 90, nbinsdEdx, 0, 1000);
-   TH2F *fph2f_XPabsmom =
-      new TH2F("fph2f_XPabsmom", ";Absolute momentum (MeV/c);dE/dx with XP (ADC counts/cm)",
-               5 * nabsmombins, 0, absmomrange, nbinsdEdx, 0, 1000);
-   TH2F *fph2f_WFabsmom =
-      new TH2F("fph2f_WFabsmom", ";Absolute momentum (MeV/c);dE/dx with WF (ADC counts/cm)",
-               5 * nabsmombins, 0, absmomrange, nbinsdEdx, 0, 1000);
+   TH2F *fph2f_XPabsmom = new TH2F(
+      "fph2f_XPabsmom", ";Absolute momentum (MeV/c);dE/dx with XP (ADC counts/cm)",
+      5 * nabsmombins / 3, 0, absmomrange, nbinsdEdx / 3, 0, 1000);
+   TH2F *fph2f_WFabsmom = new TH2F(
+      "fph2f_WFabsmom", ";Absolute momentum (MeV/c);dE/dx with WF (ADC counts/cm)",
+      5 * nabsmombins / 3, 0, absmomrange, nbinsdEdx / 3, 0, 1000);
    TH2F *fph2f_XPmom =
       new TH2F("fph2f_XPmom", ";momentum (MeV);dE/dx with XP (ADC counts/cm)",
                5 * nmombins, -momrange, momrange, nbinsdEdx, 0, 1000);
