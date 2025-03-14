@@ -78,6 +78,12 @@ private:
    float dtbinwidth = dtrange / (ndtbins - 1);
    int dtindex = 0;
 
+   // track length
+   float ntrklenbins = nbins;
+   float trklenrange = 1800;
+   float trklenbinwidth = trklenrange / (ntrklenbins - 1);
+   int trklenindex = 0;
+
    // absolute phi angle
    float nabsphibins = 91;
    float absphirange = 90;
@@ -159,6 +165,14 @@ private:
    TGraphErrors *ptge_dt_mean_XP = new TGraphErrors();
    TGraphErrors *ptge_dt_reso_WF = new TGraphErrors();
    TGraphErrors *ptge_dt_reso_XP = new TGraphErrors();
+
+   // Vectors for dE/dx vs track length
+   std::vector<TH1F *> vtrklen_fph1f_WF;
+   std::vector<TH1F *> vtrklen_fph1f_XP;
+   TGraphErrors *ptge_trklen_mean_WF = new TGraphErrors();
+   TGraphErrors *ptge_trklen_mean_XP = new TGraphErrors();
+   TGraphErrors *ptge_trklen_reso_WF = new TGraphErrors();
+   TGraphErrors *ptge_trklen_reso_XP = new TGraphErrors();
 
    // Vectors for dE/dx vs absolute phi angle bin
    std::vector<TH1F *> vabsphi_fph1f_WF;
@@ -339,7 +353,7 @@ private:
    int nclmin{0};
    int nclmax{1000};
    int dxmin{0};
-   int ddEdxmax{1000000};
+   int dxmax{1000000};
    int ncroscut{0};
    int apmcutlow{0};
    int apmcuthigh{1000};
@@ -347,8 +361,10 @@ private:
    int momcuthigh{1000000000};
    int xcutmin{-1200};
    int xcutmax{1200};
-   int tcutmin{0};
-   int tcutmax{1000};
+   int tstartmin{0};
+   int tstartmax{1000};
+   int tmeanmin{0};
+   int tmeanmax{1000};
    int chi2max{1000000000};
    int hat{0};
    int pullmumax{1000000};
