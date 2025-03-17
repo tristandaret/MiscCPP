@@ -1,7 +1,7 @@
 #include "SetStyle.h"
 #include "TPaveStats.h"
 
-// --- T2K style ---
+// --- My style ---
 
 TStyle *SetMyStyle()
 {

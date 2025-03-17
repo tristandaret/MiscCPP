@@ -30,7 +30,7 @@ void Draw::Run(const std::string &filepath)
    int dEdxmax = pr.dEdxmax;
    int absmomrange = pr.absmomrange;
    int momrange = pr.momrange;
-   int nabsmombins = pr.nabsmombins;
+   int nabsmommeanbins = pr.nabsmommeanbins;
    int nmombins = pr.nmombins;
    int nthetabins = pr.nthetabins;
    fpCanvas->cd();
@@ -330,7 +330,7 @@ void Draw::Run(const std::string &filepath)
    Graphic_setup(pr.ptge_absphi_reso_WF, 2, 33, kCyan + 2, 2, kCyan + 2);
    Graphic_setup(pr.ptge_absphi_reso_XP, 2, 47, kMagenta + 2, 2, kMagenta + 2);
    pr.ptge_absphi_reso_XP->SetTitle(";#varphi (#circ);dE/dx resolution (%)");
-   pr.ptge_absphi_reso_XP->GetXaxis()->SetLimits(0, 90);
+   pr.ptge_absphi_reso_XP->GetXaxis()->SetLimits(0, 93);
    pr.ptge_absphi_reso_XP->GetYaxis()->SetRangeUser(resomin, resomax);
    pr.ptge_absphi_reso_XP->DrawClone("AP");
    pr.ptge_absphi_reso_WF->DrawClone("P same");
@@ -344,7 +344,7 @@ void Draw::Run(const std::string &filepath)
    Graphic_setup(pr.ptge_absphi_mean_WF, 0, 33, kCyan + 2, 2, kCyan + 2);
    Graphic_setup(pr.ptge_absphi_mean_XP, 0, 47, kMagenta + 2, 2, kMagenta + 2);
    pr.ptge_absphi_mean_XP->SetTitle(";#varphi (#circ);Mean (ADC counts/cm)");
-   pr.ptge_absphi_mean_XP->GetXaxis()->SetLimits(0, 90);
+   pr.ptge_absphi_mean_XP->GetXaxis()->SetLimits(0, 93);
    pr.ptge_absphi_mean_XP->GetYaxis()->SetRangeUser(meanmin, meanmax);
    pr.ptge_absphi_mean_XP->Draw("AP");
    pr.ptge_absphi_mean_WF->Draw("P same");
@@ -359,7 +359,7 @@ void Draw::Run(const std::string &filepath)
    Graphic_setup(pr.ptge_phi_reso_WF, 2, 33, kCyan + 2, 2, kCyan + 2);
    Graphic_setup(pr.ptge_phi_reso_XP, 2, 47, kMagenta + 2, 2, kMagenta + 2);
    pr.ptge_phi_reso_XP->SetTitle(";#varphi (#circ);dE/dx resolution (%)");
-   pr.ptge_phi_reso_XP->GetXaxis()->SetLimits(-90, 90);
+   pr.ptge_phi_reso_XP->GetXaxis()->SetLimits(-93, 93);
    pr.ptge_phi_reso_XP->GetYaxis()->SetRangeUser(resomin, resomax);
    pr.ptge_phi_reso_XP->DrawClone("AP");
    pr.ptge_phi_reso_WF->DrawClone("P same");
@@ -373,7 +373,7 @@ void Draw::Run(const std::string &filepath)
    Graphic_setup(pr.ptge_phi_mean_WF, 0, 33, kCyan + 2, 2, kCyan + 2);
    Graphic_setup(pr.ptge_phi_mean_XP, 0, 47, kMagenta + 2, 2, kMagenta + 2);
    pr.ptge_phi_mean_XP->SetTitle(";#varphi (#circ);Mean (ADC counts/cm)");
-   pr.ptge_phi_mean_XP->GetXaxis()->SetLimits(-90, 90);
+   pr.ptge_phi_mean_XP->GetXaxis()->SetLimits(-93, 93);
    pr.ptge_phi_mean_XP->GetYaxis()->SetRangeUser(meanmin, meanmax);
    pr.ptge_phi_mean_XP->Draw("AP");
    pr.ptge_phi_mean_WF->Draw("P same");
@@ -415,7 +415,7 @@ void Draw::Run(const std::string &filepath)
    Graphic_setup(pr.ptge_abstheta_reso_WF, 2, 33, kCyan + 2, 2, kCyan + 2);
    Graphic_setup(pr.ptge_abstheta_reso_XP, 2, 47, kMagenta + 2, 2, kMagenta + 2);
    pr.ptge_abstheta_reso_XP->SetTitle(";#theta (#circ);dE/dx resolution (%)");
-   pr.ptge_abstheta_reso_XP->GetXaxis()->SetLimits(0, 90);
+   pr.ptge_abstheta_reso_XP->GetXaxis()->SetLimits(0, 93);
    pr.ptge_abstheta_reso_XP->GetYaxis()->SetRangeUser(resomin, resomax);
    pr.ptge_abstheta_reso_XP->DrawClone("AP");
    pr.ptge_abstheta_reso_WF->DrawClone("P same");
@@ -429,7 +429,7 @@ void Draw::Run(const std::string &filepath)
    Graphic_setup(pr.ptge_abstheta_mean_WF, 0, 33, kCyan + 2, 2, kCyan + 2);
    Graphic_setup(pr.ptge_abstheta_mean_XP, 0, 47, kMagenta + 2, 2, kMagenta + 2);
    pr.ptge_abstheta_mean_XP->SetTitle(";#theta (#circ);Mean (ADC counts/cm)");
-   pr.ptge_abstheta_mean_XP->GetXaxis()->SetLimits(0, 90);
+   pr.ptge_abstheta_mean_XP->GetXaxis()->SetLimits(0, 93);
    pr.ptge_abstheta_mean_XP->GetYaxis()->SetRangeUser(meanmin, meanmax);
    pr.ptge_abstheta_mean_XP->Draw("AP");
    pr.ptge_abstheta_mean_WF->Draw("P same");
@@ -444,7 +444,7 @@ void Draw::Run(const std::string &filepath)
    Graphic_setup(pr.ptge_theta_reso_WF, 2, 33, kCyan + 2, 2, kCyan + 2);
    Graphic_setup(pr.ptge_theta_reso_XP, 2, 47, kMagenta + 2, 2, kMagenta + 2);
    pr.ptge_theta_reso_XP->SetTitle(";#theta (#circ);dE/dx resolution (%)");
-   pr.ptge_theta_reso_XP->GetXaxis()->SetLimits(-90, 90);
+   pr.ptge_theta_reso_XP->GetXaxis()->SetLimits(-93, 93);
    pr.ptge_theta_reso_XP->GetYaxis()->SetRangeUser(resomin, resomax);
    pr.ptge_theta_reso_XP->DrawClone("AP");
    pr.ptge_theta_reso_WF->DrawClone("P same");
@@ -458,7 +458,7 @@ void Draw::Run(const std::string &filepath)
    Graphic_setup(pr.ptge_theta_mean_WF, 0, 33, kCyan + 2, 2, kCyan + 2);
    Graphic_setup(pr.ptge_theta_mean_XP, 0, 47, kMagenta + 2, 2, kMagenta + 2);
    pr.ptge_theta_mean_XP->SetTitle(";#theta (#circ);Mean (ADC counts/cm)");
-   pr.ptge_theta_mean_XP->GetXaxis()->SetLimits(-90, 90);
+   pr.ptge_theta_mean_XP->GetXaxis()->SetLimits(-93, 93);
    pr.ptge_theta_mean_XP->GetYaxis()->SetRangeUser(meanmin, meanmax);
    pr.ptge_theta_mean_XP->Draw("AP");
    pr.ptge_theta_mean_WF->Draw("P same");
@@ -523,11 +523,11 @@ void Draw::Run(const std::string &filepath)
    // 2D distribution
    fpCanvas->Clear();
    gPad->SetRightMargin(0.13);
-   pr.fph2f_WFabsmom->Draw("colz");
+   pr.fph2f_WFabsmommean->Draw("colz");
    fpCanvas->SaveAs(fRealpathPDF.c_str());
 
    fpCanvas->Clear();
-   pr.fph2f_XPabsmom->Draw("colz");
+   pr.fph2f_XPabsmommean->Draw("colz");
 
    // -----------------------------------------------------------------------------------------------------------------
    // dEdx vs momentum
@@ -608,7 +608,7 @@ void Draw::Run(const std::string &filepath)
                       ? pr.ptge_theta_std_pullmu->GetHistogram()->GetMaximum()
                       : pr.ptge_theta_std_pullelec->GetHistogram()->GetMaximum();
    float diffpull = maxpull - minpull;
-   pr.ptge_theta_std_pullmu->GetXaxis()->SetLimits(-90, 90);
+   pr.ptge_theta_std_pullmu->GetXaxis()->SetLimits(-93, 93);
    pr.ptge_theta_std_pullmu->GetYaxis()->SetRangeUser(0, maxpull + 0.1 * diffpull);
    pr.ptge_theta_std_pullmu->DrawClone("AP");
    pr.ptge_theta_std_pullelec->DrawClone("P same");
@@ -638,7 +638,7 @@ void Draw::Run(const std::string &filepath)
               pr.ptge_theta_mean_pullelec->GetHistogram()->GetMaximum())
                 ? pr.ptge_theta_mean_pullmu->GetHistogram()->GetMaximum()
                 : pr.ptge_theta_mean_pullelec->GetHistogram()->GetMaximum();
-   pr.ptge_theta_mean_pullmu->GetXaxis()->SetLimits(-90, 90);
+   pr.ptge_theta_mean_pullmu->GetXaxis()->SetLimits(-93, 93);
    pr.ptge_theta_mean_pullmu->GetYaxis()->SetRangeUser(minpull - 0.1 * diffpull,
                                                        maxpull + 0.1 * diffpull);
    pr.ptge_theta_mean_pullmu->Draw("AP");
@@ -775,7 +775,7 @@ void Draw::Run(const std::string &filepath)
    pr.fph2f_XZ->Draw("colz");
    fpCanvas->SaveAs(fRealpathPDF.c_str());
    gPad->SetLogz(0);
-   
+
    fpCanvas->Clear();
    gPad->SetTopMargin(0.02);
    gPad->SetRightMargin(0.02);
@@ -1039,6 +1039,7 @@ void Draw::Compare(const std::vector<std::string> &v_filepaths, const std::strin
    int momrange = pr0->momrange;
    int nmombins = pr0->nmombins;
    fpCanvas->cd();
+   fpCanvas->SetGrid(1, 1);
    gStyle->SetOptStat(0);
    gStyle->SetOptFit(0);
    gPad->SetTopMargin(0.05);
@@ -1093,9 +1094,11 @@ void Draw::Compare(const std::vector<std::string> &v_filepaths, const std::strin
    fpLegend->SetTextSize(0.06 - 0.005 * ncomparisons);
    // fpLegend->						SetFillStyle(0);
    fpLegend->SetTextColor(kBlue - 1);
-   fpLegend->SetFillColorAlpha(kWhite, 0.8);
+   fpLegend->SetFillColorAlpha(kWhite, 0.9);
 
    float ampmax = 0;
+   int resomarkersize = 3;
+   int meanmarkersize = 3;
    for (int i = 0; i < ncomparisons; i++) {
       Process *pr_tmp = v_processes[i];
       Graphic_setup(pr_tmp->fph1f_WF, 0.5, 1, colors[i] + 1, 2, colors[i] + 1, colors[i],
@@ -1106,39 +1109,37 @@ void Draw::Compare(const std::vector<std::string> &v_filepaths, const std::strin
          ampmax = pr_tmp->fph1f_WF->GetMaximum();
       if (pr_tmp->fph1f_XP->GetMaximum() > ampmax)
          ampmax = pr_tmp->fph1f_XP->GetMaximum();
-      Graphic_setup(pr_tmp->ptge_absmom_reso_WF, 3, markers[i], colors[2 + i], 2,
+      Graphic_setup(pr_tmp->ptge_absmom_reso_WF, resomarkersize, markers[i], colors[2 + i], 2,
                     colors[2 + i]);
-      Graphic_setup(pr_tmp->ptge_absmom_reso_XP, 3, markers[i], colors[i], 2, colors[i]);
-      Graphic_setup(pr_tmp->ptge_absmom_mean_WF, 2, markers[i], colors[2 + i], 2,
+      Graphic_setup(pr_tmp->ptge_absmom_reso_XP, resomarkersize, markers[i], colors[i], 2, colors[i]);
+      Graphic_setup(pr_tmp->ptge_absmom_mean_WF, meanmarkersize, markers[i], colors[2 + i], 2,
                     colors[2 + i]);
-      Graphic_setup(pr_tmp->ptge_absmom_mean_XP, 2, markers[i], colors[i], 2, colors[i]);
-      Graphic_setup(pr_tmp->ptge_dd_reso_WF, 3, markers[i], colors[2 + i], 2,
+      Graphic_setup(pr_tmp->ptge_absmom_mean_XP, meanmarkersize, markers[i], colors[i], 2, colors[i]);
+      Graphic_setup(pr_tmp->ptge_dd_reso_WF, resomarkersize, markers[i], colors[2 + i], 2,
                     colors[2 + i]);
-      Graphic_setup(pr_tmp->ptge_dd_reso_XP, 3, markers[i], colors[i], 2, colors[i]);
-      Graphic_setup(pr_tmp->ptge_dd_mean_WF, 2, markers[i], colors[2 + i], 2,
+      Graphic_setup(pr_tmp->ptge_dd_reso_XP, resomarkersize, markers[i], colors[i], 2, colors[i]);
+      Graphic_setup(pr_tmp->ptge_dd_mean_WF, meanmarkersize, markers[i], colors[2 + i], 2,
                     colors[2 + i]);
-      Graphic_setup(pr_tmp->ptge_dd_mean_XP, 2, markers[i], colors[i], 2, colors[i]);
-      Graphic_setup(pr_tmp->ptge_trklen_reso_WF, 3, markers[i], colors[2 + i], 2,
+      Graphic_setup(pr_tmp->ptge_dd_mean_XP, meanmarkersize, markers[i], colors[i], 2, colors[i]);
+      Graphic_setup(pr_tmp->ptge_trklen_reso_WF, resomarkersize, markers[i], colors[2 + i], 2,
                     colors[2 + i]);
-      Graphic_setup(pr_tmp->ptge_trklen_reso_XP, 3, markers[i], colors[i], 2,
+      Graphic_setup(pr_tmp->ptge_trklen_reso_XP, resomarkersize, markers[i], colors[i], 2, colors[i]);
+      Graphic_setup(pr_tmp->ptge_trklen_mean_WF, meanmarkersize, markers[i], colors[2 + i], 2,
+                    colors[2 + i]);
+      Graphic_setup(pr_tmp->ptge_trklen_mean_XP, meanmarkersize, markers[i], colors[i], 2, colors[i]);
+      Graphic_setup(pr_tmp->ptge_absphi_reso_WF, resomarkersize, markers[i], colors[2 + i], 2,
+                    colors[2 + i]);
+      Graphic_setup(pr_tmp->ptge_absphi_reso_XP, resomarkersize, markers[i], colors[i], 2, colors[i]);
+      Graphic_setup(pr_tmp->ptge_absphi_mean_WF, meanmarkersize, markers[i], colors[2 + i], 2,
+                    colors[2 + i]);
+      Graphic_setup(pr_tmp->ptge_absphi_mean_XP, meanmarkersize, markers[i], colors[i], 2, colors[i]);
+      Graphic_setup(pr_tmp->ptge_abstheta_reso_WF, resomarkersize, markers[i], colors[2 + i], 2,
+                    colors[2 + i]);
+      Graphic_setup(pr_tmp->ptge_abstheta_reso_XP, resomarkersize, markers[i], colors[i], 2,
                     colors[i]);
-      Graphic_setup(pr_tmp->ptge_trklen_mean_WF, 2, markers[i], colors[2 + i], 2,
+      Graphic_setup(pr_tmp->ptge_abstheta_mean_WF, meanmarkersize, markers[i], colors[2 + i], 2,
                     colors[2 + i]);
-      Graphic_setup(pr_tmp->ptge_trklen_mean_XP, 2, markers[i], colors[i], 2,
-                    colors[i]);
-      Graphic_setup(pr_tmp->ptge_absphi_reso_WF, 3, markers[i], colors[2 + i], 2,
-                    colors[2 + i]);
-      Graphic_setup(pr_tmp->ptge_absphi_reso_XP, 3, markers[i], colors[i], 2, colors[i]);
-      Graphic_setup(pr_tmp->ptge_absphi_mean_WF, 2, markers[i], colors[2 + i], 2,
-                    colors[2 + i]);
-      Graphic_setup(pr_tmp->ptge_absphi_mean_XP, 2, markers[i], colors[i], 2, colors[i]);
-      Graphic_setup(pr_tmp->ptge_abstheta_reso_WF, 3, markers[i], colors[2 + i], 2,
-                    colors[2 + i]);
-      Graphic_setup(pr_tmp->ptge_abstheta_reso_XP, 3, markers[i], colors[i], 2,
-                    colors[i]);
-      Graphic_setup(pr_tmp->ptge_abstheta_mean_WF, 2, markers[i], colors[2 + i], 2,
-                    colors[2 + i]);
-      Graphic_setup(pr_tmp->ptge_abstheta_mean_XP, 2, markers[i], colors[i], 2,
+      Graphic_setup(pr_tmp->ptge_abstheta_mean_XP, meanmarkersize, markers[i], colors[i], 2,
                     colors[i]);
    }
 
@@ -1155,8 +1156,8 @@ void Draw::Compare(const std::vector<std::string> &v_filepaths, const std::strin
    // -----------------------------------------------------------------------------------------------------------------
    // Bethe Bloch fit on data
    const char *formula =
-   "[0]/pow(x/sqrt(x*x+[5]*[5]),[3]) * ( [1] - pow(x/sqrt(x*x+[5]*[5]),[3]) - log([2] "
-   "+ 1 / pow(x/[5], [4])) )";
+      "[0]/pow(x/sqrt(x*x+[5]*[5]),[3]) * ( [1] - pow(x/sqrt(x*x+[5]*[5]),[3]) - log([2] "
+      "+ 1 / pow(x/[5], [4])) )";
    // Muon
    TF1 *bethefixmuon = new TF1("bethefixmuon", formula, 0, 2000, "");
    bethefixmuon->FixParameter(1, 3.62857e+00);
@@ -1164,10 +1165,11 @@ void Draw::Compare(const std::vector<std::string> &v_filepaths, const std::strin
    bethefixmuon->FixParameter(3, 2.07081e+00);
    bethefixmuon->FixParameter(4, 7.14413e-01);
    bethefixmuon->FixParameter(5, 105.658);
-   pr0->ptge_absmom_mean_XP->Fit(bethefixmuon, "R", "", 100, 2000);
-   pr0->ptge_absmom_mean_XP->GetFunction("bethefixmuon")->SetLineColor(kBlack);
-   pr0->ptge_absmom_mean_XP->GetFunction("bethefixmuon")->SetLineWidth(2);
-   pr0->ptge_absmom_mean_XP->GetFunction("bethefixmuon")->SetRange(0, 2000);
+   // Fit on MC
+   v_processes[1]->ptge_absmom_mean_XP->Fit(bethefixmuon, "R", "", 100, 2000);
+   v_processes[1]->ptge_absmom_mean_XP->GetFunction("bethefixmuon")->SetLineColor(kBlack);
+   v_processes[1]->ptge_absmom_mean_XP->GetFunction("bethefixmuon")->SetLineWidth(2);
+   v_processes[1]->ptge_absmom_mean_XP->GetFunction("bethefixmuon")->SetRange(0, 2000);
    // Proton
    TF1 *bethefixproton = (TF1 *)bethefixmuon->Clone("bethefixproton");
    bethefixproton->SetParameter(5, 938.272);
@@ -1176,11 +1178,20 @@ void Draw::Compare(const std::vector<std::string> &v_filepaths, const std::strin
    bethefixelectron->SetParameter(5, 0.511);
 
    // -----------------------------------------------------------------------------------------------------------------
+   // dE/dx vs track length fit
+   const char *trklenresoform = "[0] + [1]/pow(x, [2])";
+   TF1 trklenresofit("trklenresofit", trklenresoform, 0, 2000);
+   trklenresofit.SetParameter(2, 0.5);
+   pr0->ptge_trklen_reso_XP->Fit(&trklenresofit, "R", "", 200, 1600);
+   pr0->ptge_trklen_reso_XP->GetFunction("trklenresofit")->SetLineColor(kBlack);
+   pr0->ptge_trklen_reso_XP->GetFunction("trklenresofit")->SetLineWidth(2);
+   pr0->ptge_trklen_reso_XP->GetFunction("trklenresofit")->SetRange(0, 2000);
+   // -----------------------------------------------------------------------------------------------------------------
    // Global dE/dx plot
    pr0->fph1f_XP->SetAxisRange(0, 1.1 * ampmax, "Y");
-   // for (int i = 1; i < ncomparisons; i++)
-   //    v_processes[i]->fph1f_XP->Scale(pr0->fph1f_XP->Integral() /
-   //                                    v_processes[i]->fph1f_XP->Integral());
+   for (int i = 1; i < ncomparisons; i++)
+      v_processes[i]->fph1f_XP->Scale(pr0->fph1f_XP->Integral() /
+                                      v_processes[i]->fph1f_XP->Integral());
    float maxcount =
       std::max(pr0->fph1f_XP->GetMaximum(), v_processes[1]->fph1f_XP->GetMaximum());
    std::vector<std::string> legEntriesDistrib;
@@ -1266,20 +1277,24 @@ void Draw::Compare(const std::vector<std::string> &v_filepaths, const std::strin
 
    // Heatmap
    gPad->SetRightMargin(0.11);
-   pr0->fph2f_XPabsmom->GetYaxis()->SetRangeUser(200, 1000);
-   pr0->fph2f_XPabsmom->Draw("colz");
+   pr0->fph2f_XPabsmommean->GetYaxis()->SetRangeUser(200, 1000);
+   pr0->fph2f_XPabsmommean->GetYaxis()->SetTitle("dE/dx (ADC counts/cm)");
+   pr0->fph2f_XPabsmommean->Draw("colz");
    bethefixmuon->SetLineColor(kCyan);
+   bethefixmuon->SetLineStyle(2);
    bethefixmuon->Draw("same");
    bethefixproton->SetLineColor(kRed);
+   bethefixproton->SetLineStyle(2);
    bethefixproton->Draw("same");
-   bethefixelectron->SetLineColor(kGreen);
+   bethefixelectron->SetLineColor(kOrange + 1);
+   bethefixelectron->SetLineStyle(2);
    bethefixelectron->Draw("same");
    TLegend legbethe(0.6, 0.7, 0.83, 0.9);
    legbethe.SetFillColorAlpha(kWhite, 0.8);
    legbethe.SetTextSize(0.06);
-   legbethe.AddEntry(bethefixmuon, "Muon fit", "l");
-   legbethe.AddEntry(bethefixproton, "Proton fit", "l");
-   legbethe.AddEntry(bethefixelectron, "Electron fit", "l");
+   legbethe.AddEntry(bethefixmuon, "MC muon", "l");
+   legbethe.AddEntry(bethefixproton, "MC proton", "l");
+   legbethe.AddEntry(bethefixelectron, "MC electron", "l");
    legbethe.Draw();
    fpCanvas->SaveAs(OutputFile.c_str());
    delete bethefixmuon;
@@ -1409,11 +1424,11 @@ void Draw::Compare(const std::vector<std::string> &v_filepaths, const std::strin
    fpCanvas->Clear();
 
    // -----------------------------------------------------------------------------------------------------------------
-   // dE/dx VS phi bins
+   // dE/dx VS phi 
    // Resolution
    fpLegend->Clear();
    pr0->ptge_absphi_reso_XP->SetTitle(";#varphi (#circ);dE/dx resolution (%)");
-   pr0->ptge_absphi_reso_XP->GetXaxis()->SetLimits(-3, 90);
+   pr0->ptge_absphi_reso_XP->GetXaxis()->SetLimits(-3, 93);
    pr0->ptge_absphi_reso_XP->GetYaxis()->SetRangeUser(resominphi, resomaxphi);
    for (int i = 0; i < ncomparisons; i++) {
       v_processes[i]->ptge_absphi_reso_XP->DrawClone(i == 0 ? "AP" : "P same");
@@ -1425,7 +1440,7 @@ void Draw::Compare(const std::vector<std::string> &v_filepaths, const std::strin
    // Add WF
    fpLegend->Clear();
    pr0->ptge_absphi_reso_XP->SetTitle(";#varphi (#circ);dE/dx resolution (%)");
-   pr0->ptge_absphi_reso_XP->GetXaxis()->SetLimits(-3, 90);
+   pr0->ptge_absphi_reso_XP->GetXaxis()->SetLimits(-3, 93);
    pr0->ptge_absphi_reso_XP->GetYaxis()->SetRangeUser(resominphi, resomaxphi);
    for (int i = 0; i < ncomparisons; i++) {
       v_processes[i]->ptge_absphi_reso_XP->DrawClone(i == 0 ? "AP" : "P same");
@@ -1442,7 +1457,7 @@ void Draw::Compare(const std::vector<std::string> &v_filepaths, const std::strin
    // Mean
    fpLegend->Clear();
    pr0->ptge_absphi_mean_XP->SetTitle(";#varphi (#circ);dE/dx (ADC counts/cm)");
-   pr0->ptge_absphi_mean_XP->GetXaxis()->SetLimits(-3, 90);
+   pr0->ptge_absphi_mean_XP->GetXaxis()->SetLimits(-3, 93);
    pr0->ptge_absphi_mean_XP->GetYaxis()->SetRangeUser(dedxminphi, dedxmaxphi);
    for (int i = 0; i < ncomparisons; i++) {
       v_processes[i]->ptge_absphi_mean_XP->DrawClone(i == 0 ? "AP" : "P same");
@@ -1454,7 +1469,7 @@ void Draw::Compare(const std::vector<std::string> &v_filepaths, const std::strin
    // Add WF
    fpLegend->Clear();
    pr0->ptge_absphi_mean_XP->SetTitle(";#varphi (#circ);dE/dx (ADC counts/cm)");
-   pr0->ptge_absphi_mean_XP->GetXaxis()->SetLimits(-3, 90);
+   pr0->ptge_absphi_mean_XP->GetXaxis()->SetLimits(-3, 93);
    pr0->ptge_absphi_mean_XP->GetYaxis()->SetRangeUser(dedxminphi, dedxmaxphi);
    for (int i = 0; i < ncomparisons; i++) {
       v_processes[i]->ptge_absphi_mean_XP->DrawClone(i == 0 ? "AP" : "P same");
@@ -1473,7 +1488,7 @@ void Draw::Compare(const std::vector<std::string> &v_filepaths, const std::strin
    // Resolution
    fpLegend->Clear();
    pr0->ptge_abstheta_reso_XP->SetTitle(";#theta (#circ);dE/dx resolution (%)");
-   pr0->ptge_abstheta_reso_XP->GetXaxis()->SetLimits(-3, 90);
+   pr0->ptge_abstheta_reso_XP->GetXaxis()->SetLimits(-3, 93);
    pr0->ptge_abstheta_reso_XP->GetYaxis()->SetRangeUser(resomintheta, resomaxtheta);
    for (int i = 0; i < ncomparisons; i++) {
       v_processes[i]->ptge_abstheta_reso_XP->DrawClone(i == 0 ? "AP" : "P same");
@@ -1485,7 +1500,7 @@ void Draw::Compare(const std::vector<std::string> &v_filepaths, const std::strin
    // Add WF
    fpLegend->Clear();
    pr0->ptge_abstheta_reso_XP->SetTitle(";#theta (#circ);dE/dx resolution (%)");
-   pr0->ptge_abstheta_reso_XP->GetXaxis()->SetLimits(-3, 90);
+   pr0->ptge_abstheta_reso_XP->GetXaxis()->SetLimits(-3, 93);
    pr0->ptge_abstheta_reso_XP->GetYaxis()->SetRangeUser(resomintheta, resomaxtheta);
    for (int i = 0; i < ncomparisons; i++) {
       v_processes[i]->ptge_abstheta_reso_XP->DrawClone(i == 0 ? "AP" : "P same");
@@ -1502,7 +1517,7 @@ void Draw::Compare(const std::vector<std::string> &v_filepaths, const std::strin
    // Mean
    fpLegend->Clear();
    pr0->ptge_abstheta_mean_XP->SetTitle(";#theta (#circ);dE/dx (ADC counts/cm)");
-   pr0->ptge_abstheta_mean_XP->GetXaxis()->SetLimits(-3, 90);
+   pr0->ptge_abstheta_mean_XP->GetXaxis()->SetLimits(-3, 93);
    pr0->ptge_abstheta_mean_XP->GetYaxis()->SetRangeUser(dedxmintheta, dedxmaxtheta);
    for (int i = 0; i < ncomparisons; i++) {
       v_processes[i]->ptge_abstheta_mean_XP->DrawClone(i == 0 ? "AP" : "P same");
@@ -1514,7 +1529,7 @@ void Draw::Compare(const std::vector<std::string> &v_filepaths, const std::strin
    // Add WF
    fpLegend->Clear();
    pr0->ptge_abstheta_mean_XP->SetTitle(";#theta (#circ);dE/dx (ADC counts/cm)");
-   pr0->ptge_abstheta_mean_XP->GetXaxis()->SetLimits(-3, 90);
+   pr0->ptge_abstheta_mean_XP->GetXaxis()->SetLimits(-3, 93);
    pr0->ptge_abstheta_mean_XP->GetYaxis()->SetRangeUser(dedxmintheta, dedxmaxtheta);
    for (int i = 0; i < ncomparisons; i++) {
       v_processes[i]->ptge_abstheta_mean_XP->DrawClone(i == 0 ? "AP" : "P same");

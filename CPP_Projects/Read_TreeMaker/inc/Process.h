@@ -46,71 +46,101 @@ private:
 
    // Analysis settings
    int dEdxmax = 1300;
-   float nbins = 101;
+   int nbinsreso = 25;
+   int nbinsmean = 31;
+   int nbinsresoangle = 31;
+   int nbinsmeanangle = 31;
 
    // Absolute momentum
-   float nabsmombins = nbins;
    float absmomrange = 2000;
-   float absmombinwidth = absmomrange / (nabsmombins - 1);
-   int absmomindex = 0;
+   // Mean plots
+   int absmommeanindex = 0;
+   float nabsmommeanbins = 101;
+   float absmommeanbinwidth = absmomrange / (nabsmommeanbins - 1);
+   // Reso plots
+   int absmomresoindex = 0;
+   float nabsmomresobins = nbinsreso;
+   float absmomresobinwidth = 2 * absmomrange / (nabsmomresobins - 1);
 
    // Momentum
-   float nmombins = nbins;
+   float nmombins = 101;
    float momrange = 2000;
    float mombinwidth = 2 * momrange / (nmombins - 1);
    int momindex = 0;
 
    // X position
-   float nxposbins = nbins;
+   float nxposbins = nbinsmean;
    float xposrange = 2400;
    float xposbinwidth = 2 * xposrange / (nxposbins - 1);
    int xposindex = 0;
 
    // drift distance
-   float nddbins = nbins;
    float ddrange = 1000;
-   float ddbinwidth = ddrange / (nddbins - 1);
-   int ddindex = 0;
+   // Mean plots
+   int ddmeanindex = 0;
+   float nddmeanbins = nbinsmean;
+   float ddmeanbinwidth = ddrange / (nddmeanbins - 1);
+   // Reso plots
+   int ddresoindex = 0;
+   float nddresobins = nbinsreso;
+   float ddresobinwidth = 2 * ddrange / (nddresobins - 1);
 
    // drift time
-   float ndtbins = nbins;
+   float ndtbins = nbinsmean;
    float dtrange = 510;
    float dtbinwidth = dtrange / (ndtbins - 1);
    int dtindex = 0;
 
    // track length
-   float ntrklenbins = nbins;
    float trklenrange = 1800;
-   float trklenbinwidth = trklenrange / (ntrklenbins - 1);
-   int trklenindex = 0;
+   // Mean plots
+   int trklenmeanindex = 0;
+   float ntrklenmeanbins = nbinsmean;
+   float trklenmeanbinwidth = trklenrange / (ntrklenmeanbins - 1);
+   // Reso plots
+   int trklenresoindex = 0;
+   float ntrklenresobins = nbinsreso;
+   float trklenresobinwidth = 2 * trklenrange / (ntrklenresobins - 1);
 
    // absolute phi angle
-   float nabsphibins = 91;
    float absphirange = 90;
-   float absphibinwidth = 2 * absphirange / (nabsphibins - 1);
-   int absphiindex = 0;
+   // Mean plots
+   int absphimeanindex = 0;
+   float nabsphimeanbins = nbinsmeanangle;
+   float absphimeanbinwidth = absphirange / (nabsphimeanbins - 1);
+   // Reso plots
+   int absphiresoindex = 0;
+   float nabsphiresobins = nbinsresoangle;
+   float absphiresobinwidth = absphirange / (nabsphiresobins - 1);
 
    // phi angle
-   float nphibins = 91;
+   float nphibins = nbinsmeanangle;
    float phirange = 90;
    float phibinwidth = 2 * phirange / (nphibins - 1);
    int phiindex = 0;
 
    // absolute theta angle
-   float nabsthetabins = 91;
    float absthetarange = 90;
-   float absthetabinwidth = 2 * absthetarange / (nabsthetabins - 1);
-   int absthetaindex = 0;
+   // Mean plots
+   int absthetameanindex = 0;
+   float nabsthetameanbins = nbinsmeanangle;
+   float absthetameanbinwidth = absthetarange / (nabsthetameanbins - 1);
+   // Reso plots
+   int absthetaresoindex = 0;
+   float nabsthetaresobins = nbinsresoangle;
+   float absthetaresobinwidth = absthetarange / (nabsthetaresobins - 1);
 
    // theta angle
-   float nthetabins = 91;
+   float nthetabins = nbinsmeanangle;
    float thetarange = 90;
    float thetabinwidth = 2 * thetarange / (nthetabins - 1);
    int thetaindex = 0;
 
    // Histograms
-   TF1 *fptf1_WF = nullptr;
-   TF1 *fptf1_XP = nullptr;
+   TF1 *fptf1_WFmean = nullptr;
+   TF1 *fptf1_XPmean = nullptr;
+   TF1 *fptf1_WFreso = nullptr;
+   TF1 *fptf1_XPreso = nullptr;
    TF1 *fptf1_pullmu = nullptr;
    TF1 *fptf1_pullelec = nullptr;
    // Vectors for dE/dx vs ERAM module
@@ -118,11 +148,13 @@ private:
    std::vector<TH1F *> vmod_fph1f_WF;
    std::vector<TH2F *> vmod_fph2f_XPdrift;
 
-   // Vectors for dE/dx vs absolute momentum bin
-   std::vector<TH1F *> vabsmom_fph1f_WF;
-   std::vector<TH1F *> vabsmom_fph1f_XP;
+   // Vectors for mean dE/dx vs absolute momentum bin
+   std::vector<TH1F *> vabsmommean_fph1f_WF;
+   std::vector<TH1F *> vabsmommean_fph1f_XP;
    TGraphErrors *ptge_absmom_mean_WF = new TGraphErrors();
    TGraphErrors *ptge_absmom_mean_XP = new TGraphErrors();
+   std::vector<TH1F *> vabsmomreso_fph1f_WF;
+   std::vector<TH1F *> vabsmomreso_fph1f_XP;
    TGraphErrors *ptge_absmom_reso_WF = new TGraphErrors();
    TGraphErrors *ptge_absmom_reso_XP = new TGraphErrors();
 
@@ -150,11 +182,13 @@ private:
    TGraphErrors *ptge_X_reso_WF = new TGraphErrors();
    TGraphErrors *ptge_X_reso_XP = new TGraphErrors();
 
-   // Vectors for dE/dx vs drift distance bin
-   std::vector<TH1F *> vdd_fph1f_WF;
-   std::vector<TH1F *> vdd_fph1f_XP;
+   // Vectors for dE/dx vs drift distance
+   std::vector<TH1F *> vddmean_fph1f_WF;
+   std::vector<TH1F *> vddmean_fph1f_XP;
    TGraphErrors *ptge_dd_mean_WF = new TGraphErrors();
    TGraphErrors *ptge_dd_mean_XP = new TGraphErrors();
+   std::vector<TH1F *> vddreso_fph1f_WF;
+   std::vector<TH1F *> vddreso_fph1f_XP;
    TGraphErrors *ptge_dd_reso_WF = new TGraphErrors();
    TGraphErrors *ptge_dd_reso_XP = new TGraphErrors();
 
@@ -167,18 +201,22 @@ private:
    TGraphErrors *ptge_dt_reso_XP = new TGraphErrors();
 
    // Vectors for dE/dx vs track length
-   std::vector<TH1F *> vtrklen_fph1f_WF;
-   std::vector<TH1F *> vtrklen_fph1f_XP;
+   std::vector<TH1F *> vtrklenmean_fph1f_WF;
+   std::vector<TH1F *> vtrklenmean_fph1f_XP;
    TGraphErrors *ptge_trklen_mean_WF = new TGraphErrors();
    TGraphErrors *ptge_trklen_mean_XP = new TGraphErrors();
+   std::vector<TH1F *> vtrklenreso_fph1f_WF;
+   std::vector<TH1F *> vtrklenreso_fph1f_XP;
    TGraphErrors *ptge_trklen_reso_WF = new TGraphErrors();
    TGraphErrors *ptge_trklen_reso_XP = new TGraphErrors();
 
    // Vectors for dE/dx vs absolute phi angle bin
-   std::vector<TH1F *> vabsphi_fph1f_WF;
-   std::vector<TH1F *> vabsphi_fph1f_XP;
+   std::vector<TH1F *> vabsphimean_fph1f_WF;
+   std::vector<TH1F *> vabsphimean_fph1f_XP;
    TGraphErrors *ptge_absphi_mean_WF = new TGraphErrors();
    TGraphErrors *ptge_absphi_mean_XP = new TGraphErrors();
+   std::vector<TH1F *> vabsphireso_fph1f_WF;
+   std::vector<TH1F *> vabsphireso_fph1f_XP;
    TGraphErrors *ptge_absphi_reso_WF = new TGraphErrors();
    TGraphErrors *ptge_absphi_reso_XP = new TGraphErrors();
 
@@ -191,10 +229,12 @@ private:
    TGraphErrors *ptge_phi_reso_XP = new TGraphErrors();
 
    // Vectors for dE/dx vs absolute theta angle bin
-   std::vector<TH1F *> vabstheta_fph1f_WF;
-   std::vector<TH1F *> vabstheta_fph1f_XP;
+   std::vector<TH1F *> vabsthetamean_fph1f_WF;
+   std::vector<TH1F *> vabsthetamean_fph1f_XP;
    TGraphErrors *ptge_abstheta_mean_WF = new TGraphErrors();
    TGraphErrors *ptge_abstheta_mean_XP = new TGraphErrors();
+   std::vector<TH1F *> vabsthetareso_fph1f_WF;
+   std::vector<TH1F *> vabsthetareso_fph1f_XP;
    TGraphErrors *ptge_abstheta_reso_WF = new TGraphErrors();
    TGraphErrors *ptge_abstheta_reso_XP = new TGraphErrors();
 
@@ -242,12 +282,12 @@ private:
    TH2F *fph2f_XPtheta =
       new TH2F("fph2f_XPtheta", ";#theta; dE/dx with XP (ADC counts/cm)", 5 * nthetabins,
                -90, 90, nbinsdEdx, 0, 1000);
-   TH2F *fph2f_XPabsmom = new TH2F(
-      "fph2f_XPabsmom", ";Absolute momentum (MeV/c);dE/dx with XP (ADC counts/cm)",
-      5 * nabsmombins / 3, 0, absmomrange, nbinsdEdx / 3, 0, 1000);
-   TH2F *fph2f_WFabsmom = new TH2F(
-      "fph2f_WFabsmom", ";Absolute momentum (MeV/c);dE/dx with WF (ADC counts/cm)",
-      5 * nabsmombins / 3, 0, absmomrange, nbinsdEdx / 3, 0, 1000);
+   TH2F *fph2f_XPabsmommean = new TH2F(
+      "fph2f_XPabsmommean", ";Absolute momentum (MeV/c);dE/dx with XP (ADC counts/cm)",
+      5 * nabsmommeanbins / 3, 0, absmomrange, nbinsdEdx / 3, 0, 1000);
+   TH2F *fph2f_WFabsmommean = new TH2F(
+      "fph2f_WFabsmommean", ";Absolute momentum (MeV/c);dE/dx with WF (ADC counts/cm)",
+      5 * nabsmommeanbins / 3, 0, absmomrange, nbinsdEdx / 3, 0, 1000);
    TH2F *fph2f_XPmom =
       new TH2F("fph2f_XPmom", ";momentum (MeV);dE/dx with XP (ADC counts/cm)",
                5 * nmombins, -momrange, momrange, nbinsdEdx, 0, 1000);
