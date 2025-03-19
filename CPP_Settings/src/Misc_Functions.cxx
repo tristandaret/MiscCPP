@@ -197,12 +197,13 @@ void PrintResolution(TH1 *th1, TCanvas *pCanvas, float NDCx, float NDCy, const f
    double xMax = pCanvas->GetUxmax();
    double yMax = pCanvas->GetUymax();
    TPaveText *pPaveText = new TPaveText(arg1, arg2, arg3, arg4, "NDC");
-   pPaveText->SetFillStyle(0);
    pPaveText->SetTextAlign(12);
    pPaveText->SetLineColor(color);
-   pPaveText->SetTextColor(color);
+   pPaveText->SetTextColor(kBlue - 1);
    pPaveText->SetShadowColor(0);
-   pPaveText->SetLineWidth(1.5);
+   pPaveText->SetLineWidth(3);
+   pPaveText->SetFillColorAlpha(kWhite, 0.95);
+   // pPaveText->SetBorderSize(0);
 
    float mu = tf1->GetParameter(1);
    float dmu = tf1->GetParError(1);

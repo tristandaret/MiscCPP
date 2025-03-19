@@ -43,10 +43,13 @@ private:
    TStyle *fpStyle;
    TCanvas *fpCanvas;
    TLegend *fpLegend;
+   std::vector<int> colorsXP = {kOrange + 1, kBlue + 1, kOrange + 2, kBlue + 1};
+   std::vector<int> markers = {20, 34, 23, 34};
+   std::vector<int> colorsWF = {kRed + 1, kGreen + 1, kRed + 3, kGreen + 1};
    std::vector<int> colors = {kOrange + 1,  kBlue + 1, kRed + 1,    kGreen + 1,
                               kMagenta + 1, kCyan + 1, kYellow + 1, kViolet + 1};
    // std::vector<int> markers = {47, 34, 20, 21, 22, 23, 33, 43, 29};
-   std::vector<int> markers = {20, 34, 20, 21, 22, 23, 33, 43, 29};
+   // std::vector<int> markers = {20, 34, 20, 21, 22, 23, 33, 43, 29};
 
    float resomin = 5;
    float resomax = 30;

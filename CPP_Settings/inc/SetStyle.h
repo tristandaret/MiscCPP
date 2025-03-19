@@ -30,7 +30,7 @@ void SetStatBoxPosition(TH1 *pTH, const double &xmin, const double &xmax, const 
 void Graphic_setup(TF1 *tf1, Width_t linewidth = 2, Color_t linecolor = kBlack, Style_t linestyle = 1);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-TStyle *SetT2KStyle(Int_t WhichStyle = 1, TString styleName = "T2K");
+TStyle *SetT2KStyle(Int_t WhichStyle = 3, TString styleName = "T2K");
 
 void CenterHistoTitles(TH1 *thisHisto);
 

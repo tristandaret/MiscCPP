@@ -45,6 +45,7 @@ private:
    std::string fRealpathROOT;
 
    // Analysis settings
+   int ntest = 25;
    int dEdxmax = 1300;
    int nbinsreso = 25;
    int nbinsmean = 31;
@@ -59,8 +60,8 @@ private:
    float absmommeanbinwidth = absmomrange / (nabsmommeanbins - 1);
    // Reso plots
    int absmomresoindex = 0;
-   float nabsmomresobins = nbinsreso;
-   float absmomresobinwidth = 2 * absmomrange / (nabsmomresobins - 1);
+   float nabsmomresobins = ntest;
+   float absmomresobinwidth = absmomrange / (nabsmomresobins);
 
    // Momentum
    float nmombins = 101;
@@ -83,7 +84,7 @@ private:
    // Reso plots
    int ddresoindex = 0;
    float nddresobins = nbinsreso;
-   float ddresobinwidth = 2 * ddrange / (nddresobins - 1);
+   float ddresobinwidth = ddrange / (nddresobins - 1);
 
    // drift time
    float ndtbins = nbinsmean;
@@ -100,7 +101,7 @@ private:
    // Reso plots
    int trklenresoindex = 0;
    float ntrklenresobins = nbinsreso;
-   float trklenresobinwidth = 2 * trklenrange / (ntrklenresobins - 1);
+   float trklenresobinwidth = trklenrange / (ntrklenresobins - 1);
 
    // absolute phi angle
    float absphirange = 90;
@@ -388,6 +389,7 @@ private:
    Int_t endplate;
    Int_t eram_channel;
    Int_t eram_ID;
+   Int_t T0type;
 
    // Cuts
    int nclmin{0};

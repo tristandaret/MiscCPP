@@ -1008,7 +1008,8 @@ void Draw::Compare(const std::vector<std::string> &v_filepaths, const std::strin
    }
 
    Process *pr0 = v_processes[0];
-   int ncomparisons = (int)v_processes.size();
+   // int ncomparisons = (int)v_processes.size();
+   int ncomparisons = 2;
    std::string OutputFile;
    if (type == "comments") {
       OutputFile =
@@ -1023,14 +1024,16 @@ void Draw::Compare(const std::vector<std::string> &v_filepaths, const std::strin
          OutputFile += "_VS_" + v_processes[i]->fcutslist;
       OutputFile += ".pdf";
    } else if (type == "runs") {
-      if (pr0->ffileName.find("dog1") != std::string::npos or
-          pr0->ffileName.find("cosmics") != std::string::npos) {
-         OutputFile =
-            foutputComparisonFolder + "/Cosmics_Data_MC" + pr0->fcutslist + ".pdf";
-      } else if (pr0->ffileName.find("beam") != std::string::npos or
-                 pr0->ffileName.find("sandmu") != std::string::npos) {
-         OutputFile = foutputComparisonFolder + "/Beam_Data_MC" + pr0->fcutslist + ".pdf";
-      }
+      // if (pr0->ffileName.find("dog1") != std::string::npos or
+      //     pr0->ffileName.find("cosmics") != std::string::npos) {
+      //    OutputFile =
+      //       foutputComparisonFolder + "/Cosmics_Data_MC" + pr0->fcutslist + ".pdf";
+      // } else if (pr0->ffileName.find("beam") != std::string::npos or
+      //            pr0->ffileName.find("sandmu") != std::string::npos) {
+      //    OutputFile = foutputComparisonFolder + "/Beam_Data_MC" + pr0->fcutslist +
+      //    ".pdf";
+      // }
+      OutputFile = "Output_PDF/BeamCosmics_Data_MC" + pr0->fcutslist + ".pdf";
    }
 
    // Plot setup
@@ -1053,15 +1056,15 @@ void Draw::Compare(const std::vector<std::string> &v_filepaths, const std::strin
    int resomaxX = 12;
    int dedxminX = 350;
    int dedxmaxX = 500;
-   int resomintrklen = 4;
+   float resomintrklen = 4.5;
    int resomaxtrklen = 16;
    int dedxmintrklen = 300;
    int dedxmaxtrklen = 550;
    int resominphi = 2;
-   int resomaxphi = 12;
+   int resomaxphi = 13;
    int dedxminphi = 350;
    int dedxmaxphi = 500;
-   int resomintheta = 3;
+   int resomintheta = 2;
    int resomaxtheta = 13;
    int dedxmintheta = 350;
    int dedxmaxtheta = 500;
@@ -1089,69 +1092,115 @@ void Draw::Compare(const std::vector<std::string> &v_filepaths, const std::strin
       dedxmaxtheta = 550;
    }
 
-   // Legend
-   fpLegend = new TLegend(0.65, 0.85 - 0.06 * ncomparisons, 0.9, 0.92);
-   fpLegend->SetTextSize(0.06 - 0.005 * ncomparisons);
-   // fpLegend->						SetFillStyle(0);
-   fpLegend->SetTextColor(kBlue - 1);
-   fpLegend->SetFillColorAlpha(kWhite, 0.9);
+   // Legends
+   TLegend legendXP(0.65, 0.85 - 0.06 * ncomparisons, 0.9, 0.92);
+   legendXP.SetTextSize(0.06 - 0.005 * ncomparisons);
+   legendXP.SetTextColor(kBlue - 1);
+   legendXP.SetFillColorAlpha(kWhite, 0.9);
+   TLegend legendXPBC(0.65, 0.85 - 0.06 * (ncomparisons + 0.5), 0.9, 0.92);
+   legendXPBC.SetTextSize(0.06 - 0.005 * ncomparisons);
+   legendXPBC.SetTextColor(kBlue - 1);
+   legendXPBC.SetFillColorAlpha(kWhite, 0.9);
+   TLegend legendAll(0.65, 0.85 - 0.06 * (ncomparisons + 1), 0.9, 0.92);
+   legendAll.SetTextSize(0.06 - 0.005 * (ncomparisons + 1));
+   legendAll.SetTextColor(kBlue - 1);
+   legendAll.SetFillColorAlpha(kWhite, 0.9);
+   TLegend legendAllBC(0.65, 0.85 - 0.06 * (ncomparisons + 1), 0.9, 0.92);
+   legendAllBC.SetTextSize(0.06 - 0.005 * (ncomparisons + 2));
+   legendAllBC.SetTextColor(kBlue - 1);
+   legendAllBC.SetFillColorAlpha(kWhite, 0.9);
 
-   float ampmax = 0;
    int resomarkersize = 3;
    int meanmarkersize = 3;
-   for (int i = 0; i < ncomparisons; i++) {
+   for (int i = 0; i < ncomparisons + 2; i++) {
       Process *pr_tmp = v_processes[i];
-      Graphic_setup(pr_tmp->fph1f_WF, 0.5, 1, colors[i] + 1, 2, colors[i] + 1, colors[i],
-                    0.2);
-      Graphic_setup(pr_tmp->fph1f_XP, 0.5, 1, colors[i] + 1, 2, colors[i] + 1, colors[i],
-                    0.2);
-      if (pr_tmp->fph1f_WF->GetMaximum() > ampmax)
-         ampmax = pr_tmp->fph1f_WF->GetMaximum();
-      if (pr_tmp->fph1f_XP->GetMaximum() > ampmax)
-         ampmax = pr_tmp->fph1f_XP->GetMaximum();
-      Graphic_setup(pr_tmp->ptge_absmom_reso_WF, resomarkersize, markers[i], colors[2 + i], 2,
-                    colors[2 + i]);
-      Graphic_setup(pr_tmp->ptge_absmom_reso_XP, resomarkersize, markers[i], colors[i], 2, colors[i]);
-      Graphic_setup(pr_tmp->ptge_absmom_mean_WF, meanmarkersize, markers[i], colors[2 + i], 2,
-                    colors[2 + i]);
-      Graphic_setup(pr_tmp->ptge_absmom_mean_XP, meanmarkersize, markers[i], colors[i], 2, colors[i]);
-      Graphic_setup(pr_tmp->ptge_dd_reso_WF, resomarkersize, markers[i], colors[2 + i], 2,
-                    colors[2 + i]);
-      Graphic_setup(pr_tmp->ptge_dd_reso_XP, resomarkersize, markers[i], colors[i], 2, colors[i]);
-      Graphic_setup(pr_tmp->ptge_dd_mean_WF, meanmarkersize, markers[i], colors[2 + i], 2,
-                    colors[2 + i]);
-      Graphic_setup(pr_tmp->ptge_dd_mean_XP, meanmarkersize, markers[i], colors[i], 2, colors[i]);
-      Graphic_setup(pr_tmp->ptge_trklen_reso_WF, resomarkersize, markers[i], colors[2 + i], 2,
-                    colors[2 + i]);
-      Graphic_setup(pr_tmp->ptge_trklen_reso_XP, resomarkersize, markers[i], colors[i], 2, colors[i]);
-      Graphic_setup(pr_tmp->ptge_trklen_mean_WF, meanmarkersize, markers[i], colors[2 + i], 2,
-                    colors[2 + i]);
-      Graphic_setup(pr_tmp->ptge_trklen_mean_XP, meanmarkersize, markers[i], colors[i], 2, colors[i]);
-      Graphic_setup(pr_tmp->ptge_absphi_reso_WF, resomarkersize, markers[i], colors[2 + i], 2,
-                    colors[2 + i]);
-      Graphic_setup(pr_tmp->ptge_absphi_reso_XP, resomarkersize, markers[i], colors[i], 2, colors[i]);
-      Graphic_setup(pr_tmp->ptge_absphi_mean_WF, meanmarkersize, markers[i], colors[2 + i], 2,
-                    colors[2 + i]);
-      Graphic_setup(pr_tmp->ptge_absphi_mean_XP, meanmarkersize, markers[i], colors[i], 2, colors[i]);
-      Graphic_setup(pr_tmp->ptge_abstheta_reso_WF, resomarkersize, markers[i], colors[2 + i], 2,
-                    colors[2 + i]);
-      Graphic_setup(pr_tmp->ptge_abstheta_reso_XP, resomarkersize, markers[i], colors[i], 2,
-                    colors[i]);
-      Graphic_setup(pr_tmp->ptge_abstheta_mean_WF, meanmarkersize, markers[i], colors[2 + i], 2,
-                    colors[2 + i]);
-      Graphic_setup(pr_tmp->ptge_abstheta_mean_XP, meanmarkersize, markers[i], colors[i], 2,
-                    colors[i]);
+      Graphic_setup(pr_tmp->fph1f_XP, 0.5, 1, colorsXP[i] + 1, 2, colorsXP[i] + 1,
+                    colorsXP[i], 0.4);
+      Graphic_setup(pr_tmp->ptge_absmom_reso_XP, resomarkersize, markers[i], colorsXP[i],
+                    2, colorsXP[i]);
+      Graphic_setup(pr_tmp->ptge_absmom_mean_XP, meanmarkersize, markers[i], colorsXP[i],
+                    2, colorsXP[i]);
+      Graphic_setup(pr_tmp->ptge_dd_reso_XP, resomarkersize, markers[i], colorsXP[i], 2,
+                    colorsXP[i]);
+      Graphic_setup(pr_tmp->ptge_dd_mean_XP, meanmarkersize, markers[i], colorsXP[i], 2,
+                    colorsXP[i]);
+      Graphic_setup(pr_tmp->ptge_trklen_reso_XP, resomarkersize, markers[i], colorsXP[i],
+                    2, colorsXP[i]);
+      Graphic_setup(pr_tmp->ptge_trklen_mean_XP, meanmarkersize, markers[i], colorsXP[i],
+                    2, colorsXP[i]);
+      Graphic_setup(pr_tmp->ptge_absphi_reso_XP, resomarkersize, markers[i], colorsXP[i],
+                    2, colorsXP[i]);
+      Graphic_setup(pr_tmp->ptge_absphi_mean_XP, meanmarkersize, markers[i], colorsXP[i],
+                    2, colorsXP[i]);
+      Graphic_setup(pr_tmp->ptge_abstheta_reso_XP, resomarkersize, markers[i],
+                    colorsXP[i], 2, colorsXP[i]);
+      Graphic_setup(pr_tmp->ptge_abstheta_mean_XP, meanmarkersize, markers[i],
+                    colorsXP[i], 2, colorsXP[i]);
+
+      Graphic_setup(pr_tmp->ptge_absmom_reso_WF, resomarkersize, markers[i], colorsWF[i],
+                    2, colorsWF[i]);
+      Graphic_setup(pr_tmp->ptge_absmom_mean_WF, meanmarkersize, markers[i], colorsWF[i],
+                    2, colorsWF[i]);
+      Graphic_setup(pr_tmp->ptge_dd_reso_WF, resomarkersize, markers[i], colorsWF[i], 2,
+                    colorsWF[i]);
+      Graphic_setup(pr_tmp->ptge_dd_mean_WF, meanmarkersize, markers[i], colorsWF[i], 2,
+                    colorsWF[i]);
+      Graphic_setup(pr_tmp->ptge_trklen_reso_WF, resomarkersize, markers[i], colorsWF[i],
+                    2, colorsWF[i]);
+      Graphic_setup(pr_tmp->ptge_trklen_mean_WF, meanmarkersize, markers[i], colorsWF[i],
+                    2, colorsWF[i]);
+      Graphic_setup(pr_tmp->ptge_absphi_reso_WF, resomarkersize, markers[i], colorsWF[i],
+                    2, colorsWF[i]);
+      Graphic_setup(pr_tmp->ptge_absphi_mean_WF, meanmarkersize, markers[i], colorsWF[i],
+                    2, colorsWF[i]);
+      Graphic_setup(pr_tmp->ptge_abstheta_reso_WF, resomarkersize, markers[i],
+                    colorsWF[i], 2, colorsWF[i]);
+      Graphic_setup(pr_tmp->ptge_abstheta_mean_WF, meanmarkersize, markers[i],
+                    colorsWF[i], 2, colorsWF[i]);
    }
 
+   // Legends fiiling
    std::vector<std::string> legEntries;
-   if (pr0->ffileName.find("dog1") != std::string::npos or
-       pr0->ffileName.find("cosmics") != std::string::npos) {
-      legEntries.push_back("Cosmic rays");
-   } else if (pr0->ffileName.find("beam") != std::string::npos or
-              pr0->ffileName.find("sandmu") != std::string::npos) {
-      legEntries.push_back("Beam data");
-   }
+   // if (pr0->ffileName.find("dog1") != std::string::npos or
+   //     pr0->ffileName.find("cosmics") != std::string::npos) {
+   //    legEntries.push_back("Cosmic rays");
+   // } else if (pr0->ffileName.find("beam") != std::string::npos or
+   //            pr0->ffileName.find("sandmu") != std::string::npos) {
+   //    legEntries.push_back("Beam data");
+   // }
+   legEntries.push_back("Beam data");
    legEntries.push_back("Simulation");
+   legEntries.push_back("Cosmic rays");
+   legEntries.push_back("Simulation");
+   std::vector<TGraph> vdummyXPBC;
+   std::vector<TGraph> vdummyWFBC;
+   for (int i = 0; i < ncomparisons + 2; i++) {
+      TGraph dummyXPBC;
+      dummyXPBC.SetMarkerStyle(markers[i]);
+      dummyXPBC.SetMarkerSize(7);
+      dummyXPBC.SetMarkerColor(colorsXP[i]);
+      vdummyXPBC.push_back(dummyXPBC);
+      TGraph dummyWFBC;
+      dummyWFBC.SetMarkerStyle(markers[i]);
+      dummyWFBC.SetMarkerSize(7);
+      dummyWFBC.SetMarkerColor(colorsWF[i]);
+      vdummyWFBC.push_back(dummyWFBC);
+   }
+   legendXP.AddEntry(&vdummyXPBC[0], legEntries[0].c_str(), "P");
+   legendXP.AddEntry(&vdummyXPBC[1], legEntries[1].c_str(), "P");
+   legendXPBC.AddEntry(&vdummyXPBC[0], legEntries[0].c_str(), "P");
+   legendXPBC.AddEntry(&vdummyXPBC[2], legEntries[2].c_str(), "P");
+   legendXPBC.AddEntry(&vdummyXPBC[1], legEntries[1].c_str(), "P");
+   legendAll.AddEntry(&vdummyXPBC[0], ("XP " + legEntries[0]).c_str(), "P");
+   legendAll.AddEntry(&vdummyWFBC[0], ("WF " + legEntries[0]).c_str(), "P");
+   legendAll.AddEntry(&vdummyXPBC[1], ("XP " + legEntries[1]).c_str(), "P");
+   legendAll.AddEntry(&vdummyWFBC[1], ("WF " + legEntries[1]).c_str(), "P");
+   legendAllBC.AddEntry(&vdummyXPBC[0], ("XP " + legEntries[0]).c_str(), "P");
+   legendAllBC.AddEntry(&vdummyWFBC[0], ("WF " + legEntries[0]).c_str(), "P");
+   legendAllBC.AddEntry(&vdummyXPBC[2], ("XP " + legEntries[2]).c_str(), "P");
+   legendAllBC.AddEntry(&vdummyWFBC[2], ("WF " + legEntries[2]).c_str(), "P");
+   legendAllBC.AddEntry(&vdummyXPBC[1], ("XP " + legEntries[1]).c_str(), "P");
+   legendAllBC.AddEntry(&vdummyWFBC[1], ("WF " + legEntries[1]).c_str(), "P");
 
    // -----------------------------------------------------------------------------------------------------------------
    // Bethe Bloch fit on data
@@ -1179,16 +1228,17 @@ void Draw::Compare(const std::vector<std::string> &v_filepaths, const std::strin
 
    // -----------------------------------------------------------------------------------------------------------------
    // dE/dx vs track length fit
-   const char *trklenresoform = "[0] + [1]/pow(x, [2])";
+   const char *trklenresoform = "[0] + [1]*pow(x, [2])";
    TF1 trklenresofit("trklenresofit", trklenresoform, 0, 2000);
-   trklenresofit.SetParameter(2, 0.5);
+   trklenresofit.SetParameter(2, -0.5);
+   trklenresofit.SetLineColor(kBlack);
+   trklenresofit.SetLineStyle(9);
    pr0->ptge_trklen_reso_XP->Fit(&trklenresofit, "R", "", 200, 1600);
    pr0->ptge_trklen_reso_XP->GetFunction("trklenresofit")->SetLineColor(kBlack);
    pr0->ptge_trklen_reso_XP->GetFunction("trklenresofit")->SetLineWidth(2);
    pr0->ptge_trklen_reso_XP->GetFunction("trklenresofit")->SetRange(0, 2000);
    // -----------------------------------------------------------------------------------------------------------------
    // Global dE/dx plot
-   pr0->fph1f_XP->SetAxisRange(0, 1.1 * ampmax, "Y");
    for (int i = 1; i < ncomparisons; i++)
       v_processes[i]->fph1f_XP->Scale(pr0->fph1f_XP->Integral() /
                                       v_processes[i]->fph1f_XP->Integral());
@@ -1196,21 +1246,20 @@ void Draw::Compare(const std::vector<std::string> &v_filepaths, const std::strin
       std::max(pr0->fph1f_XP->GetMaximum(), v_processes[1]->fph1f_XP->GetMaximum());
    std::vector<std::string> legEntriesDistrib;
    legEntriesDistrib.push_back(legEntries[0]);
-   legEntriesDistrib.push_back("MC");
-   for (int i = 0; i < ncomparisons; i++) {
+   legEntriesDistrib.push_back("Simulation");
+   for (int i = ncomparisons - 1; i >= 0; i--) {
       v_processes[i]->fph1f_XP->SetAxisRange(0, 1.1 * maxcount, "Y");
-      v_processes[i]->fph1f_XP->Draw(i == 0 ? "HIST" : "HIST same");
-      float xwidth = 0.23;
-      float xright = 0.94;
-      float ywidth = (0.92 - 0.15) / ncomparisons - 0.01;
-      float ytop = 0.92 - i * (ywidth + 0.01);
-      std::cout << i << " " << xright - xwidth << " < x < " << xright << " | "
-                << ytop - ywidth << " < y < " << ytop << std::endl;
+      v_processes[i]->fph1f_XP->Draw(i == 1 ? "HIST" : "HIST same");
+      float xwidth = 0.3;
+      float xright = 0.91;
+      float ymax = 0.9;
+      float ygap = 0.05;
+      float ywidth = (ymax - 0.2) / ncomparisons - ygap;
+      float ytop = ymax - i * (ywidth + ygap);
       PrintResolution(v_processes[i]->fph1f_XP, fpCanvas, xright, ytop, xwidth, ywidth,
-                      "north east", colors[i], legEntriesDistrib[i]);
+                      "north east", colors[i] + 1, legEntriesDistrib[i]);
    }
    fpCanvas->SaveAs((OutputFile + "(").c_str());
-   fpCanvas->Clear();
 
    // dE/dx vs momentum
    // -----------------------------------------------------------------------------------------------------------------
@@ -1220,77 +1269,57 @@ void Draw::Compare(const std::vector<std::string> &v_filepaths, const std::strin
    pr0->ptge_absmom_reso_XP->GetYaxis()->SetRangeUser(resominmom, resomaxmom);
    for (int i = 0; i < ncomparisons; i++) {
       v_processes[i]->ptge_absmom_reso_XP->DrawClone(i == 0 ? "AP" : "P same");
-      v_processes[i]->ptge_absmom_reso_XP->SetMarkerSize(7);
-      fpLegend->AddEntry(v_processes[i]->ptge_absmom_reso_XP, legEntries[i].c_str(), "p");
    }
-   fpLegend->Draw();
+   legendXP.Draw();
    fpCanvas->SaveAs(OutputFile.c_str());
-   fpCanvas->Clear();
    // Add WF
-   fpLegend->Clear();
    pr0->ptge_absmom_reso_XP->SetTitle(";Momentum (MeV/c);dE/dx resolution (%)");
    pr0->ptge_absmom_reso_XP->GetXaxis()->SetLimits(0, momrange * 1.05);
    pr0->ptge_absmom_reso_XP->GetYaxis()->SetRangeUser(resominmom, resomaxmom);
    for (int i = 0; i < ncomparisons; i++) {
-      v_processes[i]->ptge_absmom_reso_XP->SetMarkerSize(3);
       v_processes[i]->ptge_absmom_reso_XP->DrawClone(i == 0 ? "AP" : "P same");
       v_processes[i]->ptge_absmom_reso_WF->DrawClone("P same");
-      v_processes[i]->ptge_absmom_reso_XP->SetMarkerSize(7);
-      v_processes[i]->ptge_absmom_reso_WF->SetMarkerSize(7);
-      fpLegend->AddEntry(v_processes[i]->ptge_absmom_reso_XP,
-                         ("XP " + legEntries[i]).c_str(), "p");
-      fpLegend->AddEntry(v_processes[i]->ptge_absmom_reso_WF,
-                         ("WF " + legEntries[i]).c_str(), "p");
    }
-   fpLegend->Draw();
+   legendAll.Draw();
    fpCanvas->SaveAs(OutputFile.c_str());
-   fpCanvas->Clear();
 
    // Mean
-   fpLegend->Clear();
    pr0->ptge_absmom_mean_XP->SetTitle(";Momentum (MeV/c);dE/dx (ADC counts/cm)");
    pr0->ptge_absmom_mean_XP->GetXaxis()->SetLimits(0, momrange * 1.05);
    pr0->ptge_absmom_mean_XP->GetYaxis()->SetRangeUser(dedxminmom, dedxmaxmom);
    for (int i = 0; i < ncomparisons; i++) {
       v_processes[i]->ptge_absmom_mean_XP->DrawClone(i == 0 ? "AP" : "P same");
-      fpLegend->AddEntry(v_processes[i]->ptge_absmom_reso_XP, legEntries[i].c_str(), "p");
    }
-   fpLegend->Draw();
+   legendXP.Draw();
    fpCanvas->SaveAs(OutputFile.c_str());
-   fpCanvas->Clear();
    // Add WF
-   fpLegend->Clear();
    pr0->ptge_absmom_mean_XP->SetTitle(";Momentum (MeV/c);dE/dx (ADC counts/cm)");
    pr0->ptge_absmom_mean_XP->GetXaxis()->SetLimits(0, momrange * 1.05);
    pr0->ptge_absmom_mean_XP->GetYaxis()->SetRangeUser(dedxminmom, dedxmaxmom);
    for (int i = 0; i < ncomparisons; i++) {
       v_processes[i]->ptge_absmom_mean_XP->DrawClone(i == 0 ? "AP" : "P same");
       v_processes[i]->ptge_absmom_mean_WF->DrawClone("P same");
-      fpLegend->AddEntry(v_processes[i]->ptge_absmom_reso_XP,
-                         ("XP " + legEntries[i]).c_str(), "p");
-      fpLegend->AddEntry(v_processes[i]->ptge_absmom_reso_WF,
-                         ("WF " + legEntries[i]).c_str(), "p");
    }
-   fpLegend->Draw();
+   legendAll.Draw();
    fpCanvas->SaveAs(OutputFile.c_str());
-   fpCanvas->Clear();
 
    // Heatmap
+   fpCanvas->SetGrid(0, 0);
    gPad->SetRightMargin(0.11);
    pr0->fph2f_XPabsmommean->GetYaxis()->SetRangeUser(200, 1000);
    pr0->fph2f_XPabsmommean->GetYaxis()->SetTitle("dE/dx (ADC counts/cm)");
    pr0->fph2f_XPabsmommean->Draw("colz");
    bethefixmuon->SetLineColor(kCyan);
-   bethefixmuon->SetLineStyle(2);
+   bethefixmuon->SetLineStyle(9);
    bethefixmuon->Draw("same");
    bethefixproton->SetLineColor(kRed);
-   bethefixproton->SetLineStyle(2);
+   bethefixproton->SetLineStyle(9);
    bethefixproton->Draw("same");
    bethefixelectron->SetLineColor(kOrange + 1);
-   bethefixelectron->SetLineStyle(2);
+   bethefixelectron->SetLineStyle(9);
    bethefixelectron->Draw("same");
-   TLegend legbethe(0.6, 0.7, 0.83, 0.9);
-   legbethe.SetFillColorAlpha(kWhite, 0.8);
+   TLegend legbethe(0.57, 0.65, 0.87, 0.9);
+   legbethe.SetFillColorAlpha(kWhite, 0.97);
    legbethe.SetTextSize(0.06);
    legbethe.AddEntry(bethefixmuon, "MC muon", "l");
    legbethe.AddEntry(bethefixproton, "MC proton", "l");
@@ -1300,246 +1329,202 @@ void Draw::Compare(const std::vector<std::string> &v_filepaths, const std::strin
    delete bethefixmuon;
    delete bethefixproton;
    delete bethefixelectron;
-   fpCanvas->Clear();
    gPad->SetRightMargin(0.035);
+   fpCanvas->SetGrid(1, 1);
 
    // dE/dx vs drift distance
    // -----------------------------------------------------------------------------------------------------------------
    // Resolution
-   fpLegend->Clear();
    pr0->ptge_dd_reso_XP->SetTitle(";Drift distance (mm);dE/dx resolution (%)");
    pr0->ptge_dd_reso_XP->GetXaxis()->SetLimits(-50, 1050);
    pr0->ptge_dd_reso_XP->GetYaxis()->SetRangeUser(resominX, resomaxX);
    for (int i = 0; i < ncomparisons; i++) {
       v_processes[i]->ptge_dd_reso_XP->DrawClone(i == 0 ? "AP" : "P same");
-      fpLegend->AddEntry(v_processes[i]->ptge_absmom_reso_XP, legEntries[i].c_str(), "p");
    }
-   fpLegend->Draw();
+   legendXP.Draw();
    fpCanvas->SaveAs(OutputFile.c_str());
-   fpCanvas->Clear();
    // Add WF
-   fpLegend->Clear();
    pr0->ptge_dd_reso_XP->SetTitle(";Drift distance (mm);dE/dx resolution (%)");
    pr0->ptge_dd_reso_XP->GetXaxis()->SetLimits(-50, 1050);
    pr0->ptge_dd_reso_XP->GetYaxis()->SetRangeUser(resominX, resomaxX);
    for (int i = 0; i < ncomparisons; i++) {
       v_processes[i]->ptge_dd_reso_XP->DrawClone(i == 0 ? "AP" : "P same");
       v_processes[i]->ptge_dd_reso_WF->DrawClone("P same");
-      fpLegend->AddEntry(v_processes[i]->ptge_absmom_reso_XP,
-                         ("XP " + legEntries[i]).c_str(), "p");
-      fpLegend->AddEntry(v_processes[i]->ptge_absmom_reso_WF,
-                         ("WF " + legEntries[i]).c_str(), "p");
    }
-   fpLegend->Draw();
+   legendAll.Draw();
    fpCanvas->SaveAs(OutputFile.c_str());
-   fpCanvas->Clear();
 
    // Mean
-   fpLegend->Clear();
    pr0->ptge_dd_mean_XP->SetTitle(";Drift distance (mm);dE/dx (ADC counts/cm)");
    pr0->ptge_dd_mean_XP->GetXaxis()->SetLimits(-50, 1050);
    pr0->ptge_dd_mean_XP->GetYaxis()->SetRangeUser(dedxminX, dedxmaxX);
    for (int i = 0; i < ncomparisons; i++) {
       v_processes[i]->ptge_dd_mean_XP->DrawClone(i == 0 ? "AP" : "P same");
-      fpLegend->AddEntry(v_processes[i]->ptge_absmom_reso_XP, legEntries[i].c_str(), "p");
    }
-   fpLegend->Draw();
+   legendXP.Draw();
    fpCanvas->SaveAs(OutputFile.c_str());
-   fpCanvas->Clear();
    // Add WF
-   fpLegend->Clear();
    pr0->ptge_dd_mean_XP->SetTitle(";Drift distance (mm);dE/dx (ADC counts/cm)");
    pr0->ptge_dd_mean_XP->GetXaxis()->SetLimits(-50, 1050);
    pr0->ptge_dd_mean_XP->GetYaxis()->SetRangeUser(dedxminX, dedxmaxX);
    for (int i = 0; i < ncomparisons; i++) {
       v_processes[i]->ptge_dd_mean_XP->DrawClone(i == 0 ? "AP" : "P same");
       v_processes[i]->ptge_dd_mean_WF->DrawClone("P same");
-      fpLegend->AddEntry(v_processes[i]->ptge_absmom_reso_XP,
-                         ("XP " + legEntries[i]).c_str(), "p");
-      fpLegend->AddEntry(v_processes[i]->ptge_absmom_reso_WF,
-                         ("WF " + legEntries[i]).c_str(), "p");
    }
-   fpLegend->Draw();
+   legendAll.Draw();
    fpCanvas->SaveAs(OutputFile.c_str());
-   fpCanvas->Clear();
 
    // -----------------------------------------------------------------------------------------------------------------
    // dE/dx VS track length
    // Resolution
-   fpLegend->Clear();
    pr0->ptge_trklen_reso_XP->SetTitle(";Track length (mm);dE/dx resolution (%)");
    pr0->ptge_trklen_reso_XP->GetXaxis()->SetLimits(-50, 1850);
    pr0->ptge_trklen_reso_XP->GetYaxis()->SetRangeUser(resomintrklen, resomaxtrklen);
    for (int i = 0; i < ncomparisons; i++) {
       v_processes[i]->ptge_trklen_reso_XP->DrawClone(i == 0 ? "AP" : "P same");
-      fpLegend->AddEntry(v_processes[i]->ptge_absmom_reso_XP, legEntries[i].c_str(), "p");
    }
-   fpLegend->Draw();
+   // -----------------------------------------------------------------------------------
+   TPaveText paveparam(0.65, 0.38, 0.92, 0.63, "NDC");
+   paveparam.SetTextColor(kBlue - 5);
+   paveparam.SetFillColorAlpha(kWhite, 0.9);
+   paveparam.SetTextAlign(12);
+   paveparam.SetTextSize(0.045);
+   paveparam.SetLineColor(kBlue - 5);
+   paveparam.SetLineWidth(1);
+   paveparam.SetShadowColor(0);
+   std::string parnames[3] = {"#alpha", "#beta", "#gamma"};
+   for (int i = 0; i < trklenresofit.GetNpar(); ++i) {
+      TString line =
+         TString::Format("%s = %.3g #pm %.2g", parnames[i].c_str(),
+                         trklenresofit.GetParameter(i), trklenresofit.GetParError(i));
+      paveparam.AddText(line);
+   }
+   TString chi2line = TString::Format(
+      "#chi^{2}/ndf = %.2f / %d", trklenresofit.GetChisquare(), trklenresofit.GetNDF());
+   paveparam.AddText(chi2line);
+   paveparam.Draw();
+   legendXP.AddEntry(&trklenresofit, "y = #alpha + #beta x^{#gamma}", "l");
+   float previousY1 = legendXP.GetY1NDC();
+   float previousY2 = legendXP.GetY2NDC();
+   legendXP.SetY1NDC(1.5 * previousY1 - previousY2 / 2);
+   legendXP.Draw();
+   // -----------------------------------------------------------------------------------
    fpCanvas->SaveAs(OutputFile.c_str());
-   fpCanvas->Clear();
+   legendXP.GetListOfPrimitives()->RemoveLast();
+   legendXP.SetY1NDC(previousY1);
    // Add WF
-   fpLegend->Clear();
    pr0->ptge_trklen_reso_XP->SetTitle(";Track length (mm);dE/dx resolution (%)");
    pr0->ptge_trklen_reso_XP->GetXaxis()->SetLimits(-50, 1850);
    pr0->ptge_trklen_reso_XP->GetYaxis()->SetRangeUser(resomintrklen, resomaxtrklen);
    for (int i = 0; i < ncomparisons; i++) {
       v_processes[i]->ptge_trklen_reso_XP->DrawClone(i == 0 ? "AP" : "P same");
       v_processes[i]->ptge_trklen_reso_WF->DrawClone("P same");
-      fpLegend->AddEntry(v_processes[i]->ptge_absmom_reso_XP,
-                         ("XP " + legEntries[i]).c_str(), "p");
-      fpLegend->AddEntry(v_processes[i]->ptge_absmom_reso_WF,
-                         ("WF " + legEntries[i]).c_str(), "p");
    }
-   fpLegend->Draw();
+   legendAll.Draw();
    fpCanvas->SaveAs(OutputFile.c_str());
-   fpCanvas->Clear();
 
    // Mean
-   fpLegend->Clear();
    pr0->ptge_trklen_mean_XP->SetTitle(";Track length (mm);dE/dx (ADC counts/cm)");
    pr0->ptge_trklen_mean_XP->GetXaxis()->SetLimits(-50, 1850);
    pr0->ptge_trklen_mean_XP->GetYaxis()->SetRangeUser(dedxmintrklen, dedxmaxtrklen);
    for (int i = 0; i < ncomparisons; i++) {
       v_processes[i]->ptge_trklen_mean_XP->DrawClone(i == 0 ? "AP" : "P same");
-      fpLegend->AddEntry(v_processes[i]->ptge_absmom_reso_XP, legEntries[i].c_str(), "p");
    }
-   fpLegend->Draw();
+   legendXP.Draw();
    fpCanvas->SaveAs(OutputFile.c_str());
-   fpCanvas->Clear();
    // Add WF
-   fpLegend->Clear();
    pr0->ptge_trklen_mean_XP->SetTitle(";Track length (mm);dE/dx (ADC counts/cm)");
    pr0->ptge_trklen_mean_XP->GetXaxis()->SetLimits(-50, 1850);
    pr0->ptge_trklen_mean_XP->GetYaxis()->SetRangeUser(dedxmintrklen, dedxmaxtrklen);
    for (int i = 0; i < ncomparisons; i++) {
       v_processes[i]->ptge_trklen_mean_XP->DrawClone(i == 0 ? "AP" : "P same");
       v_processes[i]->ptge_trklen_mean_WF->DrawClone("P same");
-      fpLegend->AddEntry(v_processes[i]->ptge_absmom_reso_XP,
-                         ("XP " + legEntries[i]).c_str(), "p");
-      fpLegend->AddEntry(v_processes[i]->ptge_absmom_reso_WF,
-                         ("WF " + legEntries[i]).c_str(), "p");
    }
-   fpLegend->Draw();
+   legendAll.Draw();
    fpCanvas->SaveAs(OutputFile.c_str());
-   fpCanvas->Clear();
 
    // -----------------------------------------------------------------------------------------------------------------
-   // dE/dx VS phi 
+   // dE/dx VS phi
    // Resolution
-   fpLegend->Clear();
    pr0->ptge_absphi_reso_XP->SetTitle(";#varphi (#circ);dE/dx resolution (%)");
    pr0->ptge_absphi_reso_XP->GetXaxis()->SetLimits(-3, 93);
    pr0->ptge_absphi_reso_XP->GetYaxis()->SetRangeUser(resominphi, resomaxphi);
-   for (int i = 0; i < ncomparisons; i++) {
+   for (int i = 0; i < ncomparisons + 2; i++) {
       v_processes[i]->ptge_absphi_reso_XP->DrawClone(i == 0 ? "AP" : "P same");
-      fpLegend->AddEntry(v_processes[i]->ptge_absmom_reso_XP, legEntries[i].c_str(), "p");
    }
-   fpLegend->Draw();
+   legendXPBC.Draw();
    fpCanvas->SaveAs(OutputFile.c_str());
-   fpCanvas->Clear();
    // Add WF
-   fpLegend->Clear();
    pr0->ptge_absphi_reso_XP->SetTitle(";#varphi (#circ);dE/dx resolution (%)");
    pr0->ptge_absphi_reso_XP->GetXaxis()->SetLimits(-3, 93);
    pr0->ptge_absphi_reso_XP->GetYaxis()->SetRangeUser(resominphi, resomaxphi);
-   for (int i = 0; i < ncomparisons; i++) {
+   for (int i = 0; i < ncomparisons + 2; i++) {
       v_processes[i]->ptge_absphi_reso_XP->DrawClone(i == 0 ? "AP" : "P same");
       v_processes[i]->ptge_absphi_reso_WF->DrawClone("P same");
-      fpLegend->AddEntry(v_processes[i]->ptge_absmom_reso_XP,
-                         ("XP " + legEntries[i]).c_str(), "p");
-      fpLegend->AddEntry(v_processes[i]->ptge_absmom_reso_WF,
-                         ("WF " + legEntries[i]).c_str(), "p");
    }
-   fpLegend->Draw();
+   legendAllBC.Draw();
    fpCanvas->SaveAs(OutputFile.c_str());
-   fpCanvas->Clear();
 
    // Mean
-   fpLegend->Clear();
    pr0->ptge_absphi_mean_XP->SetTitle(";#varphi (#circ);dE/dx (ADC counts/cm)");
    pr0->ptge_absphi_mean_XP->GetXaxis()->SetLimits(-3, 93);
    pr0->ptge_absphi_mean_XP->GetYaxis()->SetRangeUser(dedxminphi, dedxmaxphi);
-   for (int i = 0; i < ncomparisons; i++) {
+   for (int i = 0; i < ncomparisons + 2; i++) {
       v_processes[i]->ptge_absphi_mean_XP->DrawClone(i == 0 ? "AP" : "P same");
-      fpLegend->AddEntry(v_processes[i]->ptge_absmom_reso_XP, legEntries[i].c_str(), "p");
    }
-   fpLegend->Draw();
+   legendXPBC.Draw();
    fpCanvas->SaveAs(OutputFile.c_str());
-   fpCanvas->Clear();
    // Add WF
-   fpLegend->Clear();
    pr0->ptge_absphi_mean_XP->SetTitle(";#varphi (#circ);dE/dx (ADC counts/cm)");
    pr0->ptge_absphi_mean_XP->GetXaxis()->SetLimits(-3, 93);
    pr0->ptge_absphi_mean_XP->GetYaxis()->SetRangeUser(dedxminphi, dedxmaxphi);
-   for (int i = 0; i < ncomparisons; i++) {
+   for (int i = 0; i < ncomparisons + 2; i++) {
       v_processes[i]->ptge_absphi_mean_XP->DrawClone(i == 0 ? "AP" : "P same");
       v_processes[i]->ptge_absphi_mean_WF->DrawClone("P same");
-      fpLegend->AddEntry(v_processes[i]->ptge_absmom_reso_XP,
-                         ("XP " + legEntries[i]).c_str(), "p");
-      fpLegend->AddEntry(v_processes[i]->ptge_absmom_reso_WF,
-                         ("WF " + legEntries[i]).c_str(), "p");
    }
-   fpLegend->Draw();
+   legendAllBC.Draw();
    fpCanvas->SaveAs(OutputFile.c_str());
-   fpCanvas->Clear();
 
    // -----------------------------------------------------------------------------------------------------------------
    // dE/dx VS theta bins
    // Resolution
-   fpLegend->Clear();
    pr0->ptge_abstheta_reso_XP->SetTitle(";#theta (#circ);dE/dx resolution (%)");
-   pr0->ptge_abstheta_reso_XP->GetXaxis()->SetLimits(-3, 93);
+   pr0->ptge_abstheta_reso_XP->GetXaxis()->SetLimits(-3, 48);
    pr0->ptge_abstheta_reso_XP->GetYaxis()->SetRangeUser(resomintheta, resomaxtheta);
    for (int i = 0; i < ncomparisons; i++) {
       v_processes[i]->ptge_abstheta_reso_XP->DrawClone(i == 0 ? "AP" : "P same");
-      fpLegend->AddEntry(v_processes[i]->ptge_absmom_reso_XP, legEntries[i].c_str(), "p");
    }
-   fpLegend->Draw();
+   legendXP.Draw();
    fpCanvas->SaveAs(OutputFile.c_str());
-   fpCanvas->Clear();
    // Add WF
-   fpLegend->Clear();
    pr0->ptge_abstheta_reso_XP->SetTitle(";#theta (#circ);dE/dx resolution (%)");
-   pr0->ptge_abstheta_reso_XP->GetXaxis()->SetLimits(-3, 93);
+   pr0->ptge_abstheta_reso_XP->GetXaxis()->SetLimits(-3, 48);
    pr0->ptge_abstheta_reso_XP->GetYaxis()->SetRangeUser(resomintheta, resomaxtheta);
    for (int i = 0; i < ncomparisons; i++) {
       v_processes[i]->ptge_abstheta_reso_XP->DrawClone(i == 0 ? "AP" : "P same");
       v_processes[i]->ptge_abstheta_reso_WF->DrawClone("P same");
-      fpLegend->AddEntry(v_processes[i]->ptge_absmom_reso_XP,
-                         ("XP " + legEntries[i]).c_str(), "p");
-      fpLegend->AddEntry(v_processes[i]->ptge_absmom_reso_WF,
-                         ("WF " + legEntries[i]).c_str(), "p");
    }
-   fpLegend->Draw();
+   legendAll.Draw();
    fpCanvas->SaveAs(OutputFile.c_str());
-   fpCanvas->Clear();
 
    // Mean
-   fpLegend->Clear();
    pr0->ptge_abstheta_mean_XP->SetTitle(";#theta (#circ);dE/dx (ADC counts/cm)");
-   pr0->ptge_abstheta_mean_XP->GetXaxis()->SetLimits(-3, 93);
+   pr0->ptge_abstheta_mean_XP->GetXaxis()->SetLimits(-3, 48);
    pr0->ptge_abstheta_mean_XP->GetYaxis()->SetRangeUser(dedxmintheta, dedxmaxtheta);
    for (int i = 0; i < ncomparisons; i++) {
       v_processes[i]->ptge_abstheta_mean_XP->DrawClone(i == 0 ? "AP" : "P same");
-      fpLegend->AddEntry(v_processes[i]->ptge_absmom_reso_XP, legEntries[i].c_str(), "p");
    }
-   fpLegend->Draw();
+   legendXP.Draw();
    fpCanvas->SaveAs(OutputFile.c_str());
-   fpCanvas->Clear();
    // Add WF
-   fpLegend->Clear();
    pr0->ptge_abstheta_mean_XP->SetTitle(";#theta (#circ);dE/dx (ADC counts/cm)");
-   pr0->ptge_abstheta_mean_XP->GetXaxis()->SetLimits(-3, 93);
+   pr0->ptge_abstheta_mean_XP->GetXaxis()->SetLimits(-3, 48);
    pr0->ptge_abstheta_mean_XP->GetYaxis()->SetRangeUser(dedxmintheta, dedxmaxtheta);
    for (int i = 0; i < ncomparisons; i++) {
       v_processes[i]->ptge_abstheta_mean_XP->DrawClone(i == 0 ? "AP" : "P same");
       v_processes[i]->ptge_abstheta_mean_WF->DrawClone("P same");
-      fpLegend->AddEntry(v_processes[i]->ptge_absmom_reso_XP,
-                         ("XP " + legEntries[i]).c_str(), "p");
-      fpLegend->AddEntry(v_processes[i]->ptge_absmom_reso_WF,
-                         ("WF " + legEntries[i]).c_str(), "p");
    }
-   fpLegend->Draw();
+   legendAll.Draw();
    fpCanvas->SaveAs((OutputFile + ")").c_str());
 
    for (Process *pr : v_processes)

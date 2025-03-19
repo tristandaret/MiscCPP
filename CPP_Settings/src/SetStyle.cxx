@@ -90,6 +90,9 @@ TStyle *SetMyStyle()
    myStyle->SetStripDecimals(kFALSE);  // removes decimals in labels
    myStyle->SetHistMinimumZero(kTRUE); // forces 0 to appear on y-axis
 
+   // Error bars
+   myStyle->SetEndErrorSize(4);
+
    // Colors
    myStyle->SetFuncColor(600 - 4); // blue
    myStyle->SetPalette(kViridis);

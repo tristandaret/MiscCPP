@@ -61,6 +61,8 @@ ClassImp(Process)
                   Form("Energy loss | %d < p < %d; dE/dx (ADC counts/cm); Count",
                        absmomresomin, absmomresomax),
                   100, 0, dEdxmax));
+      std::cout << "Bin  " << i << " => Range: [" << absmomresomin << " - "
+                << absmomresomax << "]" << std::endl;
    }
 
    // dEdx and pulls vs momentum
@@ -541,23 +543,14 @@ void Process::SetCuts()
 
    if (ffileName.find("dog1") != std::string::npos or
        ffileName.find("cosmics") != std::string::npos)
-      nclmin = 72;
+      nclmin = 64;
    else if (ffileName.find("beam") != std::string::npos or
             ffileName.find("sandmu") != std::string::npos)
-      nclmin = 72;
+      nclmin = 64;
    fcutslist += ("_" + std::to_string(nclmin) + "ncl");
 
-   // dxmin = 0;
-   // if (ffileName.find("dog1") != std::string::npos or
-   //     ffileName.find("cosmics") != std::string::npos)
-   //    dxmin = 60;
-   // else if (ffileName.find("beam") != std::string::npos or
-   //          ffileName.find("sandmu") != std::string::npos)
-   //    dxmin = 60;
-   // fcutslist += ("_" + std::to_string(dxmin) + "dx");
-
-   xcutmin = -981, xcutmax = 981;
-   fcutslist += ("_" + std::to_string(xcutmin) + "x" + std::to_string(xcutmax));
+   // xcutmin = -981, xcutmax = 981;
+   // fcutslist += ("_" + std::to_string(xcutmin) + "x" + std::to_string(xcutmax));
 
    // phimin = 0;
    // phimax = 60;
@@ -581,7 +574,7 @@ void Process::SetCuts()
    // }
 
    // fcutslist += "_dir1>0flip";
-   fcutslist += "flipZ";
+   // fcutslist += "flipZ";
 
    // hat = 1;
    // fcutslist += std::string("_") + (hat == -1 ? "bHAT" : "tHAT");
@@ -620,6 +613,7 @@ void Process::Run()
    fpInputTree->SetBranchAddress("pull_muon", &pull_muon);
    fpInputTree->SetBranchAddress("pull_ele", &pull_ele);
    fpInputTree->SetBranchAddress("pull_prot", &pull_proton);
+   fpInputTree->SetBranchAddress("T0type", &T0type);
 
    // Debugging variables
    int dirYnegbHAT = 0, dirYposbHAT = 0, dirYnegtHAT = 0, dirYpostHAT = 0;
@@ -648,6 +642,11 @@ void Process::Run()
       theta = TMath::ATan(dir[0] / diryz) * 180 / TMath::Pi();
 
       // Cuts --------------------------------------------------------------------------
+      if (ffileName.find("beam") != std::string::npos or
+          ffileName.find("sandmu") != std::string::npos) {
+         if (T0type == 0 or T0type > 24)
+            continue;
+      }
       if (std::isnan(mom))
          continue;
       if (fabs(phi) < phimin or phimax < fabs(phi))
@@ -671,72 +670,81 @@ void Process::Run()
          continue;
 
       // Momentum related histograms ----------------------------------------------------
-      fph1i_mom->Fill(mom);
-      if (pos[1] < 0)
-         fph1i_mom_bHAT->Fill(mom);
-      if (pos[1] > 0)
-         fph1i_mom_tHAT->Fill(mom);
-      fph2f_WFabsmommean->Fill(fabs(mom), wf / 1.000);
-      fph2f_XPabsmommean->Fill(fabs(mom), xp);
-      fph2f_WFmom->Fill(mom, wf / 1.000);
-      fph2f_XPmom->Fill(mom, xp);
+      // apply locally length cut
+      if (nclmin < ncl and ncl < nclmax and dxmin < dx / 10 and dx / 10 < dxmax) {
+         fph1i_mom->Fill(mom);
+         if (pos[1] < 0)
+            fph1i_mom_bHAT->Fill(mom);
+         if (pos[1] > 0)
+            fph1i_mom_tHAT->Fill(mom);
+         fph2f_WFabsmommean->Fill(fabs(mom), wf);
+         fph2f_XPabsmommean->Fill(fabs(mom), xp);
+         fph2f_WFmom->Fill(mom, wf);
+         fph2f_XPmom->Fill(mom, xp);
 
-      // dEdx vs absolute momentum
-      absmommeanindex = (int)std::round(fabs(mom) / absmommeanbinwidth);
-      absmomresoindex = (int)std::round(fabs(mom) / absmomresobinwidth);
-      if (fabs(mom) < absmomrange) {
-         vabsmommean_fph1f_WF[absmommeanindex]->Fill(wf / 1.000);
-         vabsmommean_fph1f_XP[absmommeanindex]->Fill(xp);
-         vabsmomreso_fph1f_WF[absmomresoindex]->Fill(wf / 1.000);
-         vabsmomreso_fph1f_XP[absmomresoindex]->Fill(xp);
+         // dEdx vs absolute momentum (mean)
+         absmommeanindex = (int)std::round(fabs(mom) / absmommeanbinwidth);
+         absmomresoindex = (int)std::round(fabs(mom) / absmomresobinwidth);
+         if (fabs(mom) < absmomrange) {
+            int nin = vabsmommean_fph1f_XP[ntest]->GetEntries();
+            if(absmommeanindex == ntest) 
+               std::cout << "xp: " << xp << std::endl;
+            vabsmommean_fph1f_WF[absmommeanindex]->Fill(wf);
+            vabsmommean_fph1f_XP[absmommeanindex]->Fill(xp);
+            vabsmomreso_fph1f_WF[absmomresoindex]->Fill(wf);
+            vabsmomreso_fph1f_XP[absmomresoindex]->Fill(xp);
+            int nout = vabsmommean_fph1f_XP[ntest]->GetEntries();
+            if(nin != nout)
+               std::cout << "nentries: " << nin << " => " << nout << std::endl;
+         }
+
+         // dEdx vs momentum
+         momindex = (int)std::round(mom / mombinwidth) + nmombins / 2;
+         if (fabs(mom) < momrange) {
+            vmom_fph1f_WF[momindex]->Fill(wf);
+            vmom_fph1f_XP[momindex]->Fill(xp);
+            vmom_fph1f_pullmu[momindex]->Fill(pull_muon);
+            vmom_fph1f_pullelec[momindex]->Fill(pull_ele);
+         }
+
+         // Debug
+         if (dir[1] < 0 and pos[1] < 0)
+            dirYnegbHAT++;
+         if (dir[1] > 0 and pos[1] < 0)
+            dirYposbHAT++;
+         if (dir[1] < 0 and pos[1] > 0)
+            dirYnegtHAT++;
+         if (dir[1] > 0 and pos[1] > 0)
+            dirYpostHAT++;
+
+         if (pos[1] < 0 and sign(mom) < 0)
+            nbotneg++;
+         if (pos[1] < 0 and sign(mom) > 0)
+            nbotpos++;
+         if (pos[1] > 0 and sign(mom) < 0)
+            ntopneg++;
+         if (pos[1] > 0 and sign(mom) > 0)
+            ntoppos++;
+         fph2f_pullelecmu->Fill(pull_muon, pull_ele);
+         fph2f_chi2ndfphi->Fill(phi, chi2 / NDF);
+         fph2f_momtheta->Fill(theta, mom);
+         fph2f_momphi->Fill(phi, mom);
+         fph2f_momR->Fill(1 / curv, mom);
+         fph2f_chi2mom->Fill(mom, chi2 / NDF);
       }
-
-      // dEdx vs momentum
-      momindex = (int)std::round(mom / mombinwidth) + nmombins / 2;
-      if (fabs(mom) < momrange) {
-         vmom_fph1f_WF[momindex]->Fill(wf / 1.000);
-         vmom_fph1f_XP[momindex]->Fill(xp);
-         vmom_fph1f_pullmu[momindex]->Fill(pull_muon);
-         vmom_fph1f_pullelec[momindex]->Fill(pull_ele);
-      }
-
-      // Debug
-      if (dir[1] < 0 and pos[1] < 0)
-         dirYnegbHAT++;
-      if (dir[1] > 0 and pos[1] < 0)
-         dirYposbHAT++;
-      if (dir[1] < 0 and pos[1] > 0)
-         dirYnegtHAT++;
-      if (dir[1] > 0 and pos[1] > 0)
-         dirYpostHAT++;
-
-      if (pos[1] < 0 and sign(mom) < 0)
-         nbotneg++;
-      if (pos[1] < 0 and sign(mom) > 0)
-         nbotpos++;
-      if (pos[1] > 0 and sign(mom) < 0)
-         ntopneg++;
-      if (pos[1] > 0 and sign(mom) > 0)
-         ntoppos++;
-      fph2f_pullelecmu->Fill(pull_muon, pull_ele);
-      fph2f_chi2ndfphi->Fill(phi, chi2 / NDF);
-      fph2f_momtheta->Fill(theta, mom);
-      fph2f_momphi->Fill(phi, mom);
-      fph2f_momR->Fill(1 / curv, mom);
-      fph2f_chi2mom->Fill(mom, chi2 / NDF);
 
       // Cut on momentum range -----------------------------------------------------------
-         if (fabs(mom) < momcutlow or fabs(mom) > momcuthigh)
-      continue;
+      if (fabs(mom) < momcutlow or fabs(mom) > momcuthigh)
+         continue;
 
       // Track length related histograms ----------------------------------------------
       // dEdx vs track length
       trklenmeanindex = (int)std::round(dx / trklenmeanbinwidth);
       trklenresoindex = (int)std::round(dx / trklenresobinwidth);
       if (trklenmeanindex < ntrklenmeanbins) {
-         vtrklenmean_fph1f_WF[trklenmeanindex]->Fill(wf / 1.000);
+         vtrklenmean_fph1f_WF[trklenmeanindex]->Fill(wf);
          vtrklenmean_fph1f_XP[trklenmeanindex]->Fill(xp);
-         vtrklenreso_fph1f_WF[trklenresoindex]->Fill(wf / 1.000);
+         vtrklenreso_fph1f_WF[trklenresoindex]->Fill(wf);
          vtrklenreso_fph1f_XP[trklenresoindex]->Fill(xp);
       }
       // Other track length histograms
@@ -753,18 +761,18 @@ void Process::Run()
          continue;
 
       // Rest of the histograms --------------------------------------------------------
-      fph1f_WF->Fill(wf / 1.000);
+      fph1f_WF->Fill(wf);
       fph1f_XP->Fill(xp);
-      fph2f_WFXP->Fill(wf / 1.000, xp);
-      fph2f_WFdrift->Fill(mean_time, wf / 1.000);
+      fph2f_WFXP->Fill(wf, xp);
+      fph2f_WFdrift->Fill(mean_time, wf);
       fph2f_XPdrift->Fill(mean_time, xp);
-      fph2f_WFX->Fill(pos[0], wf / 1.000);
+      fph2f_WFX->Fill(pos[0], wf);
       fph2f_XPX->Fill(pos[0], xp);
       fph2f_XPphi->Fill(phi, xp);
       fph2f_XPtheta->Fill(theta, xp);
 
       vmod_fph2f_XPdrift[eram_channel]->Fill(mean_time, xp);
-      vmod_fph1f_WF[eram_channel]->Fill(wf / 1.000);
+      vmod_fph1f_WF[eram_channel]->Fill(wf);
       vmod_fph1f_XP[eram_channel]->Fill(xp);
 
       fph2f_XZ->Fill(dir[0], dir[2]);
@@ -776,7 +784,7 @@ void Process::Run()
       // dEdx vs X position
       xposindex = (int)std::round(pos[0] / xposbinwidth) + nxposbins / 2;
       if (xposindex < nxposbins) {
-         vX_fph1f_WF[xposindex]->Fill(wf / 1.000);
+         vX_fph1f_WF[xposindex]->Fill(wf);
          vX_fph1f_XP[xposindex]->Fill(xp);
       }
 
@@ -784,16 +792,18 @@ void Process::Run()
       ddmeanindex = (int)std::round((981 - fabs(pos[0])) / ddmeanbinwidth);
       ddresoindex = (int)std::round((981 - fabs(pos[0])) / ddresobinwidth);
       if (ddmeanindex < nddmeanbins and ddmeanindex >= 0) {
-         vddmean_fph1f_WF[ddmeanindex]->Fill(wf / 1.000);
-         vddmean_fph1f_XP[ddmeanindex]->Fill(xp);
-         vddreso_fph1f_WF[ddresoindex]->Fill(wf / 1.000);
-         vddreso_fph1f_XP[ddresoindex]->Fill(xp);
+         if (fabs(pos[0]) > 0) {
+            vddmean_fph1f_WF[ddmeanindex]->Fill(wf);
+            vddmean_fph1f_XP[ddmeanindex]->Fill(xp);
+            vddreso_fph1f_WF[ddresoindex]->Fill(wf);
+            vddreso_fph1f_XP[ddresoindex]->Fill(xp);
+         }
       }
 
       // dEdx vs drift time
       dtindex = (int)std::round(mean_time / dtbinwidth);
       if (dtindex < ndtbins) {
-         vdt_fph1f_WF[dtindex]->Fill(wf / 1.000);
+         vdt_fph1f_WF[dtindex]->Fill(wf);
          vdt_fph1f_XP[dtindex]->Fill(xp);
       }
 
@@ -801,16 +811,16 @@ void Process::Run()
       absphimeanindex = (int)std::round(fabs(phi) / absphimeanbinwidth);
       absphiresoindex = (int)std::round(fabs(phi) / absphiresobinwidth);
       if (fabs(phi) < absphirange) {
-         vabsphimean_fph1f_WF[absphimeanindex]->Fill(wf / 1.000);
+         vabsphimean_fph1f_WF[absphimeanindex]->Fill(wf);
          vabsphimean_fph1f_XP[absphimeanindex]->Fill(xp);
-         vabsphireso_fph1f_WF[absphiresoindex]->Fill(wf / 1.000);
+         vabsphireso_fph1f_WF[absphiresoindex]->Fill(wf);
          vabsphireso_fph1f_XP[absphiresoindex]->Fill(xp);
       }
 
       // dEdx vs phi angle
       phiindex = (int)std::round(phi / phibinwidth) + nphibins / 2;
       if (phiindex < nphibins) {
-         vphi_fph1f_WF[phiindex]->Fill(wf / 1.000);
+         vphi_fph1f_WF[phiindex]->Fill(wf);
          vphi_fph1f_XP[phiindex]->Fill(xp);
       }
 
@@ -818,16 +828,16 @@ void Process::Run()
       absthetameanindex = (int)std::round(fabs(theta) / absthetameanbinwidth);
       absthetaresoindex = (int)std::round(fabs(theta) / absthetaresobinwidth);
       if (fabs(theta) < absthetarange) {
-         vabsthetamean_fph1f_WF[absthetameanindex]->Fill(wf / 1.000);
+         vabsthetamean_fph1f_WF[absthetameanindex]->Fill(wf);
          vabsthetamean_fph1f_XP[absthetameanindex]->Fill(xp);
-         vabsthetareso_fph1f_WF[absthetaresoindex]->Fill(wf / 1.000);
+         vabsthetareso_fph1f_WF[absthetaresoindex]->Fill(wf);
          vabsthetareso_fph1f_XP[absthetaresoindex]->Fill(xp);
       }
 
       // dEdx vs theta angle
       thetaindex = (int)std::round(theta / thetabinwidth) + nthetabins / 2;
       if (thetaindex < nthetabins) {
-         vtheta_fph1f_WF[thetaindex]->Fill(wf / 1.000);
+         vtheta_fph1f_WF[thetaindex]->Fill(wf);
          vtheta_fph1f_XP[thetaindex]->Fill(xp);
          vtheta_fph1f_pullmu[thetaindex]->Fill(pull_muon);
          vtheta_fph1f_pullelec[thetaindex]->Fill(pull_ele);
@@ -879,11 +889,12 @@ void Process::Run()
          continue;
       fptf1_WFmean = Fit1Gauss(vabsmommean_fph1f_WF[i]);
       fptf1_XPmean = Fit1Gauss(vabsmommean_fph1f_XP[i]);
-
+      
       float mean_WF = fptf1_WFmean->GetParameter(1);
       float mean_XP = fptf1_XPmean->GetParameter(1);
       float dmean_WF = fptf1_WFmean->GetParError(1);
       float dmean_XP = fptf1_XPmean->GetParError(1);
+      std::cout << "i " << i << " mean_WF " << mean_WF << " mean_XP " << mean_XP << std::endl;
 
       if (mean_WF == 0 || mean_XP == 0)
          continue;
