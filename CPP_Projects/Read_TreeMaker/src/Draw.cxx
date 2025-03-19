@@ -343,7 +343,7 @@ void Draw::Run(const std::string &filepath)
    fpCanvas->Clear();
    Graphic_setup(pr.ptge_absphi_mean_WF, 0, 33, kCyan + 2, 2, kCyan + 2);
    Graphic_setup(pr.ptge_absphi_mean_XP, 0, 47, kMagenta + 2, 2, kMagenta + 2);
-   pr.ptge_absphi_mean_XP->SetTitle(";#varphi (#circ);Mean (ADC counts/cm)");
+   pr.ptge_absphi_mean_XP->SetTitle(";|#varphi| (#circ);Mean (ADC counts/cm)");
    pr.ptge_absphi_mean_XP->GetXaxis()->SetLimits(0, 93);
    pr.ptge_absphi_mean_XP->GetYaxis()->SetRangeUser(meanmin, meanmax);
    pr.ptge_absphi_mean_XP->Draw("AP");
@@ -1114,7 +1114,7 @@ void Draw::Compare(const std::vector<std::string> &v_filepaths, const std::strin
    int meanmarkersize = 3;
    for (int i = 0; i < ncomparisons + 2; i++) {
       Process *pr_tmp = v_processes[i];
-      Graphic_setup(pr_tmp->fph1f_XP, 0.5, 1, colorsXP[i] + 1, 2, colorsXP[i] + 1,
+      Graphic_setup(pr_tmp->vabsmomreso_fph1f_XP[7], 0.5, 1, colorsXP[i] + 1, 2, colorsXP[i] + 1,
                     colorsXP[i], 0.4);
       Graphic_setup(pr_tmp->ptge_absmom_reso_XP, resomarkersize, markers[i], colorsXP[i],
                     2, colorsXP[i]);
@@ -1233,30 +1233,31 @@ void Draw::Compare(const std::vector<std::string> &v_filepaths, const std::strin
    trklenresofit.SetParameter(2, -0.5);
    trklenresofit.SetLineColor(kBlack);
    trklenresofit.SetLineStyle(9);
-   pr0->ptge_trklen_reso_XP->Fit(&trklenresofit, "R", "", 200, 1600);
+   pr0->ptge_trklen_reso_XP->Fit(&trklenresofit, "R", "", 200, 1700);
    pr0->ptge_trklen_reso_XP->GetFunction("trklenresofit")->SetLineColor(kBlack);
    pr0->ptge_trklen_reso_XP->GetFunction("trklenresofit")->SetLineWidth(2);
    pr0->ptge_trklen_reso_XP->GetFunction("trklenresofit")->SetRange(0, 2000);
    // -----------------------------------------------------------------------------------------------------------------
    // Global dE/dx plot
    for (int i = 1; i < ncomparisons; i++)
-      v_processes[i]->fph1f_XP->Scale(pr0->fph1f_XP->Integral() /
-                                      v_processes[i]->fph1f_XP->Integral());
+      v_processes[i]->vabsmomreso_fph1f_XP[7]->Scale(pr0->vabsmomreso_fph1f_XP[7]->Integral() /
+                                      v_processes[i]->vabsmomreso_fph1f_XP[7]->Integral());
    float maxcount =
-      std::max(pr0->fph1f_XP->GetMaximum(), v_processes[1]->fph1f_XP->GetMaximum());
+      std::max(pr0->vabsmomreso_fph1f_XP[7]->GetMaximum(), v_processes[1]->vabsmomreso_fph1f_XP[7]->GetMaximum());
    std::vector<std::string> legEntriesDistrib;
    legEntriesDistrib.push_back(legEntries[0]);
    legEntriesDistrib.push_back("Simulation");
    for (int i = ncomparisons - 1; i >= 0; i--) {
-      v_processes[i]->fph1f_XP->SetAxisRange(0, 1.1 * maxcount, "Y");
-      v_processes[i]->fph1f_XP->Draw(i == 1 ? "HIST" : "HIST same");
+      v_processes[i]->vabsmomreso_fph1f_XP[7]->SetTitle("");
+      v_processes[i]->vabsmomreso_fph1f_XP[7]->SetAxisRange(0, 1.1 * maxcount, "Y");
+      v_processes[i]->vabsmomreso_fph1f_XP[7]->Draw(i == 1 ? "HIST" : "HIST same");
       float xwidth = 0.3;
       float xright = 0.91;
       float ymax = 0.9;
       float ygap = 0.05;
       float ywidth = (ymax - 0.2) / ncomparisons - ygap;
       float ytop = ymax - i * (ywidth + ygap);
-      PrintResolution(v_processes[i]->fph1f_XP, fpCanvas, xright, ytop, xwidth, ywidth,
+      PrintResolution(v_processes[i]->vabsmomreso_fph1f_XP[7], fpCanvas, xright, ytop, xwidth, ywidth,
                       "north east", colors[i] + 1, legEntriesDistrib[i]);
    }
    fpCanvas->SaveAs((OutputFile + "(").c_str());
@@ -1265,7 +1266,7 @@ void Draw::Compare(const std::vector<std::string> &v_filepaths, const std::strin
    // -----------------------------------------------------------------------------------------------------------------
    // Resolution
    pr0->ptge_absmom_reso_XP->SetTitle(";Momentum (MeV/c);dE/dx resolution (%)");
-   pr0->ptge_absmom_reso_XP->GetXaxis()->SetLimits(0, momrange * 1.05);
+   pr0->ptge_absmom_reso_XP->GetXaxis()->SetLimits(0, momrange);
    pr0->ptge_absmom_reso_XP->GetYaxis()->SetRangeUser(resominmom, resomaxmom);
    for (int i = 0; i < ncomparisons; i++) {
       v_processes[i]->ptge_absmom_reso_XP->DrawClone(i == 0 ? "AP" : "P same");
@@ -1274,7 +1275,7 @@ void Draw::Compare(const std::vector<std::string> &v_filepaths, const std::strin
    fpCanvas->SaveAs(OutputFile.c_str());
    // Add WF
    pr0->ptge_absmom_reso_XP->SetTitle(";Momentum (MeV/c);dE/dx resolution (%)");
-   pr0->ptge_absmom_reso_XP->GetXaxis()->SetLimits(0, momrange * 1.05);
+   pr0->ptge_absmom_reso_XP->GetXaxis()->SetLimits(0, momrange);
    pr0->ptge_absmom_reso_XP->GetYaxis()->SetRangeUser(resominmom, resomaxmom);
    for (int i = 0; i < ncomparisons; i++) {
       v_processes[i]->ptge_absmom_reso_XP->DrawClone(i == 0 ? "AP" : "P same");
@@ -1285,7 +1286,7 @@ void Draw::Compare(const std::vector<std::string> &v_filepaths, const std::strin
 
    // Mean
    pr0->ptge_absmom_mean_XP->SetTitle(";Momentum (MeV/c);dE/dx (ADC counts/cm)");
-   pr0->ptge_absmom_mean_XP->GetXaxis()->SetLimits(0, momrange * 1.05);
+   pr0->ptge_absmom_mean_XP->GetXaxis()->SetLimits(0, momrange);
    pr0->ptge_absmom_mean_XP->GetYaxis()->SetRangeUser(dedxminmom, dedxmaxmom);
    for (int i = 0; i < ncomparisons; i++) {
       v_processes[i]->ptge_absmom_mean_XP->DrawClone(i == 0 ? "AP" : "P same");
@@ -1294,7 +1295,7 @@ void Draw::Compare(const std::vector<std::string> &v_filepaths, const std::strin
    fpCanvas->SaveAs(OutputFile.c_str());
    // Add WF
    pr0->ptge_absmom_mean_XP->SetTitle(";Momentum (MeV/c);dE/dx (ADC counts/cm)");
-   pr0->ptge_absmom_mean_XP->GetXaxis()->SetLimits(0, momrange * 1.05);
+   pr0->ptge_absmom_mean_XP->GetXaxis()->SetLimits(0, momrange);
    pr0->ptge_absmom_mean_XP->GetYaxis()->SetRangeUser(dedxminmom, dedxmaxmom);
    for (int i = 0; i < ncomparisons; i++) {
       v_processes[i]->ptge_absmom_mean_XP->DrawClone(i == 0 ? "AP" : "P same");
@@ -1336,7 +1337,7 @@ void Draw::Compare(const std::vector<std::string> &v_filepaths, const std::strin
    // -----------------------------------------------------------------------------------------------------------------
    // Resolution
    pr0->ptge_dd_reso_XP->SetTitle(";Drift distance (mm);dE/dx resolution (%)");
-   pr0->ptge_dd_reso_XP->GetXaxis()->SetLimits(-50, 1050);
+   pr0->ptge_dd_reso_XP->GetXaxis()->SetLimits(0, 1000);
    pr0->ptge_dd_reso_XP->GetYaxis()->SetRangeUser(resominX, resomaxX);
    for (int i = 0; i < ncomparisons; i++) {
       v_processes[i]->ptge_dd_reso_XP->DrawClone(i == 0 ? "AP" : "P same");
@@ -1345,7 +1346,7 @@ void Draw::Compare(const std::vector<std::string> &v_filepaths, const std::strin
    fpCanvas->SaveAs(OutputFile.c_str());
    // Add WF
    pr0->ptge_dd_reso_XP->SetTitle(";Drift distance (mm);dE/dx resolution (%)");
-   pr0->ptge_dd_reso_XP->GetXaxis()->SetLimits(-50, 1050);
+   pr0->ptge_dd_reso_XP->GetXaxis()->SetLimits(0, 1000);
    pr0->ptge_dd_reso_XP->GetYaxis()->SetRangeUser(resominX, resomaxX);
    for (int i = 0; i < ncomparisons; i++) {
       v_processes[i]->ptge_dd_reso_XP->DrawClone(i == 0 ? "AP" : "P same");
@@ -1356,7 +1357,7 @@ void Draw::Compare(const std::vector<std::string> &v_filepaths, const std::strin
 
    // Mean
    pr0->ptge_dd_mean_XP->SetTitle(";Drift distance (mm);dE/dx (ADC counts/cm)");
-   pr0->ptge_dd_mean_XP->GetXaxis()->SetLimits(-50, 1050);
+   pr0->ptge_dd_mean_XP->GetXaxis()->SetLimits(0, 1000);
    pr0->ptge_dd_mean_XP->GetYaxis()->SetRangeUser(dedxminX, dedxmaxX);
    for (int i = 0; i < ncomparisons; i++) {
       v_processes[i]->ptge_dd_mean_XP->DrawClone(i == 0 ? "AP" : "P same");
@@ -1365,7 +1366,7 @@ void Draw::Compare(const std::vector<std::string> &v_filepaths, const std::strin
    fpCanvas->SaveAs(OutputFile.c_str());
    // Add WF
    pr0->ptge_dd_mean_XP->SetTitle(";Drift distance (mm);dE/dx (ADC counts/cm)");
-   pr0->ptge_dd_mean_XP->GetXaxis()->SetLimits(-50, 1050);
+   pr0->ptge_dd_mean_XP->GetXaxis()->SetLimits(0, 1000);
    pr0->ptge_dd_mean_XP->GetYaxis()->SetRangeUser(dedxminX, dedxmaxX);
    for (int i = 0; i < ncomparisons; i++) {
       v_processes[i]->ptge_dd_mean_XP->DrawClone(i == 0 ? "AP" : "P same");
@@ -1378,7 +1379,7 @@ void Draw::Compare(const std::vector<std::string> &v_filepaths, const std::strin
    // dE/dx VS track length
    // Resolution
    pr0->ptge_trklen_reso_XP->SetTitle(";Track length (mm);dE/dx resolution (%)");
-   pr0->ptge_trklen_reso_XP->GetXaxis()->SetLimits(-50, 1850);
+   pr0->ptge_trklen_reso_XP->GetXaxis()->SetLimits(0, 1850);
    pr0->ptge_trklen_reso_XP->GetYaxis()->SetRangeUser(resomintrklen, resomaxtrklen);
    for (int i = 0; i < ncomparisons; i++) {
       v_processes[i]->ptge_trklen_reso_XP->DrawClone(i == 0 ? "AP" : "P same");
@@ -1414,7 +1415,7 @@ void Draw::Compare(const std::vector<std::string> &v_filepaths, const std::strin
    legendXP.SetY1NDC(previousY1);
    // Add WF
    pr0->ptge_trklen_reso_XP->SetTitle(";Track length (mm);dE/dx resolution (%)");
-   pr0->ptge_trklen_reso_XP->GetXaxis()->SetLimits(-50, 1850);
+   pr0->ptge_trklen_reso_XP->GetXaxis()->SetLimits(0, 1850);
    pr0->ptge_trklen_reso_XP->GetYaxis()->SetRangeUser(resomintrklen, resomaxtrklen);
    for (int i = 0; i < ncomparisons; i++) {
       v_processes[i]->ptge_trklen_reso_XP->DrawClone(i == 0 ? "AP" : "P same");
@@ -1425,7 +1426,7 @@ void Draw::Compare(const std::vector<std::string> &v_filepaths, const std::strin
 
    // Mean
    pr0->ptge_trklen_mean_XP->SetTitle(";Track length (mm);dE/dx (ADC counts/cm)");
-   pr0->ptge_trklen_mean_XP->GetXaxis()->SetLimits(-50, 1850);
+   pr0->ptge_trklen_mean_XP->GetXaxis()->SetLimits(0, 1850);
    pr0->ptge_trklen_mean_XP->GetYaxis()->SetRangeUser(dedxmintrklen, dedxmaxtrklen);
    for (int i = 0; i < ncomparisons; i++) {
       v_processes[i]->ptge_trklen_mean_XP->DrawClone(i == 0 ? "AP" : "P same");
@@ -1434,7 +1435,7 @@ void Draw::Compare(const std::vector<std::string> &v_filepaths, const std::strin
    fpCanvas->SaveAs(OutputFile.c_str());
    // Add WF
    pr0->ptge_trklen_mean_XP->SetTitle(";Track length (mm);dE/dx (ADC counts/cm)");
-   pr0->ptge_trklen_mean_XP->GetXaxis()->SetLimits(-50, 1850);
+   pr0->ptge_trklen_mean_XP->GetXaxis()->SetLimits(0, 1850);
    pr0->ptge_trklen_mean_XP->GetYaxis()->SetRangeUser(dedxmintrklen, dedxmaxtrklen);
    for (int i = 0; i < ncomparisons; i++) {
       v_processes[i]->ptge_trklen_mean_XP->DrawClone(i == 0 ? "AP" : "P same");
@@ -1447,7 +1448,7 @@ void Draw::Compare(const std::vector<std::string> &v_filepaths, const std::strin
    // dE/dx VS phi
    // Resolution
    pr0->ptge_absphi_reso_XP->SetTitle(";#varphi (#circ);dE/dx resolution (%)");
-   pr0->ptge_absphi_reso_XP->GetXaxis()->SetLimits(-3, 93);
+   pr0->ptge_absphi_reso_XP->GetXaxis()->SetLimits(0, 90);
    pr0->ptge_absphi_reso_XP->GetYaxis()->SetRangeUser(resominphi, resomaxphi);
    for (int i = 0; i < ncomparisons + 2; i++) {
       v_processes[i]->ptge_absphi_reso_XP->DrawClone(i == 0 ? "AP" : "P same");
@@ -1456,7 +1457,7 @@ void Draw::Compare(const std::vector<std::string> &v_filepaths, const std::strin
    fpCanvas->SaveAs(OutputFile.c_str());
    // Add WF
    pr0->ptge_absphi_reso_XP->SetTitle(";#varphi (#circ);dE/dx resolution (%)");
-   pr0->ptge_absphi_reso_XP->GetXaxis()->SetLimits(-3, 93);
+   pr0->ptge_absphi_reso_XP->GetXaxis()->SetLimits(0, 90);
    pr0->ptge_absphi_reso_XP->GetYaxis()->SetRangeUser(resominphi, resomaxphi);
    for (int i = 0; i < ncomparisons + 2; i++) {
       v_processes[i]->ptge_absphi_reso_XP->DrawClone(i == 0 ? "AP" : "P same");
@@ -1467,7 +1468,7 @@ void Draw::Compare(const std::vector<std::string> &v_filepaths, const std::strin
 
    // Mean
    pr0->ptge_absphi_mean_XP->SetTitle(";#varphi (#circ);dE/dx (ADC counts/cm)");
-   pr0->ptge_absphi_mean_XP->GetXaxis()->SetLimits(-3, 93);
+   pr0->ptge_absphi_mean_XP->GetXaxis()->SetLimits(0, 90);
    pr0->ptge_absphi_mean_XP->GetYaxis()->SetRangeUser(dedxminphi, dedxmaxphi);
    for (int i = 0; i < ncomparisons + 2; i++) {
       v_processes[i]->ptge_absphi_mean_XP->DrawClone(i == 0 ? "AP" : "P same");
@@ -1476,7 +1477,7 @@ void Draw::Compare(const std::vector<std::string> &v_filepaths, const std::strin
    fpCanvas->SaveAs(OutputFile.c_str());
    // Add WF
    pr0->ptge_absphi_mean_XP->SetTitle(";#varphi (#circ);dE/dx (ADC counts/cm)");
-   pr0->ptge_absphi_mean_XP->GetXaxis()->SetLimits(-3, 93);
+   pr0->ptge_absphi_mean_XP->GetXaxis()->SetLimits(0, 90);
    pr0->ptge_absphi_mean_XP->GetYaxis()->SetRangeUser(dedxminphi, dedxmaxphi);
    for (int i = 0; i < ncomparisons + 2; i++) {
       v_processes[i]->ptge_absphi_mean_XP->DrawClone(i == 0 ? "AP" : "P same");
@@ -1489,7 +1490,7 @@ void Draw::Compare(const std::vector<std::string> &v_filepaths, const std::strin
    // dE/dx VS theta bins
    // Resolution
    pr0->ptge_abstheta_reso_XP->SetTitle(";#theta (#circ);dE/dx resolution (%)");
-   pr0->ptge_abstheta_reso_XP->GetXaxis()->SetLimits(-3, 48);
+   pr0->ptge_abstheta_reso_XP->GetXaxis()->SetLimits(0, 48);
    pr0->ptge_abstheta_reso_XP->GetYaxis()->SetRangeUser(resomintheta, resomaxtheta);
    for (int i = 0; i < ncomparisons; i++) {
       v_processes[i]->ptge_abstheta_reso_XP->DrawClone(i == 0 ? "AP" : "P same");
@@ -1498,7 +1499,7 @@ void Draw::Compare(const std::vector<std::string> &v_filepaths, const std::strin
    fpCanvas->SaveAs(OutputFile.c_str());
    // Add WF
    pr0->ptge_abstheta_reso_XP->SetTitle(";#theta (#circ);dE/dx resolution (%)");
-   pr0->ptge_abstheta_reso_XP->GetXaxis()->SetLimits(-3, 48);
+   pr0->ptge_abstheta_reso_XP->GetXaxis()->SetLimits(0, 48);
    pr0->ptge_abstheta_reso_XP->GetYaxis()->SetRangeUser(resomintheta, resomaxtheta);
    for (int i = 0; i < ncomparisons; i++) {
       v_processes[i]->ptge_abstheta_reso_XP->DrawClone(i == 0 ? "AP" : "P same");
@@ -1509,7 +1510,7 @@ void Draw::Compare(const std::vector<std::string> &v_filepaths, const std::strin
 
    // Mean
    pr0->ptge_abstheta_mean_XP->SetTitle(";#theta (#circ);dE/dx (ADC counts/cm)");
-   pr0->ptge_abstheta_mean_XP->GetXaxis()->SetLimits(-3, 48);
+   pr0->ptge_abstheta_mean_XP->GetXaxis()->SetLimits(0, 48);
    pr0->ptge_abstheta_mean_XP->GetYaxis()->SetRangeUser(dedxmintheta, dedxmaxtheta);
    for (int i = 0; i < ncomparisons; i++) {
       v_processes[i]->ptge_abstheta_mean_XP->DrawClone(i == 0 ? "AP" : "P same");
@@ -1518,7 +1519,7 @@ void Draw::Compare(const std::vector<std::string> &v_filepaths, const std::strin
    fpCanvas->SaveAs(OutputFile.c_str());
    // Add WF
    pr0->ptge_abstheta_mean_XP->SetTitle(";#theta (#circ);dE/dx (ADC counts/cm)");
-   pr0->ptge_abstheta_mean_XP->GetXaxis()->SetLimits(-3, 48);
+   pr0->ptge_abstheta_mean_XP->GetXaxis()->SetLimits(0, 48);
    pr0->ptge_abstheta_mean_XP->GetYaxis()->SetRangeUser(dedxmintheta, dedxmaxtheta);
    for (int i = 0; i < ncomparisons; i++) {
       v_processes[i]->ptge_abstheta_mean_XP->DrawClone(i == 0 ? "AP" : "P same");

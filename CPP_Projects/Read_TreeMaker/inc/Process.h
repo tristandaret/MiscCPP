@@ -45,7 +45,6 @@ private:
    std::string fRealpathROOT;
 
    // Analysis settings
-   int ntest = 25;
    int dEdxmax = 1300;
    int nbinsreso = 25;
    int nbinsmean = 31;
@@ -55,13 +54,13 @@ private:
    // Absolute momentum
    float absmomrange = 2000;
    // Mean plots
-   int absmommeanindex = 0;
-   float nabsmommeanbins = 101;
-   float absmommeanbinwidth = absmomrange / (nabsmommeanbins - 1);
+   int absmommeanindex = 25;
+   float nabsmommeanbins = 100;
+   float absmommeanbinwidth = absmomrange / nabsmommeanbins;
    // Reso plots
    int absmomresoindex = 0;
-   float nabsmomresobins = ntest;
-   float absmomresobinwidth = absmomrange / (nabsmomresobins);
+   float nabsmomresobins = nbinsreso;
+   float absmomresobinwidth = absmomrange / nabsmomresobins;
 
    // Momentum
    float nmombins = 101;
@@ -80,11 +79,11 @@ private:
    // Mean plots
    int ddmeanindex = 0;
    float nddmeanbins = nbinsmean;
-   float ddmeanbinwidth = ddrange / (nddmeanbins - 1);
+   float ddmeanbinwidth = ddrange / nddmeanbins;
    // Reso plots
    int ddresoindex = 0;
    float nddresobins = nbinsreso;
-   float ddresobinwidth = ddrange / (nddresobins - 1);
+   float ddresobinwidth = ddrange / nddresobins;
 
    // drift time
    float ndtbins = nbinsmean;
@@ -97,22 +96,22 @@ private:
    // Mean plots
    int trklenmeanindex = 0;
    float ntrklenmeanbins = nbinsmean;
-   float trklenmeanbinwidth = trklenrange / (ntrklenmeanbins - 1);
+   float trklenmeanbinwidth = trklenrange / ntrklenmeanbins;
    // Reso plots
    int trklenresoindex = 0;
    float ntrklenresobins = nbinsreso;
-   float trklenresobinwidth = trklenrange / (ntrklenresobins - 1);
+   float trklenresobinwidth = trklenrange / ntrklenresobins;
 
    // absolute phi angle
    float absphirange = 90;
    // Mean plots
    int absphimeanindex = 0;
    float nabsphimeanbins = nbinsmeanangle;
-   float absphimeanbinwidth = absphirange / (nabsphimeanbins - 1);
+   float absphimeanbinwidth = absphirange / nabsphimeanbins;
    // Reso plots
    int absphiresoindex = 0;
    float nabsphiresobins = nbinsresoangle;
-   float absphiresobinwidth = absphirange / (nabsphiresobins - 1);
+   float absphiresobinwidth = absphirange / nabsphiresobins;
 
    // phi angle
    float nphibins = nbinsmeanangle;
@@ -125,11 +124,11 @@ private:
    // Mean plots
    int absthetameanindex = 0;
    float nabsthetameanbins = nbinsmeanangle;
-   float absthetameanbinwidth = absthetarange / (nabsthetameanbins - 1);
+   float absthetameanbinwidth = absthetarange / nabsthetameanbins;
    // Reso plots
    int absthetaresoindex = 0;
    float nabsthetaresobins = nbinsresoangle;
-   float absthetaresobinwidth = absthetarange / (nabsthetaresobins - 1);
+   float absthetaresobinwidth = absthetarange / nabsthetaresobins;
 
    // theta angle
    float nthetabins = nbinsmeanangle;

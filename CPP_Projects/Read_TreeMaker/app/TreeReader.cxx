@@ -7,8 +7,8 @@ int main()
 {
 
    int do_run = 1;
-   int do_draw = 1;
-   int do_draw_comparison = 0;
+   int do_draw = 0;
+   int do_draw_comparison = 1;
    // Output structure: type -> run -> comment -> fileName
 
    std::vector<std::string> v_types;
@@ -19,17 +19,17 @@ int main()
    v_runs.push_back("treeMaker_beam_may2024");
    v_comments.push_back("nd280_14.29_withT0");
 
-   // v_types.push_back("beam");
-   // v_runs.push_back("tree_mu-_40-4895MeV_sandmu");
-   // v_comments.push_back("nd280_14.29");
+   v_types.push_back("beam");
+   v_runs.push_back("tree_mu-_40-4895MeV_sandmu");
+   v_comments.push_back("nd280_14.29");
 
-   // v_types.push_back("cosmics");
-   // v_runs.push_back("TreeMaker_dog1_00001148");
-   // v_comments.push_back("nd280_14.29");
+   v_types.push_back("cosmics");
+   v_runs.push_back("TreeMaker_dog1_00001148");
+   v_comments.push_back("nd280_14.29");
 
-   // v_types.push_back("cosmics");
-   // v_runs.push_back("tree_mu-_40-4895MeV_cosmics");
-   // v_comments.push_back("BFieldON_14.29");
+   v_types.push_back("cosmics");
+   v_runs.push_back("tree_mu-_40-4895MeV_cosmics");
+   v_comments.push_back("BFieldON_14.29");
 
    std::string tag = "";
 
