@@ -133,16 +133,16 @@ ClassImp(Process)
    for (int i = 0; i < ndtbins; i++) {
       int dtmin = i * dtbinwidth;
       int dtmax = (i + 1) * dtbinwidth;
-      vdt_fph1f_WF.push_back(new TH1F(
-         Form("ph1f_dt_WF_%d_%d", dtmin, dtmax),
-         Form("Energy loss | %d < drift distance < %d; dE/dx (ADC counts/cm); Count",
-              dtmin, dtmax),
-         100, 0, dEdxmax));
-      vdt_fph1f_XP.push_back(new TH1F(
-         Form("ph1f_dt_XP_%d_%d", dtmin, dtmax),
-         Form("Energy loss | %d < drift distance < %d; dE/dx (ADC counts/cm); Count",
-              dtmin, dtmax),
-         100, 0, dEdxmax));
+      vdt_fph1f_WF.push_back(
+         new TH1F(Form("ph1f_dt_WF_%d_%d", dtmin, dtmax),
+                  Form("Energy loss | %d < drift time < %d; dE/dx (ADC counts/cm); Count",
+                       dtmin, dtmax),
+                  100, 0, dEdxmax));
+      vdt_fph1f_XP.push_back(
+         new TH1F(Form("ph1f_dt_XP_%d_%d", dtmin, dtmax),
+                  Form("Energy loss | %d < drift time < %d; dE/dx (ADC counts/cm); Count",
+                       dtmin, dtmax),
+                  100, 0, dEdxmax));
    }
 
    // dEdx vs track length (mean)
@@ -183,12 +183,12 @@ ClassImp(Process)
       int absphimax = (i + 1) * absphimeanbinwidth;
       vabsphimean_fph1f_WF.push_back(
          new TH1F(Form("fph1f_absphi_WF_%d_%d", absphimin, absphimax),
-                  Form("Energy loss | %d < p < %d; dE/dx (ADC counts/cm); Count",
+                  Form("Energy loss | %d < #varphi < %d; dE/dx (ADC counts/cm); Count",
                        absphimin, absphimax),
                   100, 0, dEdxmax));
       vabsphimean_fph1f_XP.push_back(
          new TH1F(Form("fph1f_absphi_XP_%d_%d", absphimin, absphimax),
-                  Form("Energy loss | %d < p < %d; dE/dx (ADC counts/cm); Count",
+                  Form("Energy loss | %d < #varphi < %d; dE/dx (ADC counts/cm); Count",
                        absphimin, absphimax),
                   100, 0, dEdxmax));
    }
@@ -199,12 +199,12 @@ ClassImp(Process)
       int absphiresomax = (i + 1) * absphiresobinwidth;
       vabsphireso_fph1f_WF.push_back(
          new TH1F(Form("fph1f_absphireso_WF_%d_%d", absphiresomin, absphiresomax),
-                  Form("Energy loss | %d < p < %d; dE/dx (ADC counts/cm); Count",
+                  Form("Energy loss | %d < #varphi < %d; dE/dx (ADC counts/cm); Count",
                        absphiresomin, absphiresomax),
                   100, 0, dEdxmax));
       vabsphireso_fph1f_XP.push_back(
          new TH1F(Form("fph1f_absphireso_XP_%d_%d", absphiresomin, absphiresomax),
-                  Form("Energy loss | %d < p < %d; dE/dx (ADC counts/cm); Count",
+                  Form("Energy loss | %d < #varphi < %d; dE/dx (ADC counts/cm); Count",
                        absphiresomin, absphiresomax),
                   100, 0, dEdxmax));
    }
@@ -231,12 +231,12 @@ ClassImp(Process)
       int absthetamax = (i + 1) * absthetameanbinwidth;
       vabsthetamean_fph1f_WF.push_back(
          new TH1F(Form("fph1f_abstheta_WF_%d_%d", absthetamin, absthetamax),
-                  Form("Energy loss | %d < p < %d; dE/dx (ADC counts/cm); Count",
+                  Form("Energy loss | %d < #theta < %d; dE/dx (ADC counts/cm); Count",
                        absthetamin, absthetamax),
                   100, 0, dEdxmax));
       vabsthetamean_fph1f_XP.push_back(
          new TH1F(Form("fph1f_abstheta_XP_%d_%d", absthetamin, absthetamax),
-                  Form("Energy loss | %d < p < %d; dE/dx (ADC counts/cm); Count",
+                  Form("Energy loss | %d < #theta < %d; dE/dx (ADC counts/cm); Count",
                        absthetamin, absthetamax),
                   100, 0, dEdxmax));
    }
@@ -247,12 +247,12 @@ ClassImp(Process)
       int absthetaresomax = (i + 1) * absthetaresobinwidth;
       vabsthetareso_fph1f_WF.push_back(
          new TH1F(Form("fph1f_absthetareso_WF_%d_%d", absthetaresomin, absthetaresomax),
-                  Form("Energy loss | %d < p < %d; dE/dx (ADC counts/cm); Count",
+                  Form("Energy loss | %d < #theta < %d; dE/dx (ADC counts/cm); Count",
                        absthetaresomin, absthetaresomax),
                   100, 0, dEdxmax));
       vabsthetareso_fph1f_XP.push_back(
          new TH1F(Form("fph1f_absthetareso_XP_%d_%d", absthetaresomin, absthetaresomax),
-                  Form("Energy loss | %d < p < %d; dE/dx (ADC counts/cm); Count",
+                  Form("Energy loss | %d < #theta < %d; dE/dx (ADC counts/cm); Count",
                        absthetaresomin, absthetaresomax),
                   100, 0, dEdxmax));
    }
@@ -371,6 +371,7 @@ Process::~Process()
    delete fph1i_mom_tHAT;
    delete fph1i_mom_bHAT;
    delete fph2f_XZ;
+   delete fph2f_YZ;
    delete fph1f_phi;
    delete fph1f_theta;
    delete fph2f_phitheta;
@@ -401,6 +402,11 @@ Process::~Process()
    delete fph2f_chi2ndfR;
    delete fph2f_lentheta;
    delete fph2f_lenphi;
+   delete fph1f_dir0;
+   delete fph1f_dir1;
+   delete fph1f_dir2;
+   delete fph2f_momlen;
+   delete fph2f_momncl;
 
    // Clear vector pointers
    for (auto ptr : vmod_fph1f_XP)
@@ -520,12 +526,21 @@ Process::~Process()
 
 void Process::SetCuts()
 {
+   int nclmincosmics = 0, nclminbeam = 0;
+   if (ffileName.find("dog1") != std::string::npos or
+       ffileName.find("cosmics") != std::string::npos) {
+      nclmin = 60;
+      nclmincosmics = 60;
+   } else if (ffileName.find("beam") != std::string::npos or
+              ffileName.find("sandmu") != std::string::npos) {
+      nclmin = 130;
+      nclminbeam = 130;
+   }
+   fcutslist +=
+      ("_B" + std::to_string(nclminbeam) + "C" + std::to_string(nclmincosmics) + "ncl");
 
    // nclmin = 50, nclmax = 150;
    // fcutslist += ("_" + std::to_string(nclmin) + "ncl" + std::to_string(nclmax));
-
-   // apmcutlow = 2, apmcuthigh = 4;
-   // fcutslist += ("_" + std::to_string(apmcutlow) + "apm" + std::to_string(apmcuthigh));
 
    // tmeanmin = 0, tmeanmax = 75;
    // fcutslist += ("_" + std::to_string(tmeanmin) + "tmin" + std::to_string(tmeanmax));
@@ -536,16 +551,14 @@ void Process::SetCuts()
    // pullmumax = 2;
    // fcutslist += ("_pullmu" + std::to_string(pullmumax));
 
-   chi2max = 5;
-   fcutslist += ("_chi2ndf" + std::to_string(chi2max));
+   // chi2max = 5;
+   // fcutslist += ("_chi2ndf" + std::to_string(chi2max));
 
-   if (ffileName.find("dog1") != std::string::npos or
-       ffileName.find("cosmics") != std::string::npos)
-      nclmin = 64;
-   else if (ffileName.find("beam") != std::string::npos or
-            ffileName.find("sandmu") != std::string::npos)
-      nclmin = 64;
-   fcutslist += ("_" + std::to_string(nclmin) + "ncl");
+   // nclmin = 130;
+   // fcutslist += ("_" + std::to_string(nclmin) + "ncl");
+
+   momcutlow = 300, momcuthigh = 500;
+   fcutslist += ("_" + std::to_string(momcutlow) + "mom" + std::to_string(momcuthigh));
 
    // xcutmin = -981, xcutmax = 981;
    // fcutslist += ("_" + std::to_string(xcutmin) + "x" + std::to_string(xcutmax));
@@ -560,9 +573,6 @@ void Process::SetCuts()
 
    // momcutlow = 100;
    // fcutslist += ("_" + std::to_string(momcutlow) + "mom");
-
-   momcutlow = 400, momcuthigh = 800;
-   fcutslist += ("_" + std::to_string(momcutlow) + "mom" + std::to_string(momcuthigh));
 
    // if (ffileName.find("dog1") != std::string::npos or
    //     ffileName.find("cosmics") != std::string::npos){
@@ -600,7 +610,6 @@ void Process::Run()
    fpInputTree->SetBranchAddress("curv", &curv);
    fpInputTree->SetBranchAddress("NDF", &NDF);
    fpInputTree->SetBranchAddress("mom", &mom_og);
-   fpInputTree->SetBranchAddress("avg_pad_mult", &APM);
    fpInputTree->SetBranchAddress("starttime", &start_time);
    fpInputTree->SetBranchAddress("mean_time", &mean_time);
    fpInputTree->SetBranchAddress("endtime", &end_time);
@@ -636,7 +645,7 @@ void Process::Run()
       // Define angles ---------------------------------------------------------------
       float dirxy = TMath::Sqrt(dir[0] * dir[0] + dir[1] * dir[1]);
       float diryz = TMath::Sqrt(dir[1] * dir[1] + dir[2] * dir[2]);
-      phi = TMath::ATan(dirxy / dir[2]) * 180 / TMath::Pi();
+      phi = TMath::ATan(dir[1] / dir[2]) * 180 / TMath::Pi();
       theta = TMath::ATan(dir[0] / diryz) * 180 / TMath::Pi();
 
       // Cuts --------------------------------------------------------------------------
@@ -650,8 +659,6 @@ void Process::Run()
       if (fabs(phi) < phimin or phimax < fabs(phi))
          continue;
       if (fabs(theta) < thetamin or thetamax < fabs(theta))
-         continue;
-      if (APM < apmcutlow or APM > apmcuthigh)
          continue;
       if (mean_time < tmeanmin or mean_time > tmeanmax)
          continue;
@@ -742,6 +749,8 @@ void Process::Run()
       // Other track length histograms
       fph2f_XPlen->Fill(dx / 10, xp);
       fph1f_trklen->Fill(dx / 10);
+      fph2f_momlen->Fill(dx / 10, mom);
+      fph2f_momncl->Fill(ncl, mom);
       // Debug
       fph2f_lentheta->Fill(theta, dx / 10);
       fph2f_lenphi->Fill(phi, dx / 10);
@@ -768,6 +777,7 @@ void Process::Run()
       vmod_fph1f_XP[eram_channel]->Fill(xp);
 
       fph2f_XZ->Fill(dir[0], dir[2]);
+      fph2f_YZ->Fill(dir[1], dir[2]);
       fph1f_phi->Fill(phi);
       fph1f_theta->Fill(theta);
       fph2f_phitheta->Fill(theta, phi);
@@ -870,6 +880,9 @@ void Process::Run()
       fph1f_pullelec->Fill(pull_ele);
       fph1f_pullproton->Fill(pull_proton);
       fph2f_timeX->Fill(pos[0], mean_time);
+      fph1f_dir0->Fill(dir[0]);
+      fph1f_dir1->Fill(dir[1]);
+      fph1f_dir2->Fill(dir[2]);
    }
 
    // TGraph filling
@@ -890,9 +903,11 @@ void Process::Run()
       if (mean_WF == 0 || mean_XP == 0)
          continue;
 
-      ptge_absmom_mean_WF->SetPoint(ivalid, (2*i+1.)/2 * absmommeanbinwidth, mean_WF);
+      ptge_absmom_mean_WF->SetPoint(ivalid, (2 * i + 1.) / 2 * absmommeanbinwidth,
+                                    mean_WF);
       ptge_absmom_mean_WF->SetPointError(ivalid, absmommeanbinwidth / 2, dmean_WF);
-      ptge_absmom_mean_XP->SetPoint(ivalid, (2*i+1.)/2 * absmommeanbinwidth, mean_XP);
+      ptge_absmom_mean_XP->SetPoint(ivalid, (2 * i + 1.) / 2 * absmommeanbinwidth,
+                                    mean_XP);
       ptge_absmom_mean_XP->SetPointError(ivalid, absmommeanbinwidth / 2, dmean_XP);
       ivalid++;
    }
@@ -922,9 +937,11 @@ void Process::Run()
       if (mean_WF == 0 || mean_XP == 0)
          continue;
 
-      ptge_absmom_reso_WF->SetPoint(ivalid, (2*i+1.)/2 * absmomresobinwidth, reso_WF);
+      ptge_absmom_reso_WF->SetPoint(ivalid, (2 * i + 1.) / 2 * absmomresobinwidth,
+                                    reso_WF);
       ptge_absmom_reso_WF->SetPointError(ivalid, absmomresobinwidth / 2, dreso_WF);
-      ptge_absmom_reso_XP->SetPoint(ivalid, (2*i+1.)/2 * absmomresobinwidth, reso_XP);
+      ptge_absmom_reso_XP->SetPoint(ivalid, (2 * i + 1.) / 2 * absmomresobinwidth,
+                                    reso_XP);
       ptge_absmom_reso_XP->SetPointError(ivalid, absmomresobinwidth / 2, dreso_XP);
       ivalid++;
    }
@@ -1039,9 +1056,9 @@ void Process::Run()
       if (mean_WF == 0 || mean_XP == 0)
          continue;
 
-      ptge_dd_mean_WF->SetPoint(ivalid, (2*i+1.)/2 * ddmeanbinwidth, mean_WF);
+      ptge_dd_mean_WF->SetPoint(ivalid, (2 * i + 1.) / 2 * ddmeanbinwidth, mean_WF);
       ptge_dd_mean_WF->SetPointError(ivalid, ddmeanbinwidth / 2, dmean_WF);
-      ptge_dd_mean_XP->SetPoint(ivalid, (2*i+1.)/2 * ddmeanbinwidth, mean_XP);
+      ptge_dd_mean_XP->SetPoint(ivalid, (2 * i + 1.) / 2 * ddmeanbinwidth, mean_XP);
       ptge_dd_mean_XP->SetPointError(ivalid, ddmeanbinwidth / 2, dmean_XP);
       ivalid++;
    }
@@ -1071,9 +1088,9 @@ void Process::Run()
       if (mean_WF == 0 || mean_XP == 0)
          continue;
 
-      ptge_dd_reso_WF->SetPoint(ivalid, (2*i+1.)/2 * ddresobinwidth, reso_WF);
+      ptge_dd_reso_WF->SetPoint(ivalid, (2 * i + 1.) / 2 * ddresobinwidth, reso_WF);
       ptge_dd_reso_WF->SetPointError(ivalid, ddresobinwidth / 2, dreso_WF);
-      ptge_dd_reso_XP->SetPoint(ivalid, (2*i+1.)/2 * ddresobinwidth, reso_XP);
+      ptge_dd_reso_XP->SetPoint(ivalid, (2 * i + 1.) / 2 * ddresobinwidth, reso_XP);
       ptge_dd_reso_XP->SetPointError(ivalid, ddresobinwidth / 2, dreso_XP);
       ivalid++;
    }
@@ -1103,14 +1120,14 @@ void Process::Run()
       if (mean_WF == 0 || mean_XP == 0)
          continue;
 
-      ptge_dt_mean_WF->SetPoint(ivalid, (2*i+1.)/2 * dtbinwidth, mean_WF);
+      ptge_dt_mean_WF->SetPoint(ivalid, (2 * i + 1.) / 2 * dtbinwidth, mean_WF);
       ptge_dt_mean_WF->SetPointError(ivalid, dtbinwidth / 2, dmean_WF);
-      ptge_dt_mean_XP->SetPoint(ivalid, (2*i+1.)/2 * dtbinwidth, mean_XP);
+      ptge_dt_mean_XP->SetPoint(ivalid, (2 * i + 1.) / 2 * dtbinwidth, mean_XP);
       ptge_dt_mean_XP->SetPointError(ivalid, dtbinwidth / 2, dmean_XP);
 
-      ptge_dt_reso_WF->SetPoint(ivalid, (2*i+1.)/2 * dtbinwidth, reso_WF);
+      ptge_dt_reso_WF->SetPoint(ivalid, (2 * i + 1.) / 2 * dtbinwidth, reso_WF);
       ptge_dt_reso_WF->SetPointError(ivalid, dtbinwidth / 2, dreso_WF);
-      ptge_dt_reso_XP->SetPoint(ivalid, (2*i+1.)/2 * dtbinwidth, reso_XP);
+      ptge_dt_reso_XP->SetPoint(ivalid, (2 * i + 1.) / 2 * dtbinwidth, reso_XP);
       ptge_dt_reso_XP->SetPointError(ivalid, dtbinwidth / 2, dreso_XP);
       ivalid++;
    }
@@ -1132,9 +1149,11 @@ void Process::Run()
       if (mean_WF == 0 || mean_XP == 0)
          continue;
 
-      ptge_trklen_mean_WF->SetPoint(ivalid, (2*i+1.)/2 * trklenmeanbinwidth, mean_WF);
+      ptge_trklen_mean_WF->SetPoint(ivalid, (2 * i + 1.) / 2 * trklenmeanbinwidth,
+                                    mean_WF);
       ptge_trklen_mean_WF->SetPointError(ivalid, trklenmeanbinwidth / 2, dmean_WF);
-      ptge_trklen_mean_XP->SetPoint(ivalid, (2*i+1.)/2 * trklenmeanbinwidth, mean_XP);
+      ptge_trklen_mean_XP->SetPoint(ivalid, (2 * i + 1.) / 2 * trklenmeanbinwidth,
+                                    mean_XP);
       ptge_trklen_mean_XP->SetPointError(ivalid, trklenmeanbinwidth / 2, dmean_XP);
       ivalid++;
    }
@@ -1164,9 +1183,11 @@ void Process::Run()
       if (mean_WF == 0 || mean_XP == 0)
          continue;
 
-      ptge_trklen_reso_WF->SetPoint(ivalid, (2*i+1.)/2 * trklenresobinwidth, reso_WF);
+      ptge_trklen_reso_WF->SetPoint(ivalid, (2 * i + 1.) / 2 * trklenresobinwidth,
+                                    reso_WF);
       ptge_trklen_reso_WF->SetPointError(ivalid, trklenresobinwidth / 2, dreso_WF);
-      ptge_trklen_reso_XP->SetPoint(ivalid, (2*i+1.)/2 * trklenresobinwidth, reso_XP);
+      ptge_trklen_reso_XP->SetPoint(ivalid, (2 * i + 1.) / 2 * trklenresobinwidth,
+                                    reso_XP);
       ptge_trklen_reso_XP->SetPointError(ivalid, trklenresobinwidth / 2, dreso_XP);
       ivalid++;
    }
@@ -1187,9 +1208,11 @@ void Process::Run()
 
       if (mean_WF == 0 || mean_XP == 0)
          continue;
-      ptge_absphi_mean_WF->SetPoint(ivalid, (2*i+1.)/2 * absphimeanbinwidth, mean_WF);
+      ptge_absphi_mean_WF->SetPoint(ivalid, (2 * i + 1.) / 2 * absphimeanbinwidth,
+                                    mean_WF);
       ptge_absphi_mean_WF->SetPointError(ivalid, absphimeanbinwidth / 2, dmean_WF);
-      ptge_absphi_mean_XP->SetPoint(ivalid, (2*i+1.)/2 * absphimeanbinwidth, mean_XP);
+      ptge_absphi_mean_XP->SetPoint(ivalid, (2 * i + 1.) / 2 * absphimeanbinwidth,
+                                    mean_XP);
       ptge_absphi_mean_XP->SetPointError(ivalid, absphimeanbinwidth / 2, dmean_XP);
       ivalid++;
    }
@@ -1219,9 +1242,11 @@ void Process::Run()
       if (mean_WF == 0 || mean_XP == 0)
          continue;
 
-      ptge_absphi_reso_WF->SetPoint(ivalid, (2*i+1.)/2 * absphiresobinwidth, reso_WF);
+      ptge_absphi_reso_WF->SetPoint(ivalid, (2 * i + 1.) / 2 * absphiresobinwidth,
+                                    reso_WF);
       ptge_absphi_reso_WF->SetPointError(ivalid, absphiresobinwidth / 2, dreso_WF);
-      ptge_absphi_reso_XP->SetPoint(ivalid, (2*i+1.)/2 * absphiresobinwidth, reso_XP);
+      ptge_absphi_reso_XP->SetPoint(ivalid, (2 * i + 1.) / 2 * absphiresobinwidth,
+                                    reso_XP);
       ptge_absphi_reso_XP->SetPointError(ivalid, absphiresobinwidth / 2, dreso_XP);
       ivalid++;
    }
@@ -1280,9 +1305,11 @@ void Process::Run()
       if (mean_WF == 0 || mean_XP == 0)
          continue;
 
-      ptge_abstheta_mean_WF->SetPoint(ivalid, (2*i+1.)/2 * absthetameanbinwidth, mean_WF);
+      ptge_abstheta_mean_WF->SetPoint(ivalid, (2 * i + 1.) / 2 * absthetameanbinwidth,
+                                      mean_WF);
       ptge_abstheta_mean_WF->SetPointError(ivalid, absthetameanbinwidth / 2, dmean_WF);
-      ptge_abstheta_mean_XP->SetPoint(ivalid, (2*i+1.)/2 * absthetameanbinwidth, mean_XP);
+      ptge_abstheta_mean_XP->SetPoint(ivalid, (2 * i + 1.) / 2 * absthetameanbinwidth,
+                                      mean_XP);
       ptge_abstheta_mean_XP->SetPointError(ivalid, absthetameanbinwidth / 2, dmean_XP);
       ivalid++;
    }
@@ -1312,9 +1339,11 @@ void Process::Run()
       if (mean_WF == 0 || mean_XP == 0)
          continue;
 
-      ptge_abstheta_reso_WF->SetPoint(ivalid, (2*i+1.)/2 * absthetaresobinwidth, reso_WF);
+      ptge_abstheta_reso_WF->SetPoint(ivalid, (2 * i + 1.) / 2 * absthetaresobinwidth,
+                                      reso_WF);
       ptge_abstheta_reso_WF->SetPointError(ivalid, absthetaresobinwidth / 2, dreso_WF);
-      ptge_abstheta_reso_XP->SetPoint(ivalid, (2*i+1.)/2 * absthetaresobinwidth, reso_XP);
+      ptge_abstheta_reso_XP->SetPoint(ivalid, (2 * i + 1.) / 2 * absthetaresobinwidth,
+                                      reso_XP);
       ptge_abstheta_reso_XP->SetPointError(ivalid, absthetaresobinwidth / 2, dreso_XP);
       ivalid++;
    }

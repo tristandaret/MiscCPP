@@ -202,6 +202,7 @@ void PrintResolution(TH1 *th1, TCanvas *pCanvas, float NDCx, float NDCy, const f
    pPaveText->SetTextColor(kBlue - 1);
    pPaveText->SetShadowColor(0);
    pPaveText->SetLineWidth(3);
+   pPaveText->SetFillStyle(1001);
    pPaveText->SetFillColorAlpha(kWhite, 0.95);
    // pPaveText->SetBorderSize(0);
 
@@ -213,11 +214,17 @@ void PrintResolution(TH1 *th1, TCanvas *pCanvas, float NDCx, float NDCy, const f
    float dreso = GetResoError(tf1);
 
    // pPaveText->				AddText(Form("%s (%d entries)", title.c_str(), (int)th1->GetEntries()));
-   pPaveText->AddText(Form("%s", title.c_str()));
+   if(title != " ")
+      pPaveText->AddText(Form("%s", title.c_str()));
    pPaveText->AddText(Form("#frac{#sigma}{#mu}	= %.2f #pm %.2f %%", reso, dreso));
    pPaveText->AddText(Form("#mu	= %.1f #pm %.1f", mu, dmu));
    pPaveText->AddText(Form("#sigma	= %.1f #pm %.1f", sigma, dsigma));
    pPaveText->GetLine(0)->SetTextFont(22);
    pPaveText->DrawClone();
    delete pPaveText;
+
+   tf1->SetLineColor(color+1);
+   tf1->SetLineStyle(9);
+   tf1->SetLineWidth(3);
+   tf1->Draw("same");
 }

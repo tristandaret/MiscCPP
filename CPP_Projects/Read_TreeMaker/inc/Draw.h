@@ -51,8 +51,8 @@ private:
    // std::vector<int> markers = {47, 34, 20, 21, 22, 23, 33, 43, 29};
    // std::vector<int> markers = {20, 34, 20, 21, 22, 23, 33, 43, 29};
 
-   float resomin = 5;
-   float resomax = 30;
+   float resomin = 4;
+   float resomax = 11;
    int meanmin = 300;
    int meanmax = 600;
    int stdmin = 0;

@@ -10,7 +10,7 @@ TStyle *SetMyStyle()
    Int_t FontStyle = 132;
    Float_t FontSizeLabel = 0.045;
    Float_t FontSizeTitle = 0.055;
-   Color_t FontColor = kBlack;
+   Color_t FontColor = kBlue - 1;
 
    // Standard histogram decorations
    myStyle->SetOptTitle(1);
@@ -90,6 +90,12 @@ TStyle *SetMyStyle()
    myStyle->SetStripDecimals(kFALSE);  // removes decimals in labels
    myStyle->SetHistMinimumZero(kTRUE); // forces 0 to appear on y-axis
 
+   // Grid
+   myStyle->SetPadGridX(1);
+   myStyle->SetPadGridY(1);
+   myStyle->SetGridStyle(1);
+   myStyle->SetGridColor(kGray);
+
    // Error bars
    myStyle->SetEndErrorSize(4);
 
@@ -138,6 +144,18 @@ void Graphic_setup(TF1 *tf1, Width_t linewidth, Color_t linecolor, Style_t lines
    tf1->SetLineWidth(linewidth);
    tf1->SetLineColor(linecolor);
    tf1->SetLineStyle(linestyle);
+}
+
+// Set graphic settings for a TLegend
+void Graphic_setup(TLegend *leg, Float_t textsize, Color_t textcolor, Style_t fillStyle, Color_t fillcolor,
+                   Int_t bordersize, Int_t ncolumns)
+{
+   leg->SetTextSize(textsize);
+   leg->SetTextColor(textcolor);
+   leg->SetFillStyle(fillStyle);
+   leg->SetFillColor(fillcolor);
+   leg->SetBorderSize(bordersize);
+   leg->SetNColumns(ncolumns);
 }
 
 // Set the stats box position

@@ -47,9 +47,9 @@ private:
    // Analysis settings
    int dEdxmax = 1300;
    int nbinsreso = 25;
-   int nbinsmean = 31;
-   int nbinsresoangle = 31;
-   int nbinsmeanangle = 31;
+   int nbinsmean = 30;
+   int nbinsresoangle = 30;
+   int nbinsmeanangle = 30;
 
    // Absolute momentum
    float absmomrange = 2000;
@@ -304,6 +304,7 @@ private:
                                    3 * nmombins, -momrange, momrange);
    // Geometry
    TH2F *fph2f_XZ = new TH2F("fph1f_XZ", ";X;Z", 100, -1, 1, 100, -1, 1);
+   TH2F *fph2f_YZ = new TH2F("fph1f_YZ", ";Y;Z", 100, -1, 1, 100, -1, 1);
    TH1F *fph1f_phi = new TH1F("fph1f_phi", ";#varphi angle;Count", 100, -90, 90);
    TH1F *fph1f_theta = new TH1F("fph1f_theta", ";#theta angle;Count", 100, -90, 90);
    TH2F *fph2f_phitheta =
@@ -360,6 +361,13 @@ private:
    TH2F *fph2f_lenphi = new TH2F("ph2f_lenphi", ";#varphi;track length (cm)",
                                  5 * nphibins, -90, 90, 171, 0, 170);
    TH2F *fph2f_timeX = new TH2F("ph2f_timeX", ";X;time", 100, -1200, 1200, 100, 0, 510);
+   TH1F *fph1f_dir0 = new TH1F("ph1f_dir0", ";X direction;Counts", 100, 0, 1);
+   TH1F *fph1f_dir1 = new TH1F("ph1f_dir1", ";Y direction;Counts", 100, 0, 1);
+   TH1F *fph1f_dir2 = new TH1F("ph1f_dir2", ";Z direction;Counts", 100, 0, 1);
+   TH2F *fph2f_momlen = new TH2F("ph2f_momlen", ";track length (cm);momentum (MeV)", 171,
+                                 0, 170, 3 * nmombins, 0, momrange);
+   TH2F *fph2f_momncl = new TH2F("ph2f_momncl", ";N_{clusters};momentum (MeV)", 200, 0,
+                                 200, 3 * nmombins, 0, momrange);
 
    // Tree variables
    Double_t wf;
@@ -377,7 +385,6 @@ private:
    Double_t NDF;
    Double_t mom_og;
    Double_t mom;
-   Double_t APM;
    Double_t start_time;
    Double_t mean_time;
    Double_t end_time;
@@ -396,8 +403,6 @@ private:
    int dxmin{0};
    int dxmax{1000000};
    int ncroscut{0};
-   int apmcutlow{0};
-   int apmcuthigh{1000};
    int momcutlow{0};
    int momcuthigh{1000000000};
    int xcutmin{-1200};

@@ -12,7 +12,7 @@ void DrawPointModel();
 
 class PointModel {
 public:
-   PointModel(float peakingTime, float xpad, float ypad, float xcharge, float ycharge, float RC, float Qdrop);
+   PointModel(float peakingTime, float xpad, float ypad, float xcharge, float ycharge, float RC, float Qdrop = Q0);
    virtual ~PointModel();
 
    // Set parameters
@@ -58,6 +58,7 @@ public:
 
 private:
    float ftmax = 5e3; // Maximum time
+   constexpr static float Q0 = 54; // Charge in fC
 
    // Eletronics transfer function
    float fpeakingTime = 412;
