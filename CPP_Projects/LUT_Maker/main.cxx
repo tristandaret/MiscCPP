@@ -14,10 +14,12 @@
 
 void modifyBranches();
 
-int main()
+int main(int argc, char **argv)
 {
    TrackModel trackmodel;
    LUTMaker lutmaker;
+   lutmaker.SetPeakingtime(std::stod(argv[1]));
+   lutmaker.SetTransDiff(std::stod(argv[2]), std::stod(argv[3]));
 
    // Variables: Dt = 310 | RC = 112 | drift = 611.7 | impact = 4.89291 | phi = 44.5825 | amplitude = 239 | length = 5.39015
    // float amplitude = 239;
@@ -30,8 +32,11 @@ int main()
 
    // float diag = lutmaker.GetDiag();
 
+   std::cout << "Compute length map...";
    lutmaker.ComputeLengthMap();
+   std::cout << " done." << std::endl;
    // lutmaker.DrawLengthMap();
+   lutmaker.PrintSettings();
    lutmaker.MakeLUT();
    // lutmaker.DrawLUT(120, 0, 310/pow(10, 3.5));
 

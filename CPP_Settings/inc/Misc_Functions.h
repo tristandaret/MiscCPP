@@ -18,6 +18,30 @@ int sign(T x)
    return (x >= 0) ? 1 : (x < 0 ? -1 : 0);
 }
 
+// Add vectors
+template <typename T>
+std::vector<T>& operator+=(std::vector<T>& a, const std::vector<T>& b) {
+    if (a.size() != b.size()) {
+        throw std::runtime_error("Vector sizes don't match in operator+=");
+    }
+    for (size_t i = 0; i < a.size(); ++i) {
+        a[i] += b[i];
+    }
+    return a;
+}
+
+// Substract vectors
+template <typename T>
+std::vector<T>& operator-=(std::vector<T>& a, const std::vector<T>& b) {
+    if (a.size() != b.size()) {
+        throw std::runtime_error("Vector sizes don't match in operator-=");
+    }
+    for (size_t i = 0; i < a.size(); ++i) {
+        a[i] -= b[i];
+    }
+    return a;
+}
+
 /* GENERAL MATH*/
 // Heaviside
 float Heaviside(const float &t, const float &t_0);

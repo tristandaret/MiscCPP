@@ -4,4 +4,4 @@ cd build
 cmake ..
 make -j 12
 cd ..
-time ./build/LUTMaker
+time ./build/LUTMaker $1 $2 $3
