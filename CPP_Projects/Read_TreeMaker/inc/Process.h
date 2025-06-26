@@ -19,6 +19,7 @@ public:
    void SetRun(const std::string &run) { frun = run; }
    void SetTag(const std::string &tag) { ftag = tag; }
    void SetComment(const std::string &comment) { fcomment = comment; }
+   void SetLegend(const std::string &legend) { flegend = legend; }
    void SetFileName(const std::string &fileName) { ffileName = fileName; }
    void SetInputFile(const std::string &inputfile) { finputFile = inputfile; }
    void SetOutputROOTfolder(const std::string &outputROOTfolder)
@@ -36,6 +37,7 @@ private:
    std::string frun;
    std::string ftag;
    std::string fcomment;
+   std::string flegend;
 
    std::string finputFile;
    std::string foutputROOTfolder;
@@ -45,7 +47,7 @@ private:
    std::string fRealpathROOT;
 
    // Analysis settings
-   int dEdxmax = 1300;
+   int dEdxmax = 1600;
    int nbinsreso = 25;
    int nbinsmean = 30;
    int nbinsresoangle = 30;
@@ -62,8 +64,8 @@ private:
    float nabsmomresobins = nbinsreso;
    float absmomresobinwidth = absmomrange / nabsmomresobins;
 
-   // Momentum
-   float nmombins = 101;
+   // Signed momentum
+   float nmombins = 201;
    float momrange = 2000;
    float mombinwidth = 2 * momrange / (nmombins - 1);
    int momindex = 0;
@@ -91,7 +93,7 @@ private:
    float dtbinwidth = dtrange / (ndtbins - 1);
    int dtindex = 0;
 
-   // track length
+   // Track length
    float trklenrange = 1800;
    // Mean plots
    int trklenmeanindex = 0;
@@ -158,7 +160,7 @@ private:
    TGraphErrors *ptge_absmom_reso_WF = new TGraphErrors();
    TGraphErrors *ptge_absmom_reso_XP = new TGraphErrors();
 
-   // Vectors for dE/dx vs momentum bin
+   // Vectors for dE/dx vs signed momentum bin
    std::vector<TH1F *> vmom_fph1f_WF;
    std::vector<TH1F *> vmom_fph1f_XP;
    TGraphErrors *ptge_mom_mean_WF = new TGraphErrors();
@@ -200,7 +202,7 @@ private:
    TGraphErrors *ptge_dt_reso_WF = new TGraphErrors();
    TGraphErrors *ptge_dt_reso_XP = new TGraphErrors();
 
-   // Vectors for dE/dx vs track length
+   // Vectors for dE/dx vs Track length
    std::vector<TH1F *> vtrklenmean_fph1f_WF;
    std::vector<TH1F *> vtrklenmean_fph1f_XP;
    TGraphErrors *ptge_trklen_mean_WF = new TGraphErrors();
@@ -256,63 +258,70 @@ private:
 
    // Base
    int nbinsdEdx = 500;
-   TH1F *fph1f_WF = new TH1F("fph1f_WF", ";dE/dx (ADC counts/cm);Count", 100, 0, dEdxmax);
-   TH1F *fph1f_XP = new TH1F("fph1f_XP", ";dE/dx (ADC counts/cm);Count", 100, 0, dEdxmax);
+   TH1F *fph1f_WF = new TH1F("fph1f_WF", ";dE/dx [ADC counts/cm];Count", 100, 0, dEdxmax);
+   TH1F *fph1f_XP = new TH1F("fph1f_XP", ";dE/dx [ADC counts/cm];Count", 100, 0, dEdxmax);
    // 2D with dE/dx
    TH2F *fph2f_WFXP = new TH2F(
-      "fph1f_WFXP", ";dE/dx with WF (ADC counts/cm);dE/dx with XP (ADC counts/cm)", 100,
+      "fph1f_WFXP", ";dE/dx with WF [ADC counts/cm];dE/dx with XP [ADC counts/cm]", 100,
       0, 1000, 100, 0, 1000);
    TH2F *fph2f_WFdrift =
-      new TH2F("fph2f_WFdrift", ";drift time (timebins);dE/dx with WF (ADC counts/cm)",
+      new TH2F("fph2f_WFdrift", ";drift time (timebins);dE/dx with WF [ADC counts/cm]",
                510, 0, 510, nbinsdEdx, 0, 1000);
    TH2F *fph2f_XPdrift =
-      new TH2F("fph2f_XPdrift", ";drift time (timebins);dE/dx with XP (ADC counts/cm)",
+      new TH2F("fph2f_XPdrift", ";drift time (timebins);dE/dx with XP [ADC counts/cm]",
                510, 0, 510, nbinsdEdx, 0, 1000);
    TH2F *fph2f_WFX =
-      new TH2F("fph2f_WFX", ";Track X position (mm);dE/dx with WF (ADC counts/cm)", 100,
+      new TH2F("fph2f_WFX", ";Track X position [mm];dE/dx with WF [ADC counts/cm]", 100,
                -1200, 1200, nbinsdEdx, 0, 1000);
    TH2F *fph2f_XPX =
-      new TH2F("fph2f_XPX", ";Track X position (mm);dE/dx with XP (ADC counts/cm)", 100,
+      new TH2F("fph2f_XPX", ";Track X position [mm];dE/dx with XP [ADC counts/cm]", 100,
                -1200, 1200, nbinsdEdx, 0, 1000);
    TH2F *fph2f_XPlen =
-      new TH2F("fph1f_lenXP", ";track length (cm);dE/dx with XP (ADC counts/cm)", 171, 0,
+      new TH2F("fph1f_lenXP", ";Track length [cm];dE/dx with XP [ADC counts/cm]", 171, 0,
                170, nbinsdEdx, 0, 1000);
-   TH2F *fph2f_XPphi = new TH2F("fph2f_XPphi", ";#phi; dE/dx with XP (ADC counts/cm)",
+   TH2F *fph2f_XPphi = new TH2F("fph2f_XPphi", ";#phi; dE/dx with XP [ADC counts/cm]",
                                 5 * nphibins, -90, 90, nbinsdEdx, 0, 1000);
-   TH2F *fph2f_XPtheta =
-      new TH2F("fph2f_XPtheta", ";#theta; dE/dx with XP (ADC counts/cm)", 5 * nthetabins,
-               -90, 90, nbinsdEdx, 0, 1000);
-   TH2F *fph2f_XPabsmommean = new TH2F(
-      "fph2f_XPabsmommean", ";Absolute momentum (MeV/c);dE/dx with XP (ADC counts/cm)",
-      5 * nabsmommeanbins / 3, 0, absmomrange, nbinsdEdx / 3, 0, 1000);
-   TH2F *fph2f_WFabsmommean = new TH2F(
-      "fph2f_WFabsmommean", ";Absolute momentum (MeV/c);dE/dx with WF (ADC counts/cm)",
-      5 * nabsmommeanbins / 3, 0, absmomrange, nbinsdEdx / 3, 0, 1000);
+   TH2F *fph2f_XPtheta = new TH2F(
+      "fph2f_XPtheta", ";Track angle #theta [#circ]; dE/dx with XP [ADC counts/cm]",
+      5 * nthetabins, -90, 90, nbinsdEdx, 0, 1000);
+   TH2F *fph2f_XPabsmommean =
+      new TH2F("fph2f_XPabsmommean", ";Momentum [MeV/c];dE/dx with XP [ADC counts/cm]",
+               5 * nabsmommeanbins / 3, 0, absmomrange, nbinsdEdx / 3, 0, 1000);
+   TH2F *fph2f_WFabsmommean =
+      new TH2F("fph2f_WFabsmommean", ";Momentum [MeV/c];dE/dx with WF [ADC counts/cm]",
+               5 * nabsmommeanbins / 3, 0, absmomrange, nbinsdEdx / 3, 0, 1000);
    TH2F *fph2f_XPmom =
-      new TH2F("fph2f_XPmom", ";momentum (MeV);dE/dx with XP (ADC counts/cm)",
+      new TH2F("fph2f_XPmom", ";Signed momentum (MeV);dE/dx with XP [ADC counts/cm]",
                5 * nmombins, -momrange, momrange, nbinsdEdx, 0, 1000);
    TH2F *fph2f_WFmom =
-      new TH2F("fph2f_WFmom", ";momentum (MeV);dE/dx with WF (ADC counts/cm)",
+      new TH2F("fph2f_WFmom", ";Signed momentum (MeV);dE/dx with WF [ADC counts/cm]",
                5 * nmombins, -momrange, momrange, nbinsdEdx, 0, 1000);
 
+   // Position
+   TH1F *fph1f_Xpos =
+      new TH1F("fph1f_Xpos", ";Track X position [mm];Count", 200, -1200, 1200);
+
    // Momentum
-   TH1I *fph1i_mom =
-      new TH1I("fph1i_mom", ";momentum (MeV);Count", 3 * nmombins, -momrange, momrange);
-   TH1I *fph1i_mom_tHAT = new TH1I("fph1i_mom_thAT", ";momentum (MeV);Count",
+   TH1I *fph1i_mom = new TH1I("fph1i_mom", ";Signed momentum (MeV);Count", 3 * nmombins,
+                              -momrange, momrange);
+   TH1I *fph1i_mom_tHAT = new TH1I("fph1i_mom_thAT", ";Signed momentum (MeV);Count",
                                    3 * nmombins, -momrange, momrange);
-   TH1I *fph1i_mom_bHAT = new TH1I("fph1i_mom_bhAT", ";momentum (MeV);Count",
+   TH1I *fph1i_mom_bHAT = new TH1I("fph1i_mom_bhAT", ";Signed momentum (MeV);Count",
                                    3 * nmombins, -momrange, momrange);
    // Geometry
    TH2F *fph2f_XZ = new TH2F("fph1f_XZ", ";X;Z", 100, -1, 1, 100, -1, 1);
    TH2F *fph2f_YZ = new TH2F("fph1f_YZ", ";Y;Z", 100, -1, 1, 100, -1, 1);
-   TH1F *fph1f_phi = new TH1F("fph1f_phi", ";#varphi angle;Count", 100, -90, 90);
-   TH1F *fph1f_theta = new TH1F("fph1f_theta", ";#theta angle;Count", 100, -90, 90);
-   TH2F *fph2f_phitheta =
-      new TH2F("fph2f_phitheta", ";#theta;#varphi", 100, -90, 90, 100, -90, 90);
-   TH1F *fph1f_trklen = new TH1F("fph1f_trklen", ";track length (cm);Count", 171, 0, 170);
+   TH1F *fph1f_phi =
+      new TH1F("fph1f_phi", ";Track angle #varphi [#circ] angle;Count", 100, -90, 90);
+   TH1F *fph1f_theta =
+      new TH1F("fph1f_theta", ";Track angle #theta [#circ];Count", 100, -90, 90);
+   TH2F *fph2f_phitheta = new TH2F(
+      "fph2f_phitheta", ";Track angle #theta [#circ];Track angle #varphi [#circ]", 100,
+      -90, 90, 100, -90, 90);
+   TH1F *fph1f_trklen = new TH1F("fph1f_trklen", ";Track length [cm];Count", 171, 0, 170);
    TH1F *fph1f_chi2 = new TH1F("fph1f_chi2", ";#chi^{2};Count", 1000, 0, 50);
-   TH2F *fph2f_chi2mom = new TH2F("fph2f_chi2mom", ";momentum (MeV);#chi^{2}", nmombins,
-                                  -momrange, momrange, 1000, 0, 50);
+   TH2F *fph2f_chi2mom = new TH2F("fph2f_chi2mom", ";Signed momentum (MeV);#chi^{2}",
+                                  nmombins, -momrange, momrange, 1000, 0, 50);
    // Time in bHAT
    TH1I *fph1i_tminBotCath =
       new TH1I("fph1i_tminBotCath", ";time bin;Count", 510, 0, 510);
@@ -340,34 +349,39 @@ private:
    TH1I *fph1i_tmaxEP3 =
       new TH1I("fph1i_tmaxEP3", "End time in EP3;time bin;Count", 510, 0, 510);
    // Debug
-   TH1F *fph1f_pullmu = new TH1F("fph1f_pullmu", ";Pull #mu;Count", 100, -20, 20);
-   TH1F *fph1f_pullelec = new TH1F("fph1f_pullelec", ";Pull e;Count", 100, -20, 20);
-   TH1F *fph1f_pullproton = new TH1F("fph1f_pullproton", ";Pull p;Count", 100, -20, 20);
+   TH1F *fph1f_pullmu = new TH1F("fph1f_pullmu", ";Pull #mu;Count", 100, -25, 25);
+   TH1F *fph1f_pullelec = new TH1F("fph1f_pullelec", ";Pull e;Count", 100, -25, 25);
+   TH1F *fph1f_pullproton = new TH1F("fph1f_pullproton", ";Pull p;Count", 100, -25, 25);
    TH2F *fph2f_pullelecmu =
-      new TH2F("ph2f_pullelecmu", ";Pull #mu;Pull e", 100, -20, 20, 100, -20, 20);
+      new TH2F("ph2f_pullelecmu", ";Pull #mu;Pull e", 100, -25, 25, 100, -25, 25);
    TH2F *fph2f_chi2ndfphi =
-      new TH2F("ph2f_chi2ndfphi", ";#varphi;#chi^{2}/NDF", 100, -90, 90, 100, 0, 50);
+      new TH2F("ph2f_chi2ndfphi", ";Track angle #varphi [#circ];#chi^{2}/NDF", 100, -90,
+               90, 100, 0, 50);
    TH2F *fph2f_momtheta =
-      new TH2F("ph2f_momtheta", ";#theta;momentum (MeV)", 5 * nthetabins, -90, 90,
-               5 * nmombins, -momrange, momrange);
-   TH2F *fph2f_momphi = new TH2F("ph2f_momphi", ";#varphi;momentum (MeV)", 5 * nphibins,
-                                 -90, 90, 5 * nmombins, -momrange, momrange);
-   TH2F *fph2f_momR = new TH2F("ph2f_momR", ";R;momentum (MeV)", 300, -5e4, 5e4,
+      new TH2F("ph2f_momtheta", ";Track angle #theta [#circ];Signed momentum (MeV)",
+               5 * nthetabins, -90, 90, 5 * nmombins, -momrange, momrange);
+   TH2F *fph2f_momphi =
+      new TH2F("ph2f_momphi", ";Track angle #varphi [#circ];Signed momentum (MeV)",
+               5 * nphibins, -90, 90, 5 * nmombins, -momrange, momrange);
+   TH2F *fph2f_momR = new TH2F("ph2f_momR", ";R;Signed momentum (MeV)", 300, -5e4, 5e4,
                                3 * nmombins, -momrange, momrange);
    TH2F *fph2f_chi2ndfR =
       new TH2F("ph2f_chi2ndfR", ";R;#chi^{2}/NDF", 300, -5e4, 5e4, 300, 0, 50);
-   TH2F *fph2f_lentheta = new TH2F("ph2f_lentheta", ";#theta;track length (cm)",
-                                   5 * nthetabins, -90, 90, 171, 0, 170);
-   TH2F *fph2f_lenphi = new TH2F("ph2f_lenphi", ";#varphi;track length (cm)",
-                                 5 * nphibins, -90, 90, 171, 0, 170);
+   TH2F *fph2f_lentheta =
+      new TH2F("ph2f_lentheta", ";Track angle #theta [#circ];Track length [cm]",
+               5 * nthetabins, -90, 90, 171, 0, 170);
+   TH2F *fph2f_lenphi =
+      new TH2F("ph2f_lenphi", ";Track angle #varphi [#circ];Track length [cm]",
+               5 * nphibins, -90, 90, 171, 0, 170);
    TH2F *fph2f_timeX = new TH2F("ph2f_timeX", ";X;time", 100, -1200, 1200, 100, 0, 510);
    TH1F *fph1f_dir0 = new TH1F("ph1f_dir0", ";X direction;Counts", 100, 0, 1);
    TH1F *fph1f_dir1 = new TH1F("ph1f_dir1", ";Y direction;Counts", 100, 0, 1);
    TH1F *fph1f_dir2 = new TH1F("ph1f_dir2", ";Z direction;Counts", 100, 0, 1);
-   TH2F *fph2f_momlen = new TH2F("ph2f_momlen", ";track length (cm);momentum (MeV)", 171,
-                                 0, 170, 3 * nmombins, 0, momrange);
-   TH2F *fph2f_momncl = new TH2F("ph2f_momncl", ";N_{clusters};momentum (MeV)", 200, 0,
-                                 200, 3 * nmombins, 0, momrange);
+   TH2F *fph2f_momlen =
+      new TH2F("ph2f_momlen", ";Track length [cm];Signed momentum (MeV)", 171, 0, 170,
+               3 * nmombins, 0, momrange);
+   TH2F *fph2f_momncl = new TH2F("ph2f_momncl", ";N_{clusters};Signed momentum (MeV)",
+                                 200, 0, 200, 3 * nmombins, 0, momrange);
 
    // Tree variables
    Double_t wf;

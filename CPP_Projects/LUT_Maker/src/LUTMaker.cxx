@@ -7,15 +7,15 @@
 float LUTMaker::LUTValues[LUTMaker::SNSTEPS_TRANS][LUTMaker::SNSTEPS_RC]
                          [LUTMaker::SNSTEPS_DRIFT][LUTMaker::SNSTEPS_D]
                          [LUTMaker::SNSTEPS_PHI];
-
+=
 // Constructor
 LUTMaker::LUTMaker()
 {
    v_phi = linspace(0, 90, SNSTEPS_PHI);
    v_impact = linspace(0, PAD_DIAG / 2, SNSTEPS_D);
    v_drift = linspace(0, 1000, SNSTEPS_DRIFT);
-   v_RC = {112, 158};
-   v_Dt = {286 / pow(10, 3.5), 323 / pow(10, 3.5)};
+   v_RC = linspace(RCmin, RCmax, SNSTEPS_RC);
+   v_Dt = {DtwithB / pow(10, 3.5), DtwithoutB / pow(10, 3.5)};
 
    fp_trackmodel = new TrackModel();
 
@@ -58,15 +58,15 @@ void LUTMaker::PrintSettings()
    std::cout << "Step size in drift:        " << sSTEP_DRIFT << std::endl;
    std::cout << "Step size in RC:           " << sSTEP_RC << std::endl;
    std::cout << "Step size in Dt:           " << stepSizeTrans << std::endl;
-   std::cout << "RC values: ";
-   for (const auto &val : v_RC) {
-      std::cout << val << ", ";
+
+   std::cout << "Dt values:                 ";
+   for (const auto &val : v_Dt) {
+      std::cout << (int)(val * pow(10, 3.5)) << " ";
    }
    std::cout << std::endl;
-
-   std::cout << "Dt values: ";
-   for (const auto &val : v_Dt) {
-      std::cout << (int)(val * pow(10, 3.5)) << ", ";
+   std::cout << "RC values:                 ";
+   for (const auto &val : v_RC) {
+      std::cout << val << " ";
    }
    std::cout << std::endl;
 }
@@ -115,8 +115,9 @@ void LUTMaker::ComputeLengthMap()
 void LUTMaker::MakeLUT()
 {
    int peakingTime = (int)fp_trackmodel->GetPeakingTime();
-   TFile tfileLUT(Form("Output_LUT/dEdx_XP_LUT_Dt%d_%d_PT%d.root",
-                       (int)(v_Dt[0] * pow(10, 3.5)), (int)(v_Dt[1] * pow(10, 3.5)), peakingTime),
+   TFile tfileLUT(Form("Output_LUT/dEdx_XP_LUT_Dt%d_%d_RC_%d_%d_nDrift_%d_PT%d.root",
+                       (int)(v_Dt[0] * pow(10, 3.5)), (int)(v_Dt[1] * pow(10, 3.5)),
+                       RCmin, RCmax, SNSTEPS_DRIFT, peakingTime),
                   "RECREATE");
    TTree ttreeLUT("treeLUTdEdx", "treeLUTdEdx");
    double d, phi;
@@ -214,8 +215,8 @@ void LUTMaker::LoadLUT(std::string LUTpath)
    for (int i = 0; i < ptree.GetEntries(); i++) {
       ptree.GetEntry(i);
       int itransvDiff =
-         (int)std::round((transvDiff * pow(10, 3.5) - 286) / stepSizeTrans);
-      int iRC = (int)std::round((RC - 112) / sSTEP_RC);
+         (int)std::round((transvDiff * pow(10, 3.5) - v_Dt[0]) / stepSizeTrans);
+      int iRC = (int)std::round((RC - RCmin) / sSTEP_RC);
       int idrift = (int)std::round(drift / sSTEP_DRIFT);
       int iphi = (int)std::round(phi / sSTEP_PHI);
       int id = (int)std::round(d / sSTEP_IMPACT);
@@ -237,8 +238,8 @@ void LUTMaker::LoadLUT(std::string LUTpath)
 float LUTMaker::GetFactorFromLUT(const double &transvDiff, const double &RC,
                                  const double &drift, const double &d, const double &phi)
 { // keep double
-   int itransvDiff = (int)(transvDiff * pow(10, 3.5) - 286) / stepSizeTrans;
-   int iRC = (int)(RC - 112) / sSTEP_RC;
+   int itransvDiff = (int)(transvDiff * pow(10, 3.5) - v_Dt[0]) / stepSizeTrans;
+   int iRC = (int)(RC - RCmin) / sSTEP_RC;
    float idrift = drift / sSTEP_DRIFT;
    float idrift_min =
       std::min(std::floor(drift / sSTEP_DRIFT), (double)SNSTEPS_DRIFT - 1);

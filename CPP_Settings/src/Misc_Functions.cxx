@@ -1,6 +1,6 @@
 #include "Misc_Functions.h"
 
-#include <stdexcept>  // for std::runtime_error
+#include <stdexcept> // for std::runtime_error
 
 // General functions
 // //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -94,7 +94,8 @@ TF1 *Fit1Gauss(TH1 *h1F, const float &range)
    return tf1;
 }
 
-// ROOT /////////////////////////////////////////////////////////////////////////////////////////////////////////
+// ROOT
+// /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // Draw TH1
 void DrawTH1(const std::string &OutDir, TH1 *h1)
@@ -107,9 +108,11 @@ void DrawTH1(const std::string &OutDir, TH1 *h1)
    delete pCanTH1;
 }
 
-double GetSeparation(const float &mean1, const float &std1, const float &mean2, const float &std2)
+double GetSeparation(const float &mean1, const float &std1, const float &mean2,
+                     const float &std2)
 {
-   float separation = std::fabs(mean1 - mean2) / std::sqrt((std::pow(std1, 2) + std::pow(std2, 2)) / 2);
+   float separation =
+      std::fabs(mean1 - mean2) / std::sqrt((std::pow(std1, 2) + std::pow(std2, 2)) / 2);
    return separation;
 }
 
@@ -122,11 +125,13 @@ double GetSeparation(const TF1 *tf1_1, const TF1 *tf1_2)
    return GetSeparation(mean1, std1, mean2, std2);
 }
 
-double GetSeparationError(const float &mean1, const float &std1, const float &dmean1, const float &dstd1,
-                          const float &mean2, const float &std2, const float &dmean2, const float &dstd2)
+double GetSeparationError(const float &mean1, const float &std1, const float &dmean1,
+                          const float &dstd1, const float &mean2, const float &std2,
+                          const float &dmean2, const float &dstd2)
 {
    float mu_part = (pow(dmean1, 2) + pow(dmean2, 2)) / (pow(std1, 2) + pow(std2, 2));
-   float sigma_part = pow(mean1 - mean2, 2) * (pow(std1, 2) * pow(dstd1, 2) + pow(std2, 2) * pow(dstd2, 2)) /
+   float sigma_part = pow(mean1 - mean2, 2) *
+                      (pow(std1, 2) * pow(dstd1, 2) + pow(std2, 2) * pow(dstd2, 2)) /
                       pow(pow(std1, 2) + pow(std2, 2), 3);
    float err = sqrt(2) * sqrt(mu_part + sigma_part);
    return err;
@@ -162,12 +167,24 @@ void PrintResolution(TH1 *th1, TCanvas *pCanvas)
 {
    return PrintResolution(th1, pCanvas, 0.05, 0.7, 0.3, 0.3, "south west", kBlack, " ");
 }
-void PrintResolution(TH1 *th1, TCanvas *pCanvas, float NDCx, float NDCy, Color_t color, const std::string &title)
+void PrintResolution(TH1 *th1, TCanvas *pCanvas, float NDCx, float NDCy, Color_t color,
+                     const std::string &title)
 {
-   return PrintResolution(th1, pCanvas, NDCx, NDCy, 0.3, 0.3, "south west", color, title);
+   return PrintResolution(th1, pCanvas, NDCx, NDCy, 0.33, 0.3, "south west", color,
+                          title);
 }
-void PrintResolution(TH1 *th1, TCanvas *pCanvas, float NDCx, float NDCy, const float &xwidth, const float &ywidth,
-                     const std::string &anchor, Color_t color, const std::string &title)
+void PrintResolution(TH1 *th1, TCanvas *pCanvas, float NDCx, float NDCy,
+                     const float &xwidth, const float &ywidth, const std::string &anchor,
+                     Color_t color, const std::string &title)
+{
+   return PrintResolution(th1, pCanvas, NDCx, NDCy, xwidth, ywidth, anchor, color, title,
+                          3, 0.055);
+}
+
+void PrintResolution(TH1 *th1, TCanvas *pCanvas, float NDCx, float NDCy,
+                     const float &xwidth, const float &ywidth, const std::string &anchor,
+                     Color_t color, const std::string &title, const int &myLineWidth,
+                     const float &myFontSize)
 {
    TF1 *tf1 = th1->GetFunction("gausn");
    if (!tf1) {
@@ -201,9 +218,10 @@ void PrintResolution(TH1 *th1, TCanvas *pCanvas, float NDCx, float NDCy, const f
    TPaveText *pPaveText = new TPaveText(arg1, arg2, arg3, arg4, "NDC");
    pPaveText->SetTextAlign(12);
    pPaveText->SetLineColor(color);
+   pPaveText->SetTextSize(myFontSize);
    pPaveText->SetTextColor(kBlue - 1);
    pPaveText->SetShadowColor(0);
-   pPaveText->SetLineWidth(3);
+   pPaveText->SetLineWidth(myLineWidth);
    pPaveText->SetFillStyle(1001);
    pPaveText->SetFillColorAlpha(kWhite, 0.95);
    // pPaveText->SetBorderSize(0);
@@ -215,18 +233,20 @@ void PrintResolution(TH1 *th1, TCanvas *pCanvas, float NDCx, float NDCy, const f
    float reso = tf1->GetParameter(2) / tf1->GetParameter(1) * 100;
    float dreso = GetResoError(tf1);
 
-   // pPaveText->				AddText(Form("%s (%d entries)", title.c_str(), (int)th1->GetEntries()));
-   if(title != " ")
+   if (title != " " && !title.empty()) {
       pPaveText->AddText(Form("%s", title.c_str()));
-   pPaveText->AddText(Form("#frac{#sigma}{#mu}	= %.2f #pm %.2f %%", reso, dreso));
+      pPaveText->GetLine(0)->SetTextFont(22);
+      pPaveText->AddText(Form("#frac{#sigma}{#mu}	= %.2f #pm %.2f %%", reso, dreso));
+   }
    pPaveText->AddText(Form("#mu	= %.1f #pm %.1f", mu, dmu));
    pPaveText->AddText(Form("#sigma	= %.1f #pm %.1f", sigma, dsigma));
-   pPaveText->GetLine(0)->SetTextFont(22);
+   if (title == " " or title.empty())
+      pPaveText->AddText(Form("#frac{#sigma}{#mu}	= %.2f #pm %.2f %%", reso, dreso));
    pPaveText->DrawClone();
    delete pPaveText;
 
-   tf1->SetLineColor(color+1);
+   tf1->SetLineColor(color + 1);
    tf1->SetLineStyle(9);
-   tf1->SetLineWidth(3);
+   tf1->SetLineWidth(0);
    tf1->Draw("same");
 }

@@ -17,49 +17,46 @@ ClassImp(Process)
    for (int i = 0; i < 32; i++) {
       vmod_fph1f_XP.push_back(new TH1F(
          Form("fph1f_XP_%d", i),
-         Form("Energy loss in ERAM %i;dE/dx (ADC counts/cm);Count", channel2iD[i]), 100,
-         0, dEdxmax));
+         Form("ERAM %i;dE/dx [ADC counts/cm];Count", channel2iD[i]), 100, 0, dEdxmax));
       vmod_fph1f_WF.push_back(new TH1F(
          Form("fph1f_WF_%d", i),
-         Form("Energy loss in ERAM %i;dE/dx (ADC counts/cm);Count", channel2iD[i]), 100,
-         0, dEdxmax));
-      vmod_fph2f_XPdrift.push_back(
-         new TH2F(Form("fph2f_XPdrift_%d", i),
-                  Form("Energy loss (XP) vs drift time in ERAM %i;drift time "
-                       "(timebins);dE/dx (ADC counts/cm)",
-                       channel2iD[i]),
-                  510, 0, 510, 100, 0, dEdxmax));
+         Form("ERAM %i;dE/dx [ADC counts/cm];Count", channel2iD[i]), 100, 0, dEdxmax));
+      vmod_fph2f_XPdrift.push_back(new TH2F(Form("fph2f_XPdrift_%d", i),
+                                            Form("ERAM %i;drift time "
+                                                 "(timebins);dE/dx [ADC counts/cm]",
+                                                 channel2iD[i]),
+                                            510, 0, 510, 100, 0, dEdxmax));
    }
 
-   // dEdx vs absolute momentum (mean)
+   // dEdx vs Momentum (mean)
    for (int i = 0; i < nabsmommeanbins; i++) {
       int absmommeanmin = i * absmommeanbinwidth;
       int absmommeanmax = (i + 1) * absmommeanbinwidth;
       vabsmommean_fph1f_WF.push_back(
          new TH1F(Form("fph1f_absmommean_WF_%d_%d", absmommeanmin, absmommeanmax),
-                  Form("Energy loss | %d < p < %d; dE/dx (ADC counts/cm); Count",
-                       absmommeanmin, absmommeanmax),
+                  Form("[%d, %d] MeV/c; dE/dx [ADC counts/cm]; Count", absmommeanmin,
+                       absmommeanmax),
                   100, 0, dEdxmax));
       vabsmommean_fph1f_XP.push_back(
          new TH1F(Form("fph1f_absmommean_XP_%d_%d", absmommeanmin, absmommeanmax),
-                  Form("Energy loss | %d < p < %d; dE/dx (ADC counts/cm); Count",
-                       absmommeanmin, absmommeanmax),
+                  Form("[%d, %d] MeV/c; dE/dx [ADC counts/cm]; Count", absmommeanmin,
+                       absmommeanmax),
                   100, 0, dEdxmax));
    }
 
-   // dEdx vs absolute momentum (resolution)
+   // dEdx vs Momentum (resolution)
    for (int i = 0; i < nabsmomresobins; i++) {
       int absmomresomin = i * absmomresobinwidth;
       int absmomresomax = (i + 1) * absmomresobinwidth;
       vabsmomreso_fph1f_WF.push_back(
          new TH1F(Form("fph1f_absmomreso_WF_%d_%d", absmomresomin, absmomresomax),
-                  Form("Energy loss | %d < p < %d; dE/dx (ADC counts/cm); Count",
-                       absmomresomin, absmomresomax),
+                  Form("[%d, %d] MeV/c; dE/dx [ADC counts/cm]; Count", absmomresomin,
+                       absmomresomax),
                   100, 0, dEdxmax));
       vabsmomreso_fph1f_XP.push_back(
          new TH1F(Form("fph1f_absmomreso_XP_%d_%d", absmomresomin, absmomresomax),
-                  Form("Energy loss | %d < p < %d; dE/dx (ADC counts/cm); Count",
-                       absmomresomin, absmomresomax),
+                  Form("[%d, %d] MeV/c; dE/dx [ADC counts/cm]; Count", absmomresomin,
+                       absmomresomax),
                   100, 0, dEdxmax));
    }
 
@@ -67,20 +64,21 @@ ClassImp(Process)
    for (int i = 0; i < nmombins; i++) {
       int mommin = i * mombinwidth - momrange;
       int mommax = (i + 1) * mombinwidth - momrange;
-      vmom_fph1f_WF.push_back(new TH1F(
-         Form("fph1f_mom_WF_%d_%d", mommin, mommax),
-         Form("Energy loss | %d < p < %d; dE/dx (ADC counts/cm); Count", mommin, mommax),
-         100, 0, dEdxmax));
-      vmom_fph1f_XP.push_back(new TH1F(
-         Form("fph1f_mom_XP_%d_%d", mommin, mommax),
-         Form("Energy loss | %d < p < %d; dE/dx (ADC counts/cm); Count", mommin, mommax),
-         100, 0, dEdxmax));
+      vmom_fph1f_WF.push_back(
+         new TH1F(Form("fph1f_mom_WF_%d_%d", mommin, mommax),
+                  Form("[%d, %d] MeV/c; dE/dx [ADC counts/cm]; Count", mommin, mommax),
+                  100, 0, dEdxmax));
+      vmom_fph1f_XP.push_back(
+         new TH1F(Form("fph1f_mom_XP_%d_%d", mommin, mommax),
+                  Form("[%d, %d] MeV/c; dE/dx [ADC counts/cm]; Count", mommin, mommax),
+                  100, 0, dEdxmax));
       vmom_fph1f_pullmu.push_back(new TH1F(
          Form("fph1f_pull_%d_%d", mommin, mommax),
-         Form("Muon pull | %d < p < %d; Pull; Count", mommin, mommax), 100, -20, 20));
-      vmom_fph1f_pullelec.push_back(new TH1F(
-         Form("fph1f_pullelec_%d_%d", mommin, mommax),
-         Form("Electron pull | %d < p < %d; Pull; Count", mommin, mommax), 100, -20, 20));
+         Form("Muon pull | [%d, %d] MeV/c; Pull; Count", mommin, mommax), 100, -20, 20));
+      vmom_fph1f_pullelec.push_back(
+         new TH1F(Form("fph1f_pullelec_%d_%d", mommin, mommax),
+                  Form("Electron pull | [%d, %d] MeV/c; Pull; Count", mommin, mommax),
+                  100, -20, 20));
    }
 
    // dEdx vs X position
@@ -89,12 +87,10 @@ ClassImp(Process)
       int Xmax = (i + 1) * xposbinwidth - xposrange;
       vX_fph1f_WF.push_back(new TH1F(
          Form("fph1f_X_WF_%d_%d", Xmin, Xmax),
-         Form("Energy loss | %d < X < %d; dE/dx (ADC counts/cm); Count", Xmin, Xmax), 100,
-         0, dEdxmax));
+         Form("%d < X < %d; dE/dx [ADC counts/cm]; Count", Xmin, Xmax), 100, 0, dEdxmax));
       vX_fph1f_XP.push_back(new TH1F(
          Form("fph1f_X_XP_%d_%d", Xmin, Xmax),
-         Form("Energy loss | %d < X < %d; dE/dx (ADC counts/cm); Count", Xmin, Xmax), 100,
-         0, dEdxmax));
+         Form("%d < X < %d; dE/dx [ADC counts/cm]; Count", Xmin, Xmax), 100, 0, dEdxmax));
    }
 
    // dEdx vs drift distance (mean)
@@ -103,13 +99,11 @@ ClassImp(Process)
       int ddmax = (i + 1) * ddmeanbinwidth;
       vddmean_fph1f_WF.push_back(new TH1F(
          Form("ph1f_dd_WF_%d_%d", ddmin, ddmax),
-         Form("Energy loss | %d < drift distance < %d; dE/dx (ADC counts/cm); Count",
-              ddmin, ddmax),
+         Form("%d < drift distance < %d; dE/dx [ADC counts/cm]; Count", ddmin, ddmax),
          100, 0, dEdxmax));
       vddmean_fph1f_XP.push_back(new TH1F(
          Form("ph1f_dd_XP_%d_%d", ddmin, ddmax),
-         Form("Energy loss | %d < drift distance < %d; dE/dx (ADC counts/cm); Count",
-              ddmin, ddmax),
+         Form("%d < drift distance < %d; dE/dx [ADC counts/cm]; Count", ddmin, ddmax),
          100, 0, dEdxmax));
    }
 
@@ -117,64 +111,62 @@ ClassImp(Process)
    for (int i = 0; i < nddresobins; i++) {
       int ddresomin = i * ddresobinwidth;
       int ddresomax = (i + 1) * ddresobinwidth;
-      vddreso_fph1f_WF.push_back(new TH1F(
-         Form("ph1f_ddreso_WF_%d_%d", ddresomin, ddresomax),
-         Form("Energy loss | %d < drift distance < %d; dE/dx (ADC counts/cm); Count",
-              ddresomin, ddresomax),
-         100, 0, dEdxmax));
-      vddreso_fph1f_XP.push_back(new TH1F(
-         Form("ph1f_ddreso_XP_%d_%d", ddresomin, ddresomax),
-         Form("Energy loss | %d < drift distance < %d; dE/dx (ADC counts/cm); Count",
-              ddresomin, ddresomax),
-         100, 0, dEdxmax));
+      vddreso_fph1f_WF.push_back(
+         new TH1F(Form("ph1f_ddreso_WF_%d_%d", ddresomin, ddresomax),
+                  Form("%d < drift distance < %d; dE/dx [ADC counts/cm]; Count",
+                       ddresomin, ddresomax),
+                  100, 0, dEdxmax));
+      vddreso_fph1f_XP.push_back(
+         new TH1F(Form("ph1f_ddreso_XP_%d_%d", ddresomin, ddresomax),
+                  Form("%d < drift distance < %d; dE/dx [ADC counts/cm]; Count",
+                       ddresomin, ddresomax),
+                  100, 0, dEdxmax));
    }
 
    // dEdx vs drift time
    for (int i = 0; i < ndtbins; i++) {
       int dtmin = i * dtbinwidth;
       int dtmax = (i + 1) * dtbinwidth;
-      vdt_fph1f_WF.push_back(
-         new TH1F(Form("ph1f_dt_WF_%d_%d", dtmin, dtmax),
-                  Form("Energy loss | %d < drift time < %d; dE/dx (ADC counts/cm); Count",
-                       dtmin, dtmax),
-                  100, 0, dEdxmax));
-      vdt_fph1f_XP.push_back(
-         new TH1F(Form("ph1f_dt_XP_%d_%d", dtmin, dtmax),
-                  Form("Energy loss | %d < drift time < %d; dE/dx (ADC counts/cm); Count",
-                       dtmin, dtmax),
-                  100, 0, dEdxmax));
+      vdt_fph1f_WF.push_back(new TH1F(
+         Form("ph1f_dt_WF_%d_%d", dtmin, dtmax),
+         Form("%d < drift time < %d; dE/dx [ADC counts/cm]; Count", dtmin, dtmax), 100, 0,
+         dEdxmax));
+      vdt_fph1f_XP.push_back(new TH1F(
+         Form("ph1f_dt_XP_%d_%d", dtmin, dtmax),
+         Form("%d < drift time < %d; dE/dx [ADC counts/cm]; Count", dtmin, dtmax), 100, 0,
+         dEdxmax));
    }
 
-   // dEdx vs track length (mean)
+   // dEdx vs Track length (mean)
    for (int i = 0; i < ntrklenmeanbins; i++) {
       int trklenmin = i * trklenmeanbinwidth;
       int trklenmax = (i + 1) * trklenmeanbinwidth;
-      vtrklenmean_fph1f_WF.push_back(new TH1F(
-         Form("ph1f_trklen_WF_%d_%d", trklenmin, trklenmax),
-         Form("Energy loss | %d < track length < %d; dE/dx (ADC counts/cm); Count",
-              trklenmin, trklenmax),
-         100, 0, dEdxmax));
-      vtrklenmean_fph1f_XP.push_back(new TH1F(
-         Form("ph1f_trklen_XP_%d_%d", trklenmin, trklenmax),
-         Form("Energy loss | %d < track length < %d; dE/dx (ADC counts/cm); Count",
-              trklenmin, trklenmax),
-         100, 0, dEdxmax));
+      vtrklenmean_fph1f_WF.push_back(
+         new TH1F(Form("ph1f_trklen_WF_%d_%d", trklenmin, trklenmax),
+                  Form("%d < Track length < %d; dE/dx [ADC counts/cm]; Count", trklenmin,
+                       trklenmax),
+                  100, 0, dEdxmax));
+      vtrklenmean_fph1f_XP.push_back(
+         new TH1F(Form("ph1f_trklen_XP_%d_%d", trklenmin, trklenmax),
+                  Form("%d < Track length < %d; dE/dx [ADC counts/cm]; Count", trklenmin,
+                       trklenmax),
+                  100, 0, dEdxmax));
    }
 
-   // dEdx vs track length (resolution)
+   // dEdx vs Track length (resolution)
    for (int i = 0; i < ntrklenresobins; i++) {
       int trklenresomin = i * trklenresobinwidth;
       int trklenresomax = (i + 1) * trklenresobinwidth;
-      vtrklenreso_fph1f_WF.push_back(new TH1F(
-         Form("ph1f_trklenreso_WF_%d_%d", trklenresomin, trklenresomax),
-         Form("Energy loss | %d < track length < %d; dE/dx (ADC counts/cm); Count",
-              trklenresomin, trklenresomax),
-         100, 0, dEdxmax));
-      vtrklenreso_fph1f_XP.push_back(new TH1F(
-         Form("ph1f_trklenreso_XP_%d_%d", trklenresomin, trklenresomax),
-         Form("Energy loss | %d < track length < %d; dE/dx (ADC counts/cm); Count",
-              trklenresomin, trklenresomax),
-         100, 0, dEdxmax));
+      vtrklenreso_fph1f_WF.push_back(
+         new TH1F(Form("ph1f_trklenreso_WF_%d_%d", trklenresomin, trklenresomax),
+                  Form("%d < Track length < %d; dE/dx [ADC counts/cm]; Count",
+                       trklenresomin, trklenresomax),
+                  100, 0, dEdxmax));
+      vtrklenreso_fph1f_XP.push_back(
+         new TH1F(Form("ph1f_trklenreso_XP_%d_%d", trklenresomin, trklenresomax),
+                  Form("%d < Track length < %d; dE/dx [ADC counts/cm]; Count",
+                       trklenresomin, trklenresomax),
+                  100, 0, dEdxmax));
    }
 
    // dEdx vs absolute phi angle (mean)
@@ -183,12 +175,12 @@ ClassImp(Process)
       int absphimax = (i + 1) * absphimeanbinwidth;
       vabsphimean_fph1f_WF.push_back(
          new TH1F(Form("fph1f_absphi_WF_%d_%d", absphimin, absphimax),
-                  Form("Energy loss | %d < #varphi < %d; dE/dx (ADC counts/cm); Count",
+                  Form("#varphi #in [%d#circ, %d#circ]; dE/dx [ADC counts/cm]; Count",
                        absphimin, absphimax),
                   100, 0, dEdxmax));
       vabsphimean_fph1f_XP.push_back(
          new TH1F(Form("fph1f_absphi_XP_%d_%d", absphimin, absphimax),
-                  Form("Energy loss | %d < #varphi < %d; dE/dx (ADC counts/cm); Count",
+                  Form("#varphi #in [%d#circ, %d#circ]; dE/dx [ADC counts/cm]; Count",
                        absphimin, absphimax),
                   100, 0, dEdxmax));
    }
@@ -199,12 +191,12 @@ ClassImp(Process)
       int absphiresomax = (i + 1) * absphiresobinwidth;
       vabsphireso_fph1f_WF.push_back(
          new TH1F(Form("fph1f_absphireso_WF_%d_%d", absphiresomin, absphiresomax),
-                  Form("Energy loss | %d < #varphi < %d; dE/dx (ADC counts/cm); Count",
+                  Form("#varphi #in [%d#circ, %d#circ]; dE/dx [ADC counts/cm]; Count",
                        absphiresomin, absphiresomax),
                   100, 0, dEdxmax));
       vabsphireso_fph1f_XP.push_back(
          new TH1F(Form("fph1f_absphireso_XP_%d_%d", absphiresomin, absphiresomax),
-                  Form("Energy loss | %d < #varphi < %d; dE/dx (ADC counts/cm); Count",
+                  Form("#varphi #in [%d#circ, %d#circ]; dE/dx [ADC counts/cm]; Count",
                        absphiresomin, absphiresomax),
                   100, 0, dEdxmax));
    }
@@ -215,12 +207,12 @@ ClassImp(Process)
       int phimax = (i + 1) * phibinwidth - phirange;
       vphi_fph1f_WF.push_back(
          new TH1F(Form("fph1f_phi_WF_%d_%d", phimin, phimax),
-                  Form("Energy loss | %d < #varphi < %d; dE/dx (ADC counts/cm); Count",
+                  Form("#varphi #in [%d#circ, %d#circ]; dE/dx [ADC counts/cm]; Count",
                        phimin, phimax),
                   100, 0, dEdxmax));
       vphi_fph1f_XP.push_back(
          new TH1F(Form("fph1f_phi_XP_%d_%d", phimin, phimax),
-                  Form("Energy loss | %d < #varphi < %d; dE/dx (ADC counts/cm); Count",
+                  Form("#varphi #in [%d#circ, %d#circ]; dE/dx [ADC counts/cm]; Count",
                        phimin, phimax),
                   100, 0, dEdxmax));
    }
@@ -231,12 +223,12 @@ ClassImp(Process)
       int absthetamax = (i + 1) * absthetameanbinwidth;
       vabsthetamean_fph1f_WF.push_back(
          new TH1F(Form("fph1f_abstheta_WF_%d_%d", absthetamin, absthetamax),
-                  Form("Energy loss | %d < #theta < %d; dE/dx (ADC counts/cm); Count",
+                  Form("#theta #in [%d#circ, %d#circ]; dE/dx [ADC counts/cm]; Count",
                        absthetamin, absthetamax),
                   100, 0, dEdxmax));
       vabsthetamean_fph1f_XP.push_back(
          new TH1F(Form("fph1f_abstheta_XP_%d_%d", absthetamin, absthetamax),
-                  Form("Energy loss | %d < #theta < %d; dE/dx (ADC counts/cm); Count",
+                  Form("#theta #in [%d#circ, %d#circ]; dE/dx [ADC counts/cm]; Count",
                        absthetamin, absthetamax),
                   100, 0, dEdxmax));
    }
@@ -247,12 +239,12 @@ ClassImp(Process)
       int absthetaresomax = (i + 1) * absthetaresobinwidth;
       vabsthetareso_fph1f_WF.push_back(
          new TH1F(Form("fph1f_absthetareso_WF_%d_%d", absthetaresomin, absthetaresomax),
-                  Form("Energy loss | %d < #theta < %d; dE/dx (ADC counts/cm); Count",
+                  Form("#theta #in [%d#circ, %d#circ]; dE/dx [ADC counts/cm]; Count",
                        absthetaresomin, absthetaresomax),
                   100, 0, dEdxmax));
       vabsthetareso_fph1f_XP.push_back(
          new TH1F(Form("fph1f_absthetareso_XP_%d_%d", absthetaresomin, absthetaresomax),
-                  Form("Energy loss | %d < #theta < %d; dE/dx (ADC counts/cm); Count",
+                  Form("#theta #in [%d#circ, %d#circ]; dE/dx [ADC counts/cm]; Count",
                        absthetaresomin, absthetaresomax),
                   100, 0, dEdxmax));
    }
@@ -263,22 +255,24 @@ ClassImp(Process)
       int thetamax = (i + 1) * thetabinwidth - thetarange;
       vtheta_fph1f_WF.push_back(
          new TH1F(Form("fph1f_theta_WF_%d_%d", thetamin, thetamax),
-                  Form("Energy loss | %d < #theta < %d; dE/dx (ADC counts/cm); Count",
+                  Form("#theta #in [%d#circ, %d#circ]; dE/dx [ADC counts/cm]; Count",
                        thetamin, thetamax),
                   100, 0, dEdxmax));
       vtheta_fph1f_XP.push_back(
          new TH1F(Form("fph1f_theta_XP_%d_%d", thetamin, thetamax),
-                  Form("Energy loss | %d < #theta < %d; dE/dx (ADC counts/cm); Count",
+                  Form("#theta #in [%d#circ, %d#circ]; dE/dx [ADC counts/cm]; Count",
                        thetamin, thetamax),
                   100, 0, dEdxmax));
       vtheta_fph1f_pullmu.push_back(
          new TH1F(Form("fph1f_pullmu_%d_%d", thetamin, thetamax),
-                  Form("Muon pull | %d < #theta < %d; Pull; Count", thetamin, thetamax),
+                  Form("Muon pull | #theta #in [%d#circ, %d#circ]; Pull; Count", thetamin,
+                       thetamax),
                   100, -20, 20));
-      vtheta_fph1f_pullelec.push_back(new TH1F(
-         Form("fph1f_pullelec_%d_%d", thetamin, thetamax),
-         Form("Electron pull | %d < #theta < %d; Pull; Count", thetamin, thetamax), 100,
-         -20, 20));
+      vtheta_fph1f_pullelec.push_back(
+         new TH1F(Form("fph1f_pullelec_%d_%d", thetamin, thetamax),
+                  Form("Electron pull | #theta #in [%d#circ, %d#circ]; Pull; Count",
+                       thetamin, thetamax),
+                  100, -20, 20));
    }
 }
 
@@ -402,6 +396,7 @@ Process::~Process()
    delete fph2f_chi2ndfR;
    delete fph2f_lentheta;
    delete fph2f_lenphi;
+   delete fph1f_Xpos;
    delete fph1f_dir0;
    delete fph1f_dir1;
    delete fph1f_dir2;
@@ -537,7 +532,17 @@ void Process::SetCuts()
       nclminbeam = 130;
    }
    fcutslist +=
-      ("_B" + std::to_string(nclminbeam) + "C" + std::to_string(nclmincosmics) + "ncl");
+      ("_B" + std::to_string(nclminbeam) + "C" + std::to_string(nclmincosmics) +
+      "ncl");
+
+   chi2max = 20;
+   fcutslist += ("_chi2ndf" + std::to_string(chi2max));
+
+   // momcutlow = 300, momcuthigh = 500;
+   // fcutslist += ("_" + std::to_string(momcutlow) + "mom" + std::to_string(momcuthigh));
+
+   xcutmin = -981, xcutmax = 981;
+   fcutslist += ("_XinHAT");
 
    // nclmin = 50, nclmax = 150;
    // fcutslist += ("_" + std::to_string(nclmin) + "ncl" + std::to_string(nclmax));
@@ -551,17 +556,8 @@ void Process::SetCuts()
    // pullmumax = 2;
    // fcutslist += ("_pullmu" + std::to_string(pullmumax));
 
-   // chi2max = 5;
-   // fcutslist += ("_chi2ndf" + std::to_string(chi2max));
-
    // nclmin = 130;
    // fcutslist += ("_" + std::to_string(nclmin) + "ncl");
-
-   momcutlow = 300, momcuthigh = 500;
-   fcutslist += ("_" + std::to_string(momcutlow) + "mom" + std::to_string(momcuthigh));
-
-   // xcutmin = -981, xcutmax = 981;
-   // fcutslist += ("_" + std::to_string(xcutmin) + "x" + std::to_string(xcutmax));
 
    // phimin = 0;
    // phimax = 60;
@@ -687,7 +683,7 @@ void Process::Run()
          fph2f_WFmom->Fill(mom, wf);
          fph2f_XPmom->Fill(mom, xp);
 
-         // dEdx vs absolute momentum
+         // dEdx vs Momentum
          absmomresoindex = (int)std::floor(fabs(mom) / absmomresobinwidth);
          absmommeanindex = (int)std::floor(fabs(mom) / absmommeanbinwidth);
          if (fabs(mom) < absmomrange) {
@@ -737,7 +733,7 @@ void Process::Run()
          continue;
 
       // Track length related histograms ----------------------------------------------
-      // dEdx vs track length
+      // dEdx vs Track length
       trklenmeanindex = (int)std::floor(dx / trklenmeanbinwidth);
       trklenresoindex = (int)std::floor(dx / trklenresobinwidth);
       if (trklenmeanindex < ntrklenmeanbins) {
@@ -746,7 +742,7 @@ void Process::Run()
          vtrklenreso_fph1f_WF[trklenresoindex]->Fill(wf);
          vtrklenreso_fph1f_XP[trklenresoindex]->Fill(xp);
       }
-      // Other track length histograms
+      // Other Track length histograms
       fph2f_XPlen->Fill(dx / 10, xp);
       fph1f_trklen->Fill(dx / 10);
       fph2f_momlen->Fill(dx / 10, mom);
@@ -755,7 +751,7 @@ void Process::Run()
       fph2f_lentheta->Fill(theta, dx / 10);
       fph2f_lenphi->Fill(phi, dx / 10);
 
-      // Cut on track length -----------------------------------------------------------
+      // Cut on Track length -----------------------------------------------------------
       if (nclmin > ncl or ncl > nclmax)
          continue;
       if (dxmin > dx / 10 or dxmax < dx / 10)
@@ -782,6 +778,7 @@ void Process::Run()
       fph1f_theta->Fill(theta);
       fph2f_phitheta->Fill(theta, phi);
       fph1f_chi2->Fill(chi2 / NDF);
+      fph1f_Xpos->Fill(pos[0]);
 
       // dEdx vs X position
       xposindex = (int)std::round(pos[0] / xposbinwidth) + nxposbins / 2;
@@ -886,7 +883,7 @@ void Process::Run()
    }
 
    // TGraph filling
-   // absolute momentum (mean) ----------------------------------------------------------
+   // Momentum (mean) ----------------------------------------------------------
    int ivalid = 0;
    for (int i = 0; i < nabsmommeanbins; i++) {
       int nentries_here = vabsmommean_fph1f_WF[i]->GetEntries();
@@ -912,7 +909,7 @@ void Process::Run()
       ivalid++;
    }
 
-   // absolute momentum (resolution) ----------------------------------------------------
+   // Momentum (resolution) ----------------------------------------------------
    ivalid = 0;
    for (int i = 0; i < nabsmomresobins; i++) {
       int nentries_here = vabsmomreso_fph1f_WF[i]->GetEntries();
@@ -1132,7 +1129,7 @@ void Process::Run()
       ivalid++;
    }
 
-   // track length (mean)
+   // Track length (mean)
    ivalid = 0;
    for (int i = 0; i < ntrklenmeanbins; i++) {
       int nentries_here = vtrklenmean_fph1f_WF[i]->GetEntries();
@@ -1158,7 +1155,7 @@ void Process::Run()
       ivalid++;
    }
 
-   // track length (resolution)
+   // Track length (resolution)
    ivalid = 0;
    for (int i = 0; i < ntrklenresobins; i++) {
       int nentries_here = vtrklenreso_fph1f_WF[i]->GetEntries();

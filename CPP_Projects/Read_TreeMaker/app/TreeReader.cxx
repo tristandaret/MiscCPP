@@ -6,18 +6,19 @@
 int main()
 {
 
-   int do_run = 1;
-   int do_draw = 1;
-   int do_draw_comparison = 0;
+   int do_run = 0;
+   int do_draw = 0;
+   int do_draw_comparison = 1;
    // Output structure: type -> run -> comment -> fileName
 
    std::vector<std::string> v_types;
    std::vector<std::string> v_runs;
    std::vector<std::string> v_comments;
+   std::vector<std::string> v_legend;
 
-   v_types.push_back("beam");
-   v_runs.push_back("treeMaker_beam_may2024");
-   v_comments.push_back("nd280_14.32");
+   // v_types.push_back("beam");
+   // v_runs.push_back("treeMaker_beam_may2024");
+   // v_comments.push_back("nd280_14.32");
 
    // v_types.push_back("beam");
    // v_runs.push_back("tree_mu-_40-4895MeV_sandmu");
@@ -25,12 +26,31 @@ int main()
 
    // v_types.push_back("cosmics");
    // v_runs.push_back("TreeMaker_dog1_00001148");
-   // v_comments.push_back("nd280_14.32");
+   // v_comments.push_back("nd280_14.33");
 
    // v_types.push_back("cosmics");
    // v_runs.push_back("tree_mu-_40-4895MeV_cosmics");
    // v_comments.push_back("BFieldON_14.32");
 
+   v_types.push_back("cosmics");
+   v_runs.push_back("TreeMaker_dog1_00000920");
+   v_comments.push_back("nd280_14.33_nref");
+   v_legend.push_back("No correction");
+
+   v_types.push_back("cosmics");
+   v_runs.push_back("TreeMaker_dog1_00000920");
+   v_comments.push_back("nd280_14.33_GCorrModule");
+   v_legend.push_back("Module correction");
+
+   v_types.push_back("cosmics");
+   v_runs.push_back("TreeMaker_dog1_00000920");
+   v_comments.push_back("nd280_14.33_GCorrPad");
+   v_legend.push_back("Pad correction");
+
+   // ---------
+
+
+   // std::string tag = "0000_s0_n125000_ref";
    std::string tag = "";
 
    std::vector<std::string> v_filepaths;
@@ -42,12 +62,13 @@ int main()
       std::string type = v_types[i];
       std::string run = v_runs[i];
       std::string comment = v_comments[i];
+      std::string legend = v_legend[i];
 
       std::string fileName = run;
-      if (tag != "")
-         fileName += "_" + tag;
       if (comment != "")
          fileName += "_" + comment;
+      if (tag != "")
+         fileName += "_" + tag;
 
       // data
       std::string inputFolderPath = "/local/home/td263283/Documents/Code/CPP/"
@@ -81,6 +102,7 @@ int main()
       process.SetRun(run);
       process.SetTag(tag);
       process.SetComment(comment);
+      process.SetLegend(legend);
       process.SetFileName(fileName);
       process.SetInputFile(inputFilePath);
       process.SetOutputROOTfolder(outputROOTFolder);
@@ -98,7 +120,9 @@ int main()
          draw.Run(v_filepaths.back());
    }
    if (v_comments.size() > 1 && do_draw_comparison)
-      draw.Compare(v_filepaths, "runs");
+      // draw.Compare(v_filepaths, "runs");
+      // draw.Compare(v_filepaths, "comments");
+      draw.CompareComments(v_filepaths);
 
    return 0;
 }

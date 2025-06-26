@@ -35,19 +35,27 @@ void Draw::Run(const std::string &filepath)
    fpCanvas->cd();
    gStyle->SetOptStat(0);
    gStyle->SetOptFit(0);
-   fpLegend = new TLegend(0.15, 0.74, 0.35, 0.94);
+   fpLegend = new TLegend(0.8, 0.8, 0.98, 0.98);
    fpLegend->SetTextSize(0.08);
    fpLegend->SetFillStyle(1001);
-   fpLegend->SetTextColor(kBlue-1);
-   TLegendEntry *pentryWF = fpLegend->AddEntry((TObject *)0, "Previous", "p");
+   fpLegend->SetTextColor(kBlue - 1);
+   fpLegend->SetBorderSize(2);
+   fpLegend->SetLineColor(kBlue - 1);
+   fpLegend->SetTextAlign(22);
+   fpLegend->SetMargin(0.4);
+   TLegendEntry *pentryWF = fpLegend->AddEntry((TObject *)0, "WF", "p");
    pentryWF->SetMarkerColor(kCyan + 2);
    pentryWF->SetMarkerSize(9);
    pentryWF->SetMarkerStyle(33);
-   TLegendEntry *pentryXP = fpLegend->AddEntry((TObject *)0, "My work", "p");
+   TLegendEntry *pentryXP = fpLegend->AddEntry((TObject *)0, "XP", "p");
    pentryXP->SetMarkerColor(kMagenta + 2);
    pentryXP->SetMarkerSize(9);
    pentryXP->SetMarkerStyle(47);
-   gPad->SetTopMargin(0.05);
+   gStyle->SetTitleSize(0.07, "xyz");
+   gStyle->SetLabelSize(0.06, "xyz");
+   // gStyle->SetNdivisions(505, "xyz");
+   // gStyle->SetTitleOffset(0.8, "y");
+   SetMarginH1((TPad *)gPad);
    float invX = 0;
 
    // -----------------------------------------------------------------------------------------------------------------
@@ -60,12 +68,13 @@ void Draw::Run(const std::string &filepath)
       invX = 0.4;
    pr.fph1f_WF->Draw("HIST");
    pr.fph1f_XP->Draw("HIST sames");
-   PrintResolution(pr.fph1f_XP, fpCanvas, 0.65 - invX, 0.58, kMagenta + 2, "XP");
-   PrintResolution(pr.fph1f_WF, fpCanvas, 0.65 - invX, 0.25, kCyan + 2, "WF");
+   PrintResolution(pr.fph1f_XP, fpCanvas, 0.65 - invX, 0.6, kMagenta + 2, "XP");
+   PrintResolution(pr.fph1f_WF, fpCanvas, 0.65 - invX, 0.27, kCyan + 2, "WF");
    fpCanvas->SaveAs((fRealpathPDF + "(").c_str());
 
    // -----------------------------------------------------------------------------------------------------------------
    // dE/dx ERAM by ERAM
+   fpCanvas->SetCanvasSize(fpCanvas->GetWw(), 1200);
    float maxdEdx = 0;
    for (TH1F *hist : pr.vmod_fph1f_WF)
       if (hist->GetMaximum() > maxdEdx)
@@ -76,7 +85,7 @@ void Draw::Run(const std::string &filepath)
 
    float xMax = 0, yMax = 0, reso = 0, dreso = 0;
    fpCanvas->Clear();
-   fpCanvas->Divide(4, 4);
+   fpCanvas->Divide(4, 4, 0.0, 0.0);
    for (int i = 0; i < 32; i++) {
       pr.vmod_fph1f_WF[i]->SetAxisRange(0, 1.1 * maxdEdx, "Y");
       pr.vmod_fph1f_XP[i]->SetAxisRange(0, 1.1 * maxdEdx, "Y");
@@ -84,438 +93,92 @@ void Draw::Run(const std::string &filepath)
       Graphic_setup(pr.vmod_fph1f_XP[i], 0.5, 1, kMagenta + 2, 1, kMagenta - 2, kMagenta,
                     0.2);
    }
-   for (int i = 0; i < 16; i++) {
-      fpCanvas->cd(i + 1);
-      pr.vmod_fph1f_WF[i]->Draw("HIST");
-      pr.vmod_fph1f_XP[i]->Draw("HIST same");
-      if (pr.vmod_fph1f_WF[i]->GetEntries() < 100)
-         continue;
-      xMax = pr.vmod_fph1f_WF[i]->GetXaxis()->GetXmax();
-      yMax = pr.vmod_fph1f_WF[i]->GetMaximum();
-      pr.vmod_fph1f_WF[i]->GetMean() > dEdxmax / 2 ? invX = 0.4 : invX = 0;
-      PrintResolution(pr.vmod_fph1f_XP[i], fpCanvas, 0.65 - invX, 0.58, kMagenta + 2,
-                      "XP");
-      PrintResolution(pr.vmod_fph1f_WF[i], fpCanvas, 0.65 - invX, 0.25, kCyan + 2, "WF");
-   }
-   fpCanvas->SaveAs(fRealpathPDF.c_str());
 
-   for (int i = 16; i < 32; i++) {
-      fpCanvas->cd(i + 1 - 16);
-      pr.vmod_fph1f_WF[i]->Draw("HIST");
-      pr.vmod_fph1f_XP[i]->Draw("HIST same");
+   std::vector<int> vSouth = {16, 17, 18, 19, 20, 21, 22, 23, 0, 1, 2, 3, 4, 5, 6, 7};
+   std::vector<int> vNorth = {24, 25, 26, 27, 28, 29, 30, 31,
+                              8,  9,  10, 11, 12, 13, 14, 15};
 
-      if (pr.vmod_fph1f_WF[i]->GetEntries() < 100)
-         continue;
-      xMax = pr.vmod_fph1f_WF[i]->GetXaxis()->GetXmax();
-      yMax = pr.vmod_fph1f_WF[i]->GetMaximum();
-      pr.vmod_fph1f_WF[i]->GetMean() > dEdxmax / 2 ? invX = 0.4 : invX = 0;
-      PrintResolution(pr.vmod_fph1f_XP[i], fpCanvas, 0.65 - invX, 0.58, kMagenta + 2,
-                      "XP");
-      PrintResolution(pr.vmod_fph1f_WF[i], fpCanvas, 0.65 - invX, 0.25, kCyan + 2, "WF");
+   for (std::vector<int> vEndplate : {vSouth, vNorth}) {
+      for (int i = 0; i < 16; i++) {
+         fpCanvas->cd(i + 1);
+         int eramIndex = vEndplate[i];
+         int row = i / 4;
+         int col = i % 4;
+         // margins: left, right, bottom, top
+         double left = 0, bottom = 0, myFontSize = 0.1;
+         double leftPave = 0.05, rightPave = 0.35, bottomPave = 0.83, topPave = 0.93;
+         double bottomResoShift = 0, leftResoShift = 0;
+         if (col == 0) {
+            left = 0.15;
+            leftPave += 0.13;
+            rightPave += 0.1;
+            leftResoShift = 0.1;
+         }
+         if (row == 3) {
+            bottom = 0.15;
+            myFontSize -= 0.012;
+            bottomResoShift = 0.1;
+            bottomPave += 0.03;
+            topPave += 0.025;
+         }
+         gPad->SetMargin(left, 0, bottom, 0);
+
+         TPaveText pavetextMod(leftPave, bottomPave, rightPave, topPave, "NDC");
+         pavetextMod.SetTextAlign(22);
+         pavetextMod.SetTextSize(myFontSize);
+         pavetextMod.SetFillStyle(1001);
+         pavetextMod.SetFillColor(kWhite);
+         pavetextMod.SetBorderSize(1);
+         pavetextMod.AddText(pr.vmod_fph1f_WF[eramIndex]->GetTitle());
+
+         pr.vmod_fph1f_WF[eramIndex]->SetTitle("");
+         pr.vmod_fph1f_WF[eramIndex]->Draw("HIST");
+         pr.vmod_fph1f_XP[eramIndex]->Draw("HIST same");
+         if (pr.vmod_fph1f_WF[eramIndex]->GetEntries() < 100) {
+            pavetextMod.DrawClone();
+            continue;
+         }
+         xMax = pr.vmod_fph1f_WF[eramIndex]->GetXaxis()->GetXmax();
+         yMax = pr.vmod_fph1f_WF[eramIndex]->GetMaximum();
+         pr.vmod_fph1f_WF[eramIndex]->GetMean() > dEdxmax / 2 ? invX = 0.4 : invX = 0;
+         float x0 = 0.43, y0 = 0.55, xwidth = x0 + 0.1;
+         PrintResolution(pr.vmod_fph1f_XP[eramIndex], fpCanvas, x0 + leftResoShift - invX,
+                         y0 + 0.5 * bottomResoShift, xwidth - 0.8 * leftResoShift,
+                         0.4 - 0.5 * bottomResoShift, "south west", kMagenta + 2, "", 1,
+                         myFontSize);
+         PrintResolution(pr.vmod_fph1f_WF[eramIndex], fpCanvas, x0 + leftResoShift - invX,
+                         0.1 + bottomResoShift, xwidth - 0.8 * leftResoShift,
+                         0.4 - 0.5 * bottomResoShift, "south west", kCyan + 2, "", 1,
+                         myFontSize);
+         pavetextMod.DrawClone();
+      }
+      fpCanvas->SaveAs(fRealpathPDF.c_str());
    }
-   fpCanvas->SaveAs(fRealpathPDF.c_str());
+   fpCanvas->SetCanvasSize(fpCanvas->GetWw(), 1350);
 
    // -----------------------------------------------------------------------------------------------------------------
    // dE/dx XP vs WF
    fpCanvas->Clear();
-   gPad->SetRightMargin(0.13);
+   SetMarginH2((TPad *)gPad);
    gStyle->SetOptStat("merou");
-   gStyle->SetStatX(0.33);
-   gStyle->SetStatY(0.95);
+   gStyle->SetStatX(0.36);
+   gStyle->SetStatY(0.91);
+   SetMarginH2((TPad *)gPad);
    pr.fph2f_WFXP->Draw("colz");
    fpCanvas->SaveAs(fRealpathPDF.c_str());
 
    // -----------------------------------------------------------------------------------------------------------------
-   // dE/dx vs X position
+   // dEdx vs Momentum
    // Resolution
    fpCanvas->Clear();
-   fpCanvas->SetGrid(1, 1);
-   gPad->SetRightMargin(0.035);
-   Graphic_setup(pr.ptge_X_reso_WF, 2, 33, kCyan + 2, 2, kCyan + 2);
-   Graphic_setup(pr.ptge_X_reso_XP, 2, 47, kMagenta + 2, 2, kMagenta + 2);
-   pr.ptge_X_reso_XP->SetTitle(";Track X position (mm);dE/dx resolution (%)");
-   pr.ptge_X_reso_XP->GetYaxis()->SetRangeUser(resomin, resomax);
-   pr.ptge_X_reso_XP->DrawClone("AP");
-   pr.ptge_X_reso_WF->DrawClone("P same");
-   pr.ptge_X_reso_XP->SetMarkerSize(7);
-   pr.ptge_X_reso_WF->SetMarkerSize(7);
-   fpLegend->Draw();
-   fpCanvas->SaveAs(fRealpathPDF.c_str());
-
-   // Mean
-   fpCanvas->Clear();
-   fpCanvas->SetGrid(1, 1);
-   Graphic_setup(pr.ptge_X_mean_WF, 0, 33, kCyan + 2, 2, kCyan + 2);
-   Graphic_setup(pr.ptge_X_mean_XP, 0, 47, kMagenta + 2, 2, kMagenta + 2);
-   pr.ptge_X_mean_XP->SetTitle(";Track X position (mm);dE/dx (ADC counts/cm)");
-   pr.ptge_X_mean_XP->GetYaxis()->SetRangeUser(meanmin, meanmax);
-   pr.ptge_X_mean_XP->Draw("AP");
-   pr.ptge_X_mean_WF->Draw("P same");
-   fpLegend->Draw();
-   fpCanvas->SaveAs(fRealpathPDF.c_str());
-
-   fpCanvas->Clear();
-   gPad->SetTopMargin(0.02);
-   gPad->SetRightMargin(0.1);
-   gStyle->SetOptStat(0);
-   gStyle->SetOptFit(0);
-
-   // 2D distribution WF vs X
-   pr.fph2f_WFX->Draw("colz");
-   TGraphErrors *ptge_mom_WFX = Convert_TH2_TGE(pr.fph2f_WFX);
-   TF1 linearFitWFX("linearFitWFX", "pol1", 0, 1000);
-   ptge_mom_WFX->Fit(&linearFitWFX, "RQ");
-   linearFitWFX.SetLineColor(kRed);
-   linearFitWFX.Draw("same");
-   TPaveText pavetext(0.5, 0.8, 0.88, 0.95, "NDC");
-   pavetext.AddText(Form("y = %.2fx + %.2f", linearFitWFX.GetParameter(1),
-                         linearFitWFX.GetParameter(0)));
-   pavetext.SetFillColorAlpha(kWhite, 0.9);
-   pavetext.SetBorderSize(1);
-   pavetext.SetLineColor(kBlue - 1);
-   pavetext.SetTextColor(kRed);
-   pavetext.SetTextSize(0.07);
-   pavetext.DrawClone();
-   fpCanvas->SaveAs(fRealpathPDF.c_str());
-
-   // 2D distribution XP vs X
-   pr.fph2f_XPX->Draw("colz");
-   TGraphErrors *ptge_mom_XPX = Convert_TH2_TGE(pr.fph2f_XPX);
-   TF1 linearFitXPX("linearFitXPX", "pol1", 0, 1000);
-   ptge_mom_XPX->Fit(&linearFitXPX, "RQ");
-   linearFitXPX.SetLineColor(kRed);
-   linearFitXPX.Draw("same");
-   pavetext.Clear();
-   pavetext.AddText(Form("y = %.2fx + %.2f", linearFitXPX.GetParameter(1),
-                         linearFitXPX.GetParameter(0)));
-   pavetext.DrawClone();
-   fpCanvas->SaveAs(fRealpathPDF.c_str());
-
-   // -----------------------------------------------------------------------------------------------------------------
-   // dE/dx vs time bin
-   // Resolution
-   fpCanvas->Clear();
-   fpCanvas->SetGrid(1, 1);
-   gPad->SetRightMargin(0.035);
-   Graphic_setup(pr.ptge_dt_reso_WF, 2, 33, kCyan + 2, 2, kCyan + 2);
-   Graphic_setup(pr.ptge_dt_reso_XP, 2, 47, kMagenta + 2, 2, kMagenta + 2);
-   pr.ptge_dt_reso_XP->SetTitle(";Drift time (timebins);dE/dx resolution (%)");
-   pr.ptge_dt_reso_XP->GetXaxis()->SetLimits(0, 510);
-   pr.ptge_dt_reso_XP->GetYaxis()->SetRangeUser(resomin, resomax);
-   pr.ptge_dt_reso_XP->DrawClone("AP");
-   pr.ptge_dt_reso_WF->DrawClone("P same");
-   pr.ptge_dt_reso_XP->SetMarkerSize(7);
-   pr.ptge_dt_reso_WF->SetMarkerSize(7);
-   fpLegend->Draw();
-   fpCanvas->SaveAs(fRealpathPDF.c_str());
-
-   // Mean
-   fpCanvas->Clear();
-   fpCanvas->SetGrid(1, 1);
-   Graphic_setup(pr.ptge_dt_mean_WF, 0, 33, kCyan + 2, 2, kCyan + 2);
-   Graphic_setup(pr.ptge_dt_mean_XP, 0, 47, kMagenta + 2, 2, kMagenta + 2);
-   pr.ptge_dt_mean_XP->SetTitle(";Drift time (timebins);Mean (ADC counts/cm)");
-   pr.ptge_dt_mean_XP->GetXaxis()->SetLimits(0, 510);
-   pr.ptge_dt_mean_XP->GetYaxis()->SetRangeUser(meanmin, meanmax);
-   pr.ptge_dt_mean_XP->Draw("AP");
-   pr.ptge_dt_mean_WF->Draw("P same");
-   fpLegend->Draw();
-   fpCanvas->SaveAs(fRealpathPDF.c_str());
-
-   fpCanvas->Clear();
-   gPad->SetTopMargin(0.02);
-   gPad->SetRightMargin(0.1);
-   gStyle->SetOptStat(0);
-   gStyle->SetOptFit(0);
-
-   // heatmap WF vs time bin
-   pr.fph2f_WFdrift->Draw("colz");
-   TGraphErrors *ptge_mom_WFdrift = Convert_TH2_TGE(pr.fph2f_WFdrift);
-   TF1 fitWFtime("fitWFtime", "pol1", 80, 350);
-   ptge_mom_WFdrift->Fit(&fitWFtime, "RQ");
-   fitWFtime.SetLineColor(kRed);
-   fitWFtime.Draw("same");
-   pavetext.Clear();
-   pavetext.AddText(
-      Form("y = %.2fx + %.2f", fitWFtime.GetParameter(1), fitWFtime.GetParameter(0)));
-   pavetext.DrawClone();
-   fpCanvas->SaveAs(fRealpathPDF.c_str());
-
-   // heatmap XP vs time bin
-   pr.fph2f_XPdrift->Draw("colz");
-   TGraphErrors *ptge_mom_XPdrift = Convert_TH2_TGE(pr.fph2f_XPdrift);
-   TF1 fitXPtime("fitXPtime", "pol1", 80, 350);
-   ptge_mom_XPdrift->Fit(&fitXPtime, "RQ");
-   fitXPtime.SetLineColor(kRed);
-   fitXPtime.Draw("same");
-   pavetext.Clear();
-   pavetext.AddText(
-      Form("y = %.2fx + %.2f", fitXPtime.GetParameter(1), fitXPtime.GetParameter(0)));
-   pavetext.DrawClone();
-   fpCanvas->SaveAs(fRealpathPDF.c_str());
-
-   // heatmap XP vs time bin module VS module
-   pavetext.SetY1NDC(0.7);
-   pavetext.SetY2NDC(0.9);
-   std::vector<TF1> vlinearFit;
-   for (int i = 0; i < 32; i++) {
-      vlinearFit.push_back(TF1(Form("linearFit_%d", i), "pol1", 80, 350));
-      vlinearFit[i].SetLineColor(kRed);
-      vlinearFit[i].SetLineWidth(1);
-      if (i % 16 == 0) {
-         fpCanvas->Clear();
-         fpCanvas->Divide(4, 4);
-      }
-      fpCanvas->cd(i % 16 + 1);
-      fpCanvas->cd(i % 16 + 1)->SetRightMargin(0.1);
-      pr.vmod_fph2f_XPdrift[i]->Draw("colz");
-      pavetext.Clear();
-      pr.vmod_fph2f_XPdrift[i]->Fit(&vlinearFit[i], "RQ");
-      vlinearFit[i].Draw("same");
-      pavetext.AddText(Form("y = %.2fx + %.2f", vlinearFit[i].GetParameter(1),
-                            vlinearFit[i].GetParameter(0)));
-      pavetext.DrawClone();
-      if (i % 16 == 15)
-         fpCanvas->SaveAs(fRealpathPDF.c_str());
-   }
-
-   // Time bin vs X track position
-   fpCanvas->Clear();
-   pr.fph2f_timeX->Draw("colz");
-   fpCanvas->SaveAs(fRealpathPDF.c_str());
-
-   // -----------------------------------------------------------------------------------------------------------------
-   // dE/dx vs track length
-   // Resolution
-   fpCanvas->Clear();
-   fpCanvas->SetGrid(1, 1);
-   gPad->SetRightMargin(0.035);
-   Graphic_setup(pr.ptge_trklen_reso_WF, 2, 33, kCyan + 2, 2, kCyan + 2);
-   Graphic_setup(pr.ptge_trklen_reso_XP, 2, 47, kMagenta + 2, 2, kMagenta + 2);
-   pr.ptge_trklen_reso_XP->SetTitle(";Track length (mm);dE/dx resolution (%)");
-   pr.ptge_trklen_reso_XP->GetYaxis()->SetRangeUser(resomin, resomax);
-   pr.ptge_trklen_reso_XP->DrawClone("AP");
-   pr.ptge_trklen_reso_WF->DrawClone("P same");
-   pr.ptge_trklen_reso_XP->SetMarkerSize(7);
-   pr.ptge_trklen_reso_WF->SetMarkerSize(7);
-   fpLegend->Draw();
-   fpCanvas->SaveAs(fRealpathPDF.c_str());
-
-   // Mean
-   fpCanvas->Clear();
-   fpCanvas->SetGrid(1, 1);
-   Graphic_setup(pr.ptge_trklen_mean_WF, 0, 33, kCyan + 2, 2, kCyan + 2);
-   Graphic_setup(pr.ptge_trklen_mean_XP, 0, 47, kMagenta + 2, 2, kMagenta + 2);
-   pr.ptge_trklen_mean_XP->SetTitle(";Track length (mm);Mean (ADC counts/cm)");
-   pr.ptge_trklen_mean_XP->GetYaxis()->SetRangeUser(meanmin, meanmax);
-   pr.ptge_trklen_mean_XP->Draw("AP");
-   pr.ptge_trklen_mean_WF->Draw("P same");
-   fpLegend->Draw();
-   fpCanvas->SaveAs(fRealpathPDF.c_str());
-
-   // 2D distributions
-   gPad->SetRightMargin(0.13);
-   gPad->SetTopMargin(0.02);
-   gStyle->SetStatX(0.87);
-   pr.fph2f_XPlen->Draw("colz");
-   fpCanvas->SaveAs(fRealpathPDF.c_str());
-
-   pr.fph2f_momlen->Draw("colz");
-   fpCanvas->SaveAs(fRealpathPDF.c_str());
-
-   pr.fph2f_momncl->Draw("colz");
-   fpCanvas->SaveAs(fRealpathPDF.c_str());
-
-   // -----------------------------------------------------------------------------------------------------------------
-   // dE/dx vs absolute track angle phi
-   // Resolution
-   fpCanvas->Clear();
-   gPad->SetRightMargin(0.035);
-   Graphic_setup(pr.ptge_absphi_reso_WF, 2, 33, kCyan + 2, 2, kCyan + 2);
-   Graphic_setup(pr.ptge_absphi_reso_XP, 2, 47, kMagenta + 2, 2, kMagenta + 2);
-   pr.ptge_absphi_reso_XP->SetTitle(";#varphi (#circ);dE/dx resolution (%)");
-   pr.ptge_absphi_reso_XP->GetXaxis()->SetLimits(0, 93);
-   pr.ptge_absphi_reso_XP->GetYaxis()->SetRangeUser(resomin, resomax);
-   pr.ptge_absphi_reso_XP->DrawClone("AP");
-   pr.ptge_absphi_reso_WF->DrawClone("P same");
-   pr.ptge_absphi_reso_XP->SetMarkerSize(7);
-   pr.ptge_absphi_reso_WF->SetMarkerSize(7);
-   fpLegend->Draw();
-   fpCanvas->SaveAs(fRealpathPDF.c_str());
-
-   // Mean
-   fpCanvas->Clear();
-   Graphic_setup(pr.ptge_absphi_mean_WF, 0, 33, kCyan + 2, 2, kCyan + 2);
-   Graphic_setup(pr.ptge_absphi_mean_XP, 0, 47, kMagenta + 2, 2, kMagenta + 2);
-   pr.ptge_absphi_mean_XP->SetTitle(";|#varphi| (#circ);Mean (ADC counts/cm)");
-   pr.ptge_absphi_mean_XP->GetXaxis()->SetLimits(0, 93);
-   pr.ptge_absphi_mean_XP->GetYaxis()->SetRangeUser(meanmin, meanmax);
-   pr.ptge_absphi_mean_XP->Draw("AP");
-   pr.ptge_absphi_mean_WF->Draw("P same");
-   fpLegend->Draw();
-   fpCanvas->SaveAs(fRealpathPDF.c_str());
-
-   // -----------------------------------------------------------------------------------------------------------------
-   // dE/dx vs track angle phi
-   // Resolution
-   fpCanvas->Clear();
-   gPad->SetRightMargin(0.035);
-   Graphic_setup(pr.ptge_phi_reso_WF, 2, 33, kCyan + 2, 2, kCyan + 2);
-   Graphic_setup(pr.ptge_phi_reso_XP, 2, 47, kMagenta + 2, 2, kMagenta + 2);
-   pr.ptge_phi_reso_XP->SetTitle(";#varphi (#circ);dE/dx resolution (%)");
-   pr.ptge_phi_reso_XP->GetXaxis()->SetLimits(-93, 93);
-   pr.ptge_phi_reso_XP->GetYaxis()->SetRangeUser(resomin, resomax);
-   pr.ptge_phi_reso_XP->DrawClone("AP");
-   pr.ptge_phi_reso_WF->DrawClone("P same");
-   pr.ptge_phi_reso_XP->SetMarkerSize(7);
-   pr.ptge_phi_reso_WF->SetMarkerSize(7);
-   fpLegend->Draw();
-   fpCanvas->SaveAs(fRealpathPDF.c_str());
-
-   // Mean
-   fpCanvas->Clear();
-   Graphic_setup(pr.ptge_phi_mean_WF, 0, 33, kCyan + 2, 2, kCyan + 2);
-   Graphic_setup(pr.ptge_phi_mean_XP, 0, 47, kMagenta + 2, 2, kMagenta + 2);
-   pr.ptge_phi_mean_XP->SetTitle(";#varphi (#circ);Mean (ADC counts/cm)");
-   pr.ptge_phi_mean_XP->GetXaxis()->SetLimits(-93, 93);
-   pr.ptge_phi_mean_XP->GetYaxis()->SetRangeUser(meanmin, meanmax);
-   pr.ptge_phi_mean_XP->Draw("AP");
-   pr.ptge_phi_mean_WF->Draw("P same");
-   fpLegend->Draw();
-   fpCanvas->SaveAs(fRealpathPDF.c_str());
-
-   // 2D distribution
-   fpCanvas->Clear();
-   gPad->SetTopMargin(0.02);
-   gPad->SetRightMargin(0.13);
-   gStyle->SetOptStat(0);
-   gStyle->SetOptFit(0);
-   pr.fph2f_XPphi->SetTitle(";#varphi (#circ);dE/dx with XP (ADC counts/cm)");
-   pr.fph2f_XPphi->Draw("colz");
-   fpCanvas->SaveAs(fRealpathPDF.c_str());
-
-   fpCanvas->Clear();
-   pr.fph2f_lenphi->Draw("colz");
-   fpCanvas->SaveAs(fRealpathPDF.c_str());
-
-   fpCanvas->Clear();
-   pr.fph2f_chi2ndfphi->Draw("colz");
-   fpCanvas->SaveAs(fRealpathPDF.c_str());
-
-   fpCanvas->Clear();
-   pr.fph2f_momphi->Draw("colz");
-   fpCanvas->SaveAs(fRealpathPDF.c_str());
-
-   fpCanvas->Clear();
-   gPad->SetRightMargin(0.02);
-   pr.fph1f_phi->Draw("HIST");
-   fpCanvas->SaveAs(fRealpathPDF.c_str());
-
-   // dE/dx vs absolute track angle theta
-   // -----------------------------------------------------------------------------------------------------------------
-   // Resolution
-   fpCanvas->Clear();
-   gPad->SetRightMargin(0.035);
-   Graphic_setup(pr.ptge_abstheta_reso_WF, 2, 33, kCyan + 2, 2, kCyan + 2);
-   Graphic_setup(pr.ptge_abstheta_reso_XP, 2, 47, kMagenta + 2, 2, kMagenta + 2);
-   pr.ptge_abstheta_reso_XP->SetTitle(";#theta (#circ);dE/dx resolution (%)");
-   pr.ptge_abstheta_reso_XP->GetXaxis()->SetLimits(0, 93);
-   pr.ptge_abstheta_reso_XP->GetYaxis()->SetRangeUser(resomin, resomax);
-   pr.ptge_abstheta_reso_XP->DrawClone("AP");
-   pr.ptge_abstheta_reso_WF->DrawClone("P same");
-   pr.ptge_abstheta_reso_XP->SetMarkerSize(7);
-   pr.ptge_abstheta_reso_WF->SetMarkerSize(7);
-   fpLegend->Draw();
-   fpCanvas->SaveAs(fRealpathPDF.c_str());
-
-   // Mean
-   fpCanvas->Clear();
-   Graphic_setup(pr.ptge_abstheta_mean_WF, 0, 33, kCyan + 2, 2, kCyan + 2);
-   Graphic_setup(pr.ptge_abstheta_mean_XP, 0, 47, kMagenta + 2, 2, kMagenta + 2);
-   pr.ptge_abstheta_mean_XP->SetTitle(";#theta (#circ);Mean (ADC counts/cm)");
-   pr.ptge_abstheta_mean_XP->GetXaxis()->SetLimits(0, 93);
-   pr.ptge_abstheta_mean_XP->GetYaxis()->SetRangeUser(meanmin, meanmax);
-   pr.ptge_abstheta_mean_XP->Draw("AP");
-   pr.ptge_abstheta_mean_WF->Draw("P same");
-   fpLegend->Draw();
-   fpCanvas->SaveAs(fRealpathPDF.c_str());
-
-   // dE/dx vs track angle theta
-   // -----------------------------------------------------------------------------------------------------------------
-   // Resolution
-   fpCanvas->Clear();
-   gPad->SetRightMargin(0.035);
-   Graphic_setup(pr.ptge_theta_reso_WF, 2, 33, kCyan + 2, 2, kCyan + 2);
-   Graphic_setup(pr.ptge_theta_reso_XP, 2, 47, kMagenta + 2, 2, kMagenta + 2);
-   pr.ptge_theta_reso_XP->SetTitle(";#theta (#circ);dE/dx resolution (%)");
-   pr.ptge_theta_reso_XP->GetXaxis()->SetLimits(-93, 93);
-   pr.ptge_theta_reso_XP->GetYaxis()->SetRangeUser(resomin, resomax);
-   pr.ptge_theta_reso_XP->DrawClone("AP");
-   pr.ptge_theta_reso_WF->DrawClone("P same");
-   pr.ptge_theta_reso_XP->SetMarkerSize(7);
-   pr.ptge_theta_reso_WF->SetMarkerSize(7);
-   fpLegend->Draw();
-   fpCanvas->SaveAs(fRealpathPDF.c_str());
-
-   // Mean
-   fpCanvas->Clear();
-   Graphic_setup(pr.ptge_theta_mean_WF, 0, 33, kCyan + 2, 2, kCyan + 2);
-   Graphic_setup(pr.ptge_theta_mean_XP, 0, 47, kMagenta + 2, 2, kMagenta + 2);
-   pr.ptge_theta_mean_XP->SetTitle(";#theta (#circ);Mean (ADC counts/cm)");
-   pr.ptge_theta_mean_XP->GetXaxis()->SetLimits(-93, 93);
-   pr.ptge_theta_mean_XP->GetYaxis()->SetRangeUser(meanmin, meanmax);
-   pr.ptge_theta_mean_XP->Draw("AP");
-   pr.ptge_theta_mean_WF->Draw("P same");
-   fpLegend->Draw();
-   fpCanvas->SaveAs(fRealpathPDF.c_str());
-
-   // 2D distribution
-   fpCanvas->Clear();
-   gPad->SetRightMargin(0.13);
-   pr.fph2f_XPtheta->SetTitle(";#theta (#circ);dE/dx with XP (ADC counts/cm)");
-   pr.fph2f_XPtheta->Draw("colz");
-   fpCanvas->SaveAs(fRealpathPDF.c_str());
-
-   fpCanvas->Clear();
-   pr.fph2f_lentheta->Draw("colz");
-   fpCanvas->SaveAs(fRealpathPDF.c_str());
-
-   fpCanvas->Clear();
-   pr.fph2f_momtheta->Draw("colz");
-   fpCanvas->SaveAs(fRealpathPDF.c_str());
-
-   fpCanvas->Clear();
-   gPad->SetRightMargin(0.035);
-   pr.fph1f_theta->Draw("HIST");
-   fpCanvas->SaveAs(fRealpathPDF.c_str());
-
-   // -----------------------------------------------------------------------------------------------------------------
-   // Both angles
-   fpCanvas->Clear();
-   gPad->SetRightMargin(0.13);
-   pr.fph2f_phitheta->Draw("colz");
-   fpCanvas->SaveAs(fRealpathPDF.c_str());
-
-   // -----------------------------------------------------------------------------------------------------------------
-   // dEdx vs absolute momentum
-   // Resolution
-   fpCanvas->Clear();
-   gStyle->SetTitleSize(0.07, "xyz");
-   gStyle->SetLabelSize(0.06, "xyz");
-   gStyle->SetTitleOffset(0.8, "y");
-   gPad->SetRightMargin(0.045);
-   gPad->SetTopMargin(0.03);
-   gPad->SetBottomMargin(0.15);
+   SetMarginH1((TPad *)gPad);
    Graphic_setup(pr.ptge_absmom_reso_WF, 5, 33, kCyan + 2, 0, kCyan + 2);
    Graphic_setup(pr.ptge_absmom_reso_XP, 5, 47, kMagenta + 2, 0, kMagenta + 2);
-   pr.ptge_absmom_reso_XP->SetTitle(";Momentum (MeV/c);dE/dx resolution (%)");
+   pr.ptge_absmom_reso_XP->SetTitle(";Momentum [MeV/c];dE/dx resolution [%]");
    pr.ptge_absmom_reso_XP->GetXaxis()->SetLimits(0, absmomrange);
    pr.ptge_absmom_reso_XP->GetYaxis()->SetRangeUser(resomin, resomax);
-   pr.ptge_absmom_reso_XP->GetXaxis()->SetNdivisions(505);
    pr.ptge_absmom_reso_XP->DrawClone("AP");
    pr.ptge_absmom_reso_WF->DrawClone("P same");
-   fpLegend->SetX1NDC(0.6);
-   fpLegend->SetX2NDC(0.9);
    fpLegend->Draw();
    fpCanvas->SaveAs((fRealpathPDF + "(").c_str());
 
@@ -523,7 +186,7 @@ void Draw::Run(const std::string &filepath)
    fpCanvas->Clear();
    Graphic_setup(pr.ptge_absmom_mean_WF, 0, 33, kCyan + 2, 1, kCyan + 2);
    Graphic_setup(pr.ptge_absmom_mean_XP, 0, 47, kMagenta + 2, 1, kMagenta + 2);
-   pr.ptge_absmom_mean_XP->SetTitle(";Momentum (MeV/c);Mean (ADC counts/cm)");
+   pr.ptge_absmom_mean_XP->SetTitle(";Momentum [MeV/c];Mean dE/dx [ADC counts/cm]");
    pr.ptge_absmom_mean_XP->GetXaxis()->SetLimits(0, absmomrange);
    pr.ptge_absmom_mean_XP->GetYaxis()->SetRangeUser(meanmin, meanmax);
    pr.ptge_absmom_mean_XP->Draw("APL");
@@ -531,24 +194,73 @@ void Draw::Run(const std::string &filepath)
    fpLegend->Draw();
    fpCanvas->SaveAs(fRealpathPDF.c_str());
 
+   // -----------------------------------------------------------------------------------------------------------------
    // 2D distribution
+   // WF
    fpCanvas->Clear();
-   gPad->SetRightMargin(0.13);
+   SetMarginH2((TPad *)gPad);
+   gStyle->SetOptStat(0);
    pr.fph2f_WFabsmommean->Draw("colz");
    fpCanvas->SaveAs(fRealpathPDF.c_str());
 
+   // Bethe Bloch fit on data
+   const char *formula =
+      "[0]/pow(x/sqrt(x*x+[5]*[5]),[3]) * ( [1] - pow(x/sqrt(x*x+[5]*[5]),[3]) - log([2] "
+      "+ 1 / pow(x/[5], [4])) )";
+   // Muon
+   TF1 *bethefixmuon = new TF1("bethefixmuon", formula, 0, 2000, "");
+   bethefixmuon->FixParameter(1, 3.62857e+00);
+   bethefixmuon->FixParameter(2, 3.18209e-02);
+   bethefixmuon->FixParameter(3, 2.07081e+00);
+   bethefixmuon->FixParameter(4, 7.14413e-01);
+   bethefixmuon->FixParameter(5, 105.658);
+   // Fit on MC
+   pr.ptge_absmom_mean_XP->Fit(bethefixmuon, "R", "", 100, 2000);
+   pr.ptge_absmom_mean_XP->GetFunction("bethefixmuon")->SetLineColor(kBlack);
+   pr.ptge_absmom_mean_XP->GetFunction("bethefixmuon")->SetLineWidth(2);
+   pr.ptge_absmom_mean_XP->GetFunction("bethefixmuon")->SetRange(0, 2000);
+   // Electron
+   TF1 *bethefixelectron = (TF1 *)bethefixmuon->Clone("bethefixelectron");
+   bethefixelectron->SetParameter(5, 0.511);
+   // Proton
+   TF1 *bethefixproton = (TF1 *)bethefixmuon->Clone("bethefixproton");
+   bethefixproton->SetParameter(5, 938.272);
+
+   // XP
    fpCanvas->Clear();
    pr.fph2f_XPabsmommean->Draw("colz");
+   bethefixmuon->SetLineColor(kCyan);
+   bethefixmuon->SetLineStyle(9);
+   bethefixmuon->Draw("same");
+   bethefixelectron->SetLineColor(kOrange + 1);
+   bethefixelectron->SetLineStyle(9);
+   bethefixelectron->Draw("same");
+   bethefixproton->SetLineColor(kRed);
+   bethefixproton->SetLineStyle(9);
+   TLegend legbethe(0.53, 0.76, 0.83, 0.91);
+   legbethe.SetTextSize(0.06);
+   legbethe.SetBorderSize(2);
+   legbethe.SetLineColor(kBlue - 1);
+   legbethe.AddEntry(bethefixmuon, "Muon fit", "l");
+   legbethe.AddEntry(bethefixelectron, "Electron fit", "l");
+   if (pr.frun.find("beam") != std::string::npos) {
+      legbethe.SetY1(0.7);
+      bethefixproton->Draw("same");
+      legbethe.AddEntry(bethefixproton, "Proton fit", "l");
+   }
+   legbethe.Draw();
+   fpCanvas->SaveAs(fRealpathPDF.c_str());
+   delete bethefixmuon;
+   delete bethefixelectron;
 
    // -----------------------------------------------------------------------------------------------------------------
    // dEdx vs momentum
    // Resolution
    fpCanvas->Clear();
-   gPad->SetRightMargin(0.035);
-   gPad->SetTopMargin(0.03);
+   SetMarginH1((TPad *)gPad);
    Graphic_setup(pr.ptge_mom_reso_WF, 3, 33, kCyan + 2, 1, kCyan + 2);
    Graphic_setup(pr.ptge_mom_reso_XP, 3, 47, kMagenta + 2, 1, kMagenta + 2);
-   pr.ptge_mom_reso_XP->SetTitle(";Momentum (MeV/c);dE/dx resolution (%)");
+   pr.ptge_mom_reso_XP->SetTitle(";Momentum [MeV/c];dE/dx resolution [%]");
    pr.ptge_mom_reso_XP->GetXaxis()->SetLimits(-momrange, momrange);
    pr.ptge_mom_reso_XP->GetYaxis()->SetRangeUser(resomin, resomax);
    pr.ptge_mom_reso_XP->DrawClone("AP");
@@ -560,7 +272,7 @@ void Draw::Run(const std::string &filepath)
    fpCanvas->Clear();
    Graphic_setup(pr.ptge_mom_mean_WF, 0, 33, kCyan + 2, 1, kCyan + 2);
    Graphic_setup(pr.ptge_mom_mean_XP, 0, 47, kMagenta + 2, 1, kMagenta + 2);
-   pr.ptge_mom_mean_XP->SetTitle(";Momentum (MeV/c);Mean (ADC counts/cm)");
+   pr.ptge_mom_mean_XP->SetTitle(";Momentum [MeV/c];Mean dE/dx [ADC counts/cm]");
    pr.ptge_mom_mean_XP->GetXaxis()->SetLimits(-momrange, momrange);
    pr.ptge_mom_mean_XP->GetYaxis()->SetRangeUser(meanmin, meanmax);
    pr.ptge_mom_mean_XP->Draw("APL");
@@ -570,7 +282,7 @@ void Draw::Run(const std::string &filepath)
 
    // 2D distribution
    fpCanvas->Clear();
-   gPad->SetRightMargin(0.13);
+   SetMarginH2((TPad *)gPad);
    pr.fph2f_WFmom->Draw("colz");
    fpCanvas->SaveAs(fRealpathPDF.c_str());
 
@@ -579,8 +291,7 @@ void Draw::Run(const std::string &filepath)
    fpCanvas->SaveAs(fRealpathPDF.c_str());
 
    fpCanvas->Clear();
-   gStyle->SetOptStat(0);
-   gPad->SetRightMargin(0.035);
+   SetMarginH1((TPad *)gPad);
    Graphic_setup(pr.fph1i_mom, 0.5, 1, kMagenta + 2, 2, kMagenta - 2, kMagenta, 0.2);
    Graphic_setup(pr.fph1i_mom_tHAT, 0.5, 1, kRed + 2, 2, kRed - 2, kRed, 0.2);
    Graphic_setup(pr.fph1i_mom_bHAT, 0.5, 1, kBlue + 2, 2, kBlue - 2, kBlue, 0.2);
@@ -599,8 +310,283 @@ void Draw::Run(const std::string &filepath)
    delete plegmom;
 
    fpCanvas->Clear();
-   gPad->SetRightMargin(0.13);
+   SetMarginH2((TPad *)gPad);
    pr.fph2f_chi2mom->Draw("colz");
+   fpCanvas->SaveAs(fRealpathPDF.c_str());
+
+   // -----------------------------------------------------------------------------------------------------------------
+   // dE/dx vs X position
+   // Resolution
+   fpCanvas->Clear();
+   fpCanvas->SetGrid(1, 1);
+   SetMarginH1((TPad *)gPad);
+   Graphic_setup(pr.ptge_X_reso_WF, 2, 33, kCyan + 2, 2, kCyan + 2);
+   Graphic_setup(pr.ptge_X_reso_XP, 2, 47, kMagenta + 2, 2, kMagenta + 2);
+   pr.ptge_X_reso_XP->SetTitle(";Track X position [mm];dE/dx resolution [%]");
+   pr.ptge_X_reso_XP->GetXaxis()->SetLimits(-1000, 1000);
+   pr.ptge_X_reso_XP->GetYaxis()->SetRangeUser(resomin, resomax);
+   pr.ptge_X_reso_XP->DrawClone("AP");
+   pr.ptge_X_reso_WF->DrawClone("P same");
+   pr.ptge_X_reso_XP->SetMarkerSize(7);
+   pr.ptge_X_reso_WF->SetMarkerSize(7);
+   fpLegend->Draw();
+   fpCanvas->SaveAs(fRealpathPDF.c_str());
+
+   // Mean
+   fpCanvas->Clear();
+   fpCanvas->SetGrid(1, 1);
+   Graphic_setup(pr.ptge_X_mean_WF, 0, 33, kCyan + 2, 2, kCyan + 2);
+   Graphic_setup(pr.ptge_X_mean_XP, 0, 47, kMagenta + 2, 2, kMagenta + 2);
+   pr.ptge_X_mean_XP->SetTitle(";Track X position [mm];dE/dx [ADC counts/cm]");
+   pr.ptge_X_mean_XP->GetXaxis()->SetLimits(-1000, 1000);
+   pr.ptge_X_mean_XP->GetYaxis()->SetRangeUser(meanmin, meanmax);
+   pr.ptge_X_mean_XP->Draw("AP");
+   pr.ptge_X_mean_WF->Draw("P same");
+   fpLegend->Draw();
+   fpCanvas->SaveAs(fRealpathPDF.c_str());
+
+   // 2D distribution WF vs X
+   fpCanvas->Clear();
+   SetMarginH2((TPad *)gPad);
+   pr.fph2f_WFX->SetAxisRange(-1000, 1000, "X");
+   pr.fph2f_WFX->Draw("colz");
+   TGraphErrors *ptge_mom_WFX = Convert_TH2_TGE(pr.fph2f_WFX);
+   TF1 linearFitWFX("linearFitWFX", "pol1", 0, 1000);
+   ptge_mom_WFX->Fit(&linearFitWFX, "RQ");
+   linearFitWFX.SetLineColor(kRed);
+   // linearFitWFX.Draw("same");
+   TPaveText pavetext(0.4, 0.75, 0.8, 0.9, "NDC");
+   pavetext.AddText(Form("y = %.2fx + %.2f", linearFitWFX.GetParameter(1),
+                         linearFitWFX.GetParameter(0)));
+   pavetext.SetFillColorAlpha(kWhite, 0.9);
+   pavetext.SetBorderSize(1);
+   pavetext.SetLineColor(kBlue - 1);
+   pavetext.SetTextColor(kRed);
+   pavetext.SetTextSize(0.07);
+   // pavetext.DrawClone();
+   fpCanvas->SaveAs(fRealpathPDF.c_str());
+
+   // 2D distribution XP vs X
+   pr.fph2f_XPX->SetAxisRange(-1000, 1000, "X");
+   pr.fph2f_XPX->Draw("colz");
+   TGraphErrors *ptge_mom_XPX = Convert_TH2_TGE(pr.fph2f_XPX);
+   TF1 linearFitXPX("linearFitXPX", "pol1", 0, 1000);
+   ptge_mom_XPX->Fit(&linearFitXPX, "RQ");
+   linearFitXPX.SetLineColor(kRed);
+   // linearFitXPX.Draw("same");
+   pavetext.Clear();
+   pavetext.AddText(Form("y = %.2fx + %.2f", linearFitXPX.GetParameter(1),
+                         linearFitXPX.GetParameter(0)));
+   // pavetext.DrawClone();
+   fpCanvas->SaveAs(fRealpathPDF.c_str());
+
+   // -----------------------------------------------------------------------------------------------------------------
+   // dE/dx vs Track length
+   // Resolution
+   fpCanvas->Clear();
+   fpCanvas->SetGrid(1, 1);
+   SetMarginH1((TPad *)gPad);
+   Graphic_setup(pr.ptge_trklen_reso_WF, 2, 33, kCyan + 2, 2, kCyan + 2);
+   Graphic_setup(pr.ptge_trklen_reso_XP, 2, 47, kMagenta + 2, 2, kMagenta + 2);
+   pr.ptge_trklen_reso_XP->SetTitle(";Track length [mm];dE/dx resolution [%]");
+   pr.ptge_trklen_reso_XP->GetYaxis()->SetRangeUser(resomin, resomax);
+   pr.ptge_trklen_reso_XP->DrawClone("AP");
+   pr.ptge_trklen_reso_WF->DrawClone("P same");
+   pr.ptge_trklen_reso_XP->SetMarkerSize(7);
+   pr.ptge_trklen_reso_WF->SetMarkerSize(7);
+   fpLegend->Draw();
+   fpCanvas->SaveAs(fRealpathPDF.c_str());
+
+   // Mean
+   fpCanvas->Clear();
+   Graphic_setup(pr.ptge_trklen_mean_WF, 0, 33, kCyan + 2, 2, kCyan + 2);
+   Graphic_setup(pr.ptge_trklen_mean_XP, 0, 47, kMagenta + 2, 2, kMagenta + 2);
+   pr.ptge_trklen_mean_XP->SetTitle(";Track length [mm];Mean dE/dx [ADC counts/cm]");
+   pr.ptge_trklen_mean_XP->GetYaxis()->SetRangeUser(meanmin, meanmax);
+   pr.ptge_trklen_mean_XP->Draw("AP");
+   pr.ptge_trklen_mean_WF->Draw("P same");
+   fpLegend->Draw();
+   fpCanvas->SaveAs(fRealpathPDF.c_str());
+
+   // 2D distributions
+   SetMarginH2((TPad *)gPad);
+   gStyle->SetStatX(0.87);
+   pr.fph2f_XPlen->Draw("colz");
+   fpCanvas->SaveAs(fRealpathPDF.c_str());
+
+   pr.fph2f_momlen->Draw("colz");
+   fpCanvas->SaveAs(fRealpathPDF.c_str());
+
+   pr.fph2f_momncl->Draw("colz");
+   fpCanvas->SaveAs(fRealpathPDF.c_str());
+
+   // -----------------------------------------------------------------------------------------------------------------
+   // dE/dx vs absolute Track angle phi
+   // Resolution
+   fpCanvas->Clear();
+   SetMarginH1((TPad *)gPad);
+   Graphic_setup(pr.ptge_absphi_reso_WF, 2, 33, kCyan + 2, 2, kCyan + 2);
+   Graphic_setup(pr.ptge_absphi_reso_XP, 2, 47, kMagenta + 2, 2, kMagenta + 2);
+   pr.ptge_absphi_reso_XP->SetTitle(";Track angle #varphi [#circ];dE/dx resolution [%]");
+   pr.ptge_absphi_reso_XP->GetXaxis()->SetLimits(0, 93);
+   pr.ptge_absphi_reso_XP->GetYaxis()->SetRangeUser(resomin, resomax);
+   pr.ptge_absphi_reso_XP->DrawClone("AP");
+   pr.ptge_absphi_reso_WF->DrawClone("P same");
+   pr.ptge_absphi_reso_XP->SetMarkerSize(7);
+   pr.ptge_absphi_reso_WF->SetMarkerSize(7);
+   fpLegend->Draw();
+   fpCanvas->SaveAs(fRealpathPDF.c_str());
+
+   // Mean
+   fpCanvas->Clear();
+   Graphic_setup(pr.ptge_absphi_mean_WF, 0, 33, kCyan + 2, 2, kCyan + 2);
+   Graphic_setup(pr.ptge_absphi_mean_XP, 0, 47, kMagenta + 2, 2, kMagenta + 2);
+   pr.ptge_absphi_mean_XP->SetTitle(
+      ";Track angle #varphi [#circ];Mean dE/dx [ADC counts/cm]");
+   pr.ptge_absphi_mean_XP->GetXaxis()->SetLimits(0, 93);
+   pr.ptge_absphi_mean_XP->GetYaxis()->SetRangeUser(meanmin, meanmax);
+   pr.ptge_absphi_mean_XP->Draw("AP");
+   pr.ptge_absphi_mean_WF->Draw("P same");
+   fpLegend->Draw();
+   fpCanvas->SaveAs(fRealpathPDF.c_str());
+
+   // -----------------------------------------------------------------------------------------------------------------
+   // dE/dx vs Track angle phi
+   // Resolution
+   fpCanvas->Clear();
+   Graphic_setup(pr.ptge_phi_reso_WF, 2, 33, kCyan + 2, 2, kCyan + 2);
+   Graphic_setup(pr.ptge_phi_reso_XP, 2, 47, kMagenta + 2, 2, kMagenta + 2);
+   pr.ptge_phi_reso_XP->SetTitle(";Track angle #varphi [#circ];dE/dx resolution [%]");
+   pr.ptge_phi_reso_XP->GetXaxis()->SetLimits(-93, 93);
+   pr.ptge_phi_reso_XP->GetYaxis()->SetRangeUser(resomin, resomax);
+   pr.ptge_phi_reso_XP->DrawClone("AP");
+   pr.ptge_phi_reso_WF->DrawClone("P same");
+   pr.ptge_phi_reso_XP->SetMarkerSize(7);
+   pr.ptge_phi_reso_WF->SetMarkerSize(7);
+   fpLegend->Draw();
+   fpCanvas->SaveAs(fRealpathPDF.c_str());
+
+   // Mean
+   fpCanvas->Clear();
+   Graphic_setup(pr.ptge_phi_mean_WF, 0, 33, kCyan + 2, 2, kCyan + 2);
+   Graphic_setup(pr.ptge_phi_mean_XP, 0, 47, kMagenta + 2, 2, kMagenta + 2);
+   pr.ptge_phi_mean_XP->SetTitle(
+      ";Track angle #varphi [#circ];Mean dE/dx [ADC counts/cm]");
+   pr.ptge_phi_mean_XP->GetXaxis()->SetLimits(-93, 93);
+   pr.ptge_phi_mean_XP->GetYaxis()->SetRangeUser(meanmin, meanmax);
+   pr.ptge_phi_mean_XP->Draw("AP");
+   pr.ptge_phi_mean_WF->Draw("P same");
+   fpLegend->Draw();
+   fpCanvas->SaveAs(fRealpathPDF.c_str());
+
+   // 2D distribution
+   fpCanvas->Clear();
+   SetMarginH2((TPad *)gPad);
+   pr.fph2f_XPphi->SetTitle(";Track angle #varphi [#circ];dE/dx with XP [ADC counts/cm]");
+   pr.fph2f_XPphi->Draw("colz");
+   fpCanvas->SaveAs(fRealpathPDF.c_str());
+
+   fpCanvas->Clear();
+   pr.fph2f_lenphi->Draw("colz");
+   fpCanvas->SaveAs(fRealpathPDF.c_str());
+
+   fpCanvas->Clear();
+   pr.fph2f_chi2ndfphi->Draw("colz");
+   fpCanvas->SaveAs(fRealpathPDF.c_str());
+
+   fpCanvas->Clear();
+   pr.fph2f_momphi->Draw("colz");
+   fpCanvas->SaveAs(fRealpathPDF.c_str());
+
+   fpCanvas->Clear();
+   SetMarginH1((TPad *)gPad);
+   pr.fph1f_phi->Draw("HIST");
+   fpCanvas->SaveAs(fRealpathPDF.c_str());
+
+   // dE/dx vs absolute Track angle theta
+   // -----------------------------------------------------------------------------------------------------------------
+   // Resolution
+   fpCanvas->Clear();
+   Graphic_setup(pr.ptge_abstheta_reso_WF, 2, 33, kCyan + 2, 2, kCyan + 2);
+   Graphic_setup(pr.ptge_abstheta_reso_XP, 2, 47, kMagenta + 2, 2, kMagenta + 2);
+   pr.ptge_abstheta_reso_XP->SetTitle(";Track angle #theta [#circ];dE/dx resolution [%]");
+   pr.ptge_abstheta_reso_XP->GetXaxis()->SetLimits(0, 93);
+   pr.ptge_abstheta_reso_XP->GetYaxis()->SetRangeUser(resomin, resomax);
+   pr.ptge_abstheta_reso_XP->DrawClone("AP");
+   pr.ptge_abstheta_reso_WF->DrawClone("P same");
+   pr.ptge_abstheta_reso_XP->SetMarkerSize(7);
+   pr.ptge_abstheta_reso_WF->SetMarkerSize(7);
+   fpLegend->Draw();
+   fpCanvas->SaveAs(fRealpathPDF.c_str());
+
+   // Mean
+   fpCanvas->Clear();
+   Graphic_setup(pr.ptge_abstheta_mean_WF, 0, 33, kCyan + 2, 2, kCyan + 2);
+   Graphic_setup(pr.ptge_abstheta_mean_XP, 0, 47, kMagenta + 2, 2, kMagenta + 2);
+   pr.ptge_abstheta_mean_XP->SetTitle(
+      ";Track angle #theta [#circ];Mean dE/dx [ADC counts/cm]");
+   pr.ptge_abstheta_mean_XP->GetXaxis()->SetLimits(0, 93);
+   pr.ptge_abstheta_mean_XP->GetYaxis()->SetRangeUser(meanmin, meanmax);
+   pr.ptge_abstheta_mean_XP->Draw("AP");
+   pr.ptge_abstheta_mean_WF->Draw("P same");
+   fpLegend->Draw();
+   fpCanvas->SaveAs(fRealpathPDF.c_str());
+
+   // dE/dx vs Track angle theta
+   // -----------------------------------------------------------------------------------------------------------------
+   // Resolution
+   fpCanvas->Clear();
+   Graphic_setup(pr.ptge_theta_reso_WF, 2, 33, kCyan + 2, 2, kCyan + 2);
+   Graphic_setup(pr.ptge_theta_reso_XP, 2, 47, kMagenta + 2, 2, kMagenta + 2);
+   pr.ptge_theta_reso_XP->SetTitle(";Track angle #theta [#circ];dE/dx resolution [%]");
+   pr.ptge_theta_reso_XP->GetXaxis()->SetLimits(-93, 93);
+   pr.ptge_theta_reso_XP->GetYaxis()->SetRangeUser(resomin, resomax);
+   pr.ptge_theta_reso_XP->DrawClone("AP");
+   pr.ptge_theta_reso_WF->DrawClone("P same");
+   pr.ptge_theta_reso_XP->SetMarkerSize(7);
+   pr.ptge_theta_reso_WF->SetMarkerSize(7);
+   fpLegend->Draw();
+   fpCanvas->SaveAs(fRealpathPDF.c_str());
+
+   // Mean
+   fpCanvas->Clear();
+   Graphic_setup(pr.ptge_theta_mean_WF, 0, 33, kCyan + 2, 2, kCyan + 2);
+   Graphic_setup(pr.ptge_theta_mean_XP, 0, 47, kMagenta + 2, 2, kMagenta + 2);
+   pr.ptge_theta_mean_XP->SetTitle(
+      ";Track angle #theta [#circ];Mean dE/dx [ADC counts/cm]");
+   pr.ptge_theta_mean_XP->GetXaxis()->SetLimits(-93, 93);
+   pr.ptge_theta_mean_XP->GetYaxis()->SetRangeUser(meanmin, meanmax);
+   pr.ptge_theta_mean_XP->Draw("AP");
+   pr.ptge_theta_mean_WF->Draw("P same");
+   fpLegend->Draw();
+   fpCanvas->SaveAs(fRealpathPDF.c_str());
+
+   // 2D distribution
+   fpCanvas->Clear();
+   SetMarginH2((TPad *)gPad);
+   pr.fph2f_XPtheta->SetTitle(
+      ";Track angle #theta [#circ];dE/dx with XP [ADC counts/cm]");
+   pr.fph2f_XPtheta->Draw("colz");
+   fpCanvas->SaveAs(fRealpathPDF.c_str());
+
+   fpCanvas->Clear();
+   pr.fph2f_lentheta->Draw("colz");
+   fpCanvas->SaveAs(fRealpathPDF.c_str());
+
+   fpCanvas->Clear();
+   pr.fph2f_momtheta->Draw("colz");
+   fpCanvas->SaveAs(fRealpathPDF.c_str());
+
+   fpCanvas->Clear();
+   SetMarginH1((TPad *)gPad);
+   pr.fph1f_theta->Draw("HIST");
+   fpCanvas->SaveAs(fRealpathPDF.c_str());
+
+   // -----------------------------------------------------------------------------------------------------------------
+   // Both angles
+   fpCanvas->Clear();
+   SetMarginH2((TPad *)gPad);
+   pr.fph2f_phitheta->Draw("colz");
    fpCanvas->SaveAs(fRealpathPDF.c_str());
 
    // -----------------------------------------------------------------------------------------------------------------
@@ -609,10 +595,11 @@ void Draw::Run(const std::string &filepath)
    // Pulls vs theta
    // Standard deviation
    fpCanvas->Clear();
-   gPad->SetRightMargin(0.035);
+   SetMarginH1((TPad *)gPad);
    Graphic_setup(pr.ptge_theta_std_pullmu, 2, 21, kBlue + 1, 2, kBlue + 1);
    Graphic_setup(pr.ptge_theta_std_pullelec, 2, 20, kOrange + 7, 2, kOrange + 7);
-   pr.ptge_theta_std_pullmu->SetTitle(";#theta (#circ);Pulls standard deviation");
+   pr.ptge_theta_std_pullmu->SetTitle(
+      ";Track angle #theta [#circ];Pulls standard deviation");
    float minpull = 0;
    float maxpull = (pr.ptge_theta_std_pullmu->GetHistogram()->GetMaximum() >
                     pr.ptge_theta_std_pullelec->GetHistogram()->GetMaximum())
@@ -640,7 +627,7 @@ void Draw::Run(const std::string &filepath)
    fpCanvas->Clear();
    Graphic_setup(pr.ptge_theta_mean_pullmu, 2, 21, kBlue + 1, 2, kBlue + 1);
    Graphic_setup(pr.ptge_theta_mean_pullelec, 2, 20, kOrange + 7, 2, kOrange + 7);
-   pr.ptge_theta_mean_pullmu->SetTitle(";#theta (#circ);Pulls mean");
+   pr.ptge_theta_mean_pullmu->SetTitle(";Track angle #theta [#circ];Pulls mean");
    minpull = (pr.ptge_theta_mean_pullmu->GetHistogram()->GetMinimum() <
               pr.ptge_theta_mean_pullelec->GetHistogram()->GetMinimum())
                 ? pr.ptge_theta_mean_pullmu->GetHistogram()->GetMinimum()
@@ -665,10 +652,9 @@ void Draw::Run(const std::string &filepath)
    // Pulls vs momentum
    // Standard deviation
    fpCanvas->Clear();
-   gPad->SetRightMargin(0.035);
    Graphic_setup(pr.ptge_mom_std_pullmu, 2, 21, kBlue + 1, 2, kBlue + 1);
    Graphic_setup(pr.ptge_mom_std_pullelec, 2, 20, kOrange + 7, 2, kOrange + 7);
-   pr.ptge_mom_std_pullmu->SetTitle(";Momentum (MeV/c);Pulls standard deviation");
+   pr.ptge_mom_std_pullmu->SetTitle(";Momentum [MeV/c];Pulls standard deviation");
    minpull = 0;
    maxpull = (pr.ptge_mom_std_pullmu->GetHistogram()->GetMaximum() >
               pr.ptge_mom_std_pullelec->GetHistogram()->GetMaximum())
@@ -691,7 +677,7 @@ void Draw::Run(const std::string &filepath)
    fpCanvas->Clear();
    Graphic_setup(pr.ptge_mom_mean_pullmu, 2, 21, kBlue + 1, 2, kBlue + 1);
    Graphic_setup(pr.ptge_mom_mean_pullelec, 2, 20, kOrange + 7, 2, kOrange + 7);
-   pr.ptge_mom_mean_pullmu->SetTitle(";Momentum (MeV/c);Pulls mean");
+   pr.ptge_mom_mean_pullmu->SetTitle(";Momentum [MeV/c];Pulls mean");
    minpull = (pr.ptge_mom_mean_pullmu->GetHistogram()->GetMinimum() <
               pr.ptge_mom_mean_pullelec->GetHistogram()->GetMinimum())
                 ? pr.ptge_mom_mean_pullmu->GetHistogram()->GetMinimum()
@@ -713,24 +699,31 @@ void Draw::Run(const std::string &filepath)
    fpCanvas->SaveAs(fRealpathPDF.c_str());
 
    fpCanvas->Clear();
-   gPad->SetRightMargin(0.13);
+   SetMarginH2((TPad *)gPad);
    pr.fph2f_pullelecmu->Draw("colz");
    fpCanvas->SaveAs(fRealpathPDF.c_str());
 
    // Pulls distribution
    fpCanvas->Clear();
-   gPad->SetRightMargin(0.035);
-   gPad->SetTopMargin(0.05);
+   SetMarginH1((TPad *)gPad);
    Graphic_setup(pr.fph1f_pullmu, 0.5, 1, kCyan + 1, 2, kCyan - 2, kCyan, 0.2);
    Graphic_setup(pr.fph1f_pullelec, 0.5, 1, kOrange + 7, 2, kOrange - 2, kOrange, 0.2);
    Graphic_setup(pr.fph1f_pullproton, 0.5, 1, kRed + 1, 2, kRed - 2, kRed, 0.2);
-   TLegend legpull2(0.75, 0.7, 0.9, 0.93);
-   legpull2.AddEntry(pr.fph1f_pullmu, " #mu hyp.", "f");
-   legpull2.AddEntry(pr.fph1f_pullelec, " e hyp.", "f");
-   legpull2.AddEntry(pr.fph1f_pullproton, " p hyp.", "f");
+   TLegend legpull2(0.2, 0.7, 0.35, 0.9);
+   legpull2.AddEntry(pr.fph1f_pullmu, "#mu?", "f");
+   legpull2.AddEntry(pr.fph1f_pullelec, "e?", "f");
+   legpull2.AddEntry(pr.fph1f_pullproton, "p?", "f");
    legpull2.SetTextSize(0.06);
    legpull2.SetTextColor(kBlue - 1);
+   legpull2.SetLineColor(kBlue - 1);
+   legpull2.SetBorderSize(1);
+   legpull2.SetTextAlign(22);
+   legpull2.SetMargin(0.5);
    pr.fph1f_pullmu->SetXTitle("Pull");
+   float maxpull2 = std::max(
+      pr.fph1f_pullmu->GetMaximum(),
+      std::max(pr.fph1f_pullelec->GetMaximum(), pr.fph1f_pullproton->GetMaximum()));
+   pr.fph1f_pullmu->GetYaxis()->SetRangeUser(0, maxpull2 + 0.1 * maxpull2);
    pr.fph1f_pullmu->Draw("HIST");
    pr.fph1f_pullelec->Draw("HIST same");
    pr.fph1f_pullproton->Draw("HIST same");
@@ -746,45 +739,54 @@ void Draw::Run(const std::string &filepath)
    float dstdelec = tf1_elec.GetParError(2);
    float separation = GetSeparation(&tf1_mu, &tf1_elec);
    float dseparation = GetSeparationError(&tf1_mu, &tf1_elec);
-   TPaveText pavetextmu(0.6, 0.4, 0.93, 0.55, "NDC");
+
+   TPaveText pavetextmu(0.6, 0.75, 0.93, 0.9, "NDC");
    pavetextmu.SetTextSize(0.05);
    pavetextmu.SetTextColor(kCyan + 4);
-   pavetextmu.SetFillColorAlpha(kCyan, 0.2);
+   pavetextmu.SetFillColorAlpha(kCyan, 0.6);
    pavetextmu.SetLineWidth(2);
    pavetextmu.SetBorderSize(2);
+   pavetextmu.SetTextAlign(22);
    pavetextmu.SetLineColor(kCyan - 2);
    pavetextmu.AddText(Form("#mu_{#mu} = %.3f #pm %.3f", meanmu, dmeanmu));
    pavetextmu.AddText(Form("#sigma_{#mu} = %.3f #pm %.3f", stdmu, dstdmu));
 
-   TPaveText pavetextelec(0.6, 0.2, 0.93, 0.35, "NDC");
+   TPaveText pavetextelec(0.6, 0.55, 0.93, 0.7, "NDC");
    pavetextelec.SetTextSize(0.05);
    pavetextelec.SetTextColor(kOrange + 3);
-   pavetextelec.SetFillColorAlpha(kOrange, 0.2);
+   pavetextelec.SetFillColorAlpha(kOrange, 0.6);
    pavetextelec.SetLineWidth(2);
    pavetextelec.SetBorderSize(2);
-   pavetextelec.SetLineColor(kOrange - 2);
+   pavetextelec.SetTextAlign(22);
+   pavetextelec.SetLineColor(kOrange - 1);
    pavetextelec.AddText(Form("#mu_{e} = %.3f #pm %.3f", meanelec, dmeanelec));
    pavetextelec.AddText(Form("#sigma_{e} = %.3f #pm %.3f", stdelec, dstdelec));
 
-   TLatex latexpull;
-   latexpull.SetNDC();
-   latexpull.SetTextSize(0.06);
-   latexpull.SetTextColor(kBlue - 1);
-   latexpull.DrawLatex(0.6, 0.6,
-                       Form("S(#mu/e) = %.2f #pm %.2f", separation, dseparation));
+   TPaveText paveTextSep(0.6, 0.4, 0.93, 0.5, "NDC");
+   paveTextSep.SetTextSize(0.058);
+   paveTextSep.SetTextColor(kBlue - 1);
+   paveTextSep.SetFillColor(kWhite);
+   paveTextSep.SetLineWidth(2);
+   paveTextSep.SetBorderSize(2);
+   paveTextSep.SetTextAlign(22);
+   paveTextSep.SetLineColor(kRed);
+   paveTextSep.AddText(Form("S(#mu/e) = %.2f #pm %.2f", separation, dseparation));
+
    legpull2.Draw();
    pavetextmu.Draw();
    pavetextelec.Draw();
+   paveTextSep.Draw();
    fpCanvas->SaveAs(fRealpathPDF.c_str());
 
    // Geometry plots
    // -----------------------------------------------------------------------------------------------------------------
-   gPad->SetTopMargin(0.02);
-   gPad->SetRightMargin(0.02);
    pr.fph1f_trklen->Draw("HIST");
    fpCanvas->SaveAs(fRealpathPDF.c_str());
 
    pr.fph1f_chi2->Draw("HIST");
+   fpCanvas->SaveAs(fRealpathPDF.c_str());
+
+   pr.fph1f_Xpos->Draw("HIST");
    fpCanvas->SaveAs(fRealpathPDF.c_str());
 
    pr.fph1f_dir0->Draw("HIST");
@@ -796,7 +798,7 @@ void Draw::Run(const std::string &filepath)
    pr.fph1f_dir2->Draw("HIST");
    fpCanvas->SaveAs(fRealpathPDF.c_str());
 
-   gPad->SetTopMargin(0.02);
+   SetMarginH2((TPad *)gPad);
    gPad->SetLogz();
    pr.fph2f_XZ->Draw("colz");
    fpCanvas->SaveAs(fRealpathPDF.c_str());
@@ -805,11 +807,10 @@ void Draw::Run(const std::string &filepath)
    fpCanvas->SaveAs(fRealpathPDF.c_str());
    gPad->SetLogz(0);
 
-   // Debugging
    // -----------------------------------------------------------------------------------------------------------------
+   // Debugging
 
    fpCanvas->Clear();
-   gPad->SetRightMargin(0.13);
    pr.fph2f_momR->Draw("colz");
    fpCanvas->SaveAs(fRealpathPDF.c_str());
 
@@ -817,91 +818,137 @@ void Draw::Run(const std::string &filepath)
    pr.fph2f_chi2ndfR->Draw("colz");
    fpCanvas->SaveAs(fRealpathPDF.c_str());
 
-   // dE/dx VS momentum bin
    // -----------------------------------------------------------------------------------------------------------------
-   gPad->SetTopMargin(0.08);
-   gPad->SetRightMargin(0.02);
+   TPaveText pavetextBins(0.65, 0.86, 0.98, 0.94, "NDC");
+   pavetextBins.SetTextAlign(22);
+   pavetextBins.SetTextSize(0.05);
+   pavetextBins.SetFillStyle(1001);
+   pavetextBins.SetFillColor(kWhite);
+   pavetextBins.SetBorderSize(2);
+   pavetextBins.SetLineWidth(2);
+
+   // dE/dx VS momentum bin
+   SetMarginH1((TPad *)gPad);
+   gPad->SetTopMargin(0.03);
    for (int i = 0; i < pr.nabsmomresobins; i++) {
       fpCanvas->Clear();
-      pr.vabsmomreso_fph1f_WF[i]->SetAxisRange(
-         0,
-         1.1 * std::max({pr.vabsmomreso_fph1f_WF[i]->GetMaximum(),
-                         pr.vabsmomreso_fph1f_XP[i]->GetMaximum()}),
-         "Y");
       float invX = 0;
       if (pr.vabsmomreso_fph1f_WF[i]->GetMean() > dEdxmax / 2)
          invX = 0.4;
+      pavetextBins.Clear();
+      pavetextBins.SetX1NDC(0.65 - invX);
+      pavetextBins.SetX2NDC(0.98 - invX);
+      pavetextBins.AddText(pr.vabsmomreso_fph1f_WF[i]->GetTitle());
+      pr.vabsmomreso_fph1f_WF[i]->SetTitle("");
+      pr.vabsmomreso_fph1f_WF[i]->SetMaximum(
+         1.1 * std::max({pr.vabsmomreso_fph1f_WF[i]->GetMaximum(),
+                         pr.vabsmomreso_fph1f_XP[i]->GetMaximum()}));
       Graphic_setup(pr.vabsmomreso_fph1f_WF[i], 0.5, 1, kCyan + 1, 2, kCyan - 2, kCyan,
                     0.2);
       Graphic_setup(pr.vabsmomreso_fph1f_XP[i], 0.5, 1, kMagenta + 1, 2, kMagenta - 2,
                     kMagenta, 0.2);
       pr.vabsmomreso_fph1f_WF[i]->Draw("HIST");
       pr.vabsmomreso_fph1f_XP[i]->Draw("HIST same");
-      PrintResolution(pr.vabsmomreso_fph1f_XP[i], fpCanvas, 0.65 - invX, 0.58,
+      PrintResolution(pr.vabsmomreso_fph1f_XP[i], fpCanvas, 0.65 - invX, 0.53,
                       kMagenta + 2, "XP");
-      PrintResolution(pr.vabsmomreso_fph1f_WF[i], fpCanvas, 0.65 - invX, 0.25, kCyan + 2,
+      PrintResolution(pr.vabsmomreso_fph1f_WF[i], fpCanvas, 0.65 - invX, 0.2, kCyan + 2,
                       "WF");
+      pavetextBins.Draw();
+      fpCanvas->SaveAs(fRealpathPDF.c_str());
+   }
+
+   // dE/dx VS signed momentum bin
+   // -----------------------------------------------------------------------------------------------------------------
+   for (int i = 0; i < pr.nmombins; i++) {
+      fpCanvas->Clear();
+      float invX = 0;
+      if (pr.vmom_fph1f_WF[i]->GetMean() > dEdxmax / 2)
+         invX = 0.4;
+      pavetextBins.Clear();
+      pavetextBins.SetX1NDC(0.65 - invX);
+      pavetextBins.SetX2NDC(0.98 - invX);
+      pavetextBins.Clear();
+      pavetextBins.AddText(pr.vmom_fph1f_WF[i]->GetTitle());
+      pr.vmom_fph1f_WF[i]->SetTitle("");
+      pr.vmom_fph1f_WF[i]->SetMaximum(1.1 *
+                                      std::max({pr.vmom_fph1f_WF[i]->GetMaximum(),
+                                                pr.vmom_fph1f_XP[i]->GetMaximum()}));
+      Graphic_setup(pr.vmom_fph1f_WF[i], 0.5, 1, kCyan + 1, 2, kCyan - 2, kCyan, 0.2);
+      Graphic_setup(pr.vmom_fph1f_XP[i], 0.5, 1, kMagenta + 1, 2, kMagenta - 2, kMagenta,
+                    0.2);
+      pr.vmom_fph1f_WF[i]->Draw("HIST");
+      pr.vmom_fph1f_XP[i]->Draw("HIST same");
+      PrintResolution(pr.vmom_fph1f_XP[i], fpCanvas, 0.65 - invX, 0.53, kMagenta + 2,
+                      "XP");
+      PrintResolution(pr.vmom_fph1f_WF[i], fpCanvas, 0.65 - invX, 0.2, kCyan + 2, "WF");
+      pavetextBins.Draw();
       fpCanvas->SaveAs(fRealpathPDF.c_str());
    }
 
    // dE/dx VS absolute phi (resolution)
    // -----------------------------------------------------------------------------------------------------------------
-   gPad->SetTopMargin(0.08);
-   gPad->SetRightMargin(0.02);
+   pavetextBins.SetTextSize(0.07);
    for (int i = 0; i < pr.nabsphiresobins; i++) {
       fpCanvas->Clear();
-      pr.vabsphireso_fph1f_WF[i]->SetAxisRange(
-         0,
-         1.1 * std::max({pr.vabsphireso_fph1f_WF[i]->GetMaximum(),
-                         pr.vabsphireso_fph1f_XP[i]->GetMaximum()}),
-         "Y");
       float invX = 0;
       if (pr.vabsphireso_fph1f_WF[i]->GetMean() > dEdxmax / 2)
          invX = 0.4;
+      pavetextBins.Clear();
+      pavetextBins.SetX1NDC(0.65 - invX);
+      pavetextBins.SetX2NDC(0.98 - invX);
+      pavetextBins.Clear();
+      pavetextBins.AddText(pr.vabsphireso_fph1f_WF[i]->GetTitle());
+      pr.vabsphireso_fph1f_WF[i]->SetTitle("");
+      pr.vabsphireso_fph1f_WF[i]->SetMaximum(
+         1.1 * std::max({pr.vabsphireso_fph1f_WF[i]->GetMaximum(),
+                         pr.vabsphireso_fph1f_XP[i]->GetMaximum()}));
       Graphic_setup(pr.vabsphireso_fph1f_WF[i], 0.5, 1, kCyan + 1, 2, kCyan - 2, kCyan,
                     0.2);
       Graphic_setup(pr.vabsphireso_fph1f_XP[i], 0.5, 1, kMagenta + 1, 2, kMagenta - 2,
                     kMagenta, 0.2);
-      pr.vabsphireso_fph1f_WF[i]->Draw("");
-      pr.vabsphireso_fph1f_XP[i]->Draw("same");
-      PrintResolution(pr.vabsphireso_fph1f_XP[i], fpCanvas, 0.65 - invX, 0.58,
+      pr.vabsphireso_fph1f_WF[i]->Draw("HIST");
+      pr.vabsphireso_fph1f_XP[i]->Draw("HIST same");
+      PrintResolution(pr.vabsphireso_fph1f_XP[i], fpCanvas, 0.65 - invX, 0.53,
                       kMagenta + 2, "XP");
-      PrintResolution(pr.vabsphireso_fph1f_WF[i], fpCanvas, 0.65 - invX, 0.25, kCyan + 2,
+      PrintResolution(pr.vabsphireso_fph1f_WF[i], fpCanvas, 0.65 - invX, 0.2, kCyan + 2,
                       "WF");
+      pavetextBins.Draw();
       fpCanvas->SaveAs(fRealpathPDF.c_str());
    }
 
    // dE/dx VS absolute theta (resolution)
    // -----------------------------------------------------------------------------------------------------------------
-   gPad->SetTopMargin(0.08);
-   gPad->SetRightMargin(0.02);
    for (int i = 0; i < pr.nabsthetaresobins; i++) {
       fpCanvas->Clear();
-      pr.vabsthetareso_fph1f_WF[i]->SetAxisRange(
-         0,
-         1.1 * std::max({pr.vabsthetareso_fph1f_WF[i]->GetMaximum(),
-                         pr.vabsthetareso_fph1f_XP[i]->GetMaximum()}),
-         "Y");
       float invX = 0;
       if (pr.vabsthetareso_fph1f_WF[i]->GetMean() > dEdxmax / 2)
          invX = 0.4;
+      pavetextBins.Clear();
+      pavetextBins.SetX1NDC(0.65 - invX);
+      pavetextBins.SetX2NDC(0.98 - invX);
+      pavetextBins.Clear();
+      pavetextBins.AddText(pr.vabsthetareso_fph1f_WF[i]->GetTitle());
+      pr.vabsthetareso_fph1f_WF[i]->SetTitle("");
+      pr.vabsthetareso_fph1f_WF[i]->SetMaximum(
+         1.1 * std::max({pr.vabsthetareso_fph1f_WF[i]->GetMaximum(),
+                         pr.vabsthetareso_fph1f_XP[i]->GetMaximum()}));
       Graphic_setup(pr.vabsthetareso_fph1f_WF[i], 0.5, 1, kCyan + 1, 2, kCyan - 2, kCyan,
                     0.2);
       Graphic_setup(pr.vabsthetareso_fph1f_XP[i], 0.5, 1, kMagenta + 1, 2, kMagenta - 2,
                     kMagenta, 0.2);
-      pr.vabsthetareso_fph1f_WF[i]->Draw("");
-      pr.vabsthetareso_fph1f_XP[i]->Draw("same");
-      PrintResolution(pr.vabsthetareso_fph1f_XP[i], fpCanvas, 0.65 - invX, 0.58,
+      pr.vabsthetareso_fph1f_WF[i]->Draw("HIST");
+      pr.vabsthetareso_fph1f_XP[i]->Draw("HIST same");
+      PrintResolution(pr.vabsthetareso_fph1f_XP[i], fpCanvas, 0.65 - invX, 0.53,
                       kMagenta + 2, "XP");
-      PrintResolution(pr.vabsthetareso_fph1f_WF[i], fpCanvas, 0.65 - invX, 0.25,
-                      kCyan + 2, "WF");
+      PrintResolution(pr.vabsthetareso_fph1f_WF[i], fpCanvas, 0.65 - invX, 0.2, kCyan + 2,
+                      "WF");
+      pavetextBins.Draw();
       fpCanvas->SaveAs(fRealpathPDF.c_str());
    }
 
    // Drift velocity plots
    // -----------------------------------------------------------------------------------------------------------------
    fpCanvas->Clear();
-   gPad->SetRightMargin(0.02);
    int bins = 100;
    int tmin = -999;
    int max = -999;
@@ -996,9 +1043,6 @@ void Draw::Run(const std::string &filepath)
    fpCanvas->SaveAs(fRealpathPDF.c_str());
 
    fpCanvas->Clear();
-   gStyle->SetOptStat(0);
-   gStyle->SetOptFit(0);
-
    pr.fph1i_tmaxBotCath->SetAxisRange(
       0,
       1.1 * std::max({pr.fph1i_tmaxBotCath->GetMaximum(), pr.fph1i_tmaxEP0->GetMaximum(),
@@ -1276,7 +1320,7 @@ void Draw::Compare(const std::vector<std::string> &v_filepaths, const std::strin
    bethefixelectron->SetParameter(5, 0.511);
 
    // -----------------------------------------------------------------------------------------------------------------
-   // dE/dx vs track length fit
+   // dE/dx vs Track length fit
    const char *trklenresoform = "[0] + [1]*pow(x, [2])";
    TF1 trklenresofit("trklenresofit", trklenresoform, 0, 2000);
    trklenresofit.SetParameter(2, -0.5);
@@ -1359,7 +1403,7 @@ void Draw::Compare(const std::vector<std::string> &v_filepaths, const std::strin
    // -----------------------------------------------------------------------------------------------------------------
    // dE/dx vs momentum
    // Resolution
-   pr0->ptge_absmom_reso_XP->SetTitle(";Momentum (MeV/c);dE/dx resolution (%)");
+   pr0->ptge_absmom_reso_XP->SetTitle(";Momentum [MeV/c];dE/dx resolution [%]");
    pr0->ptge_absmom_reso_XP->GetXaxis()->SetLimits(0, momrange);
    pr0->ptge_absmom_reso_XP->GetYaxis()->SetRangeUser(resominmom, resomaxmom);
    for (int i = 0; i < ncomparisons; i++) {
@@ -1368,7 +1412,7 @@ void Draw::Compare(const std::vector<std::string> &v_filepaths, const std::strin
    legendXP.Draw();
    fpCanvas->SaveAs(OutputFile.c_str());
    // Add WF
-   pr0->ptge_absmom_reso_XP->SetTitle(";Momentum (MeV/c);dE/dx resolution (%)");
+   pr0->ptge_absmom_reso_XP->SetTitle(";Momentum [MeV/c];dE/dx resolution [%]");
    pr0->ptge_absmom_reso_XP->GetXaxis()->SetLimits(0, momrange);
    pr0->ptge_absmom_reso_XP->GetYaxis()->SetRangeUser(resominmom, resomaxmom);
    for (int i = 0; i < ncomparisons; i++) {
@@ -1379,7 +1423,7 @@ void Draw::Compare(const std::vector<std::string> &v_filepaths, const std::strin
    fpCanvas->SaveAs(OutputFile.c_str());
 
    // Mean
-   pr0->ptge_absmom_mean_XP->SetTitle(";Momentum (MeV/c);dE/dx (ADC counts/cm)");
+   pr0->ptge_absmom_mean_XP->SetTitle(";Momentum [MeV/c];dE/dx [ADC counts/cm]");
    pr0->ptge_absmom_mean_XP->GetXaxis()->SetLimits(0, momrange);
    pr0->ptge_absmom_mean_XP->GetYaxis()->SetRangeUser(dedxminmom, dedxmaxmom);
    for (int i = 0; i < ncomparisons; i++) {
@@ -1388,7 +1432,7 @@ void Draw::Compare(const std::vector<std::string> &v_filepaths, const std::strin
    legendXP.Draw();
    fpCanvas->SaveAs(OutputFile.c_str());
    // Add WF
-   pr0->ptge_absmom_mean_XP->SetTitle(";Momentum (MeV/c);dE/dx (ADC counts/cm)");
+   pr0->ptge_absmom_mean_XP->SetTitle(";Momentum [MeV/c];dE/dx [ADC counts/cm]");
    pr0->ptge_absmom_mean_XP->GetXaxis()->SetLimits(0, momrange);
    pr0->ptge_absmom_mean_XP->GetYaxis()->SetRangeUser(dedxminmom, dedxmaxmom);
    for (int i = 0; i < ncomparisons; i++) {
@@ -1402,7 +1446,7 @@ void Draw::Compare(const std::vector<std::string> &v_filepaths, const std::strin
    fpCanvas->SetGrid(0, 0);
    gPad->SetRightMargin(0.11);
    pr0->fph2f_XPabsmommean->GetYaxis()->SetRangeUser(200, 1000);
-   pr0->fph2f_XPabsmommean->GetYaxis()->SetTitle("dE/dx (ADC counts/cm)");
+   pr0->fph2f_XPabsmommean->GetYaxis()->SetTitle("dE/dx [ADC counts/cm]");
    pr0->fph2f_XPabsmommean->Draw("colz");
    bethefixmuon->SetLineColor(kCyan);
    bethefixmuon->SetLineStyle(9);
@@ -1430,7 +1474,7 @@ void Draw::Compare(const std::vector<std::string> &v_filepaths, const std::strin
    // dE/dx vs drift distance
    // -----------------------------------------------------------------------------------------------------------------
    // Resolution
-   pr0->ptge_dd_reso_XP->SetTitle(";Drift distance (mm);dE/dx resolution (%)");
+   pr0->ptge_dd_reso_XP->SetTitle(";Drift distance [mm];dE/dx resolution [%]");
    pr0->ptge_dd_reso_XP->GetXaxis()->SetLimits(0, 1000);
    pr0->ptge_dd_reso_XP->GetYaxis()->SetRangeUser(resominX, resomaxX);
    for (int i = 0; i < ncomparisons; i++) {
@@ -1439,7 +1483,7 @@ void Draw::Compare(const std::vector<std::string> &v_filepaths, const std::strin
    legendXP.Draw();
    fpCanvas->SaveAs(OutputFile.c_str());
    // Add WF
-   pr0->ptge_dd_reso_XP->SetTitle(";Drift distance (mm);dE/dx resolution (%)");
+   pr0->ptge_dd_reso_XP->SetTitle(";Drift distance [mm];dE/dx resolution [%]");
    pr0->ptge_dd_reso_XP->GetXaxis()->SetLimits(0, 1000);
    pr0->ptge_dd_reso_XP->GetYaxis()->SetRangeUser(resominX, resomaxX);
    for (int i = 0; i < ncomparisons; i++) {
@@ -1450,7 +1494,7 @@ void Draw::Compare(const std::vector<std::string> &v_filepaths, const std::strin
    fpCanvas->SaveAs(OutputFile.c_str());
 
    // Mean
-   pr0->ptge_dd_mean_XP->SetTitle(";Drift distance (mm);dE/dx (ADC counts/cm)");
+   pr0->ptge_dd_mean_XP->SetTitle(";Drift distance [mm];dE/dx [ADC counts/cm]");
    pr0->ptge_dd_mean_XP->GetXaxis()->SetLimits(0, 1000);
    pr0->ptge_dd_mean_XP->GetYaxis()->SetRangeUser(dedxminX, dedxmaxX);
    for (int i = 0; i < ncomparisons; i++) {
@@ -1459,7 +1503,7 @@ void Draw::Compare(const std::vector<std::string> &v_filepaths, const std::strin
    legendXP.Draw();
    fpCanvas->SaveAs(OutputFile.c_str());
    // Add WF
-   pr0->ptge_dd_mean_XP->SetTitle(";Drift distance (mm);dE/dx (ADC counts/cm)");
+   pr0->ptge_dd_mean_XP->SetTitle(";Drift distance [mm];dE/dx [ADC counts/cm]");
    pr0->ptge_dd_mean_XP->GetXaxis()->SetLimits(0, 1000);
    pr0->ptge_dd_mean_XP->GetYaxis()->SetRangeUser(dedxminX, dedxmaxX);
    for (int i = 0; i < ncomparisons; i++) {
@@ -1470,9 +1514,9 @@ void Draw::Compare(const std::vector<std::string> &v_filepaths, const std::strin
    fpCanvas->SaveAs(OutputFile.c_str());
 
    // -----------------------------------------------------------------------------------------------------------------
-   // dE/dx VS track length
+   // dE/dx VS Track length
    // Resolution
-   pr0->ptge_trklen_reso_XP->SetTitle(";Track length (mm);dE/dx resolution (%)");
+   pr0->ptge_trklen_reso_XP->SetTitle(";Track length [mm];dE/dx resolution [%]");
    pr0->ptge_trklen_reso_XP->GetXaxis()->SetLimits(0, 1850);
    pr0->ptge_trklen_reso_XP->GetYaxis()->SetRangeUser(resomintrklen, resomaxtrklen);
    for (int i = 0; i < ncomparisons; i++) {
@@ -1508,7 +1552,7 @@ void Draw::Compare(const std::vector<std::string> &v_filepaths, const std::strin
    legendXP.GetListOfPrimitives()->RemoveLast();
    legendXP.SetY1NDC(previousY1);
    // Add WF
-   pr0->ptge_trklen_reso_XP->SetTitle(";Track length (mm);dE/dx resolution (%)");
+   pr0->ptge_trklen_reso_XP->SetTitle(";Track length [mm];dE/dx resolution [%]");
    pr0->ptge_trklen_reso_XP->GetXaxis()->SetLimits(0, 1850);
    pr0->ptge_trklen_reso_XP->GetYaxis()->SetRangeUser(resomintrklen, resomaxtrklen);
    for (int i = 0; i < ncomparisons; i++) {
@@ -1519,7 +1563,7 @@ void Draw::Compare(const std::vector<std::string> &v_filepaths, const std::strin
    fpCanvas->SaveAs(OutputFile.c_str());
 
    // Mean
-   pr0->ptge_trklen_mean_XP->SetTitle(";Track length (mm);dE/dx (ADC counts/cm)");
+   pr0->ptge_trklen_mean_XP->SetTitle(";Track length [mm];dE/dx [ADC counts/cm]");
    pr0->ptge_trklen_mean_XP->GetXaxis()->SetLimits(0, 1850);
    pr0->ptge_trklen_mean_XP->GetYaxis()->SetRangeUser(dedxmintrklen, dedxmaxtrklen);
    for (int i = 0; i < ncomparisons; i++) {
@@ -1528,7 +1572,7 @@ void Draw::Compare(const std::vector<std::string> &v_filepaths, const std::strin
    legendXP.Draw();
    fpCanvas->SaveAs(OutputFile.c_str());
    // Add WF
-   pr0->ptge_trklen_mean_XP->SetTitle(";Track length (mm);dE/dx (ADC counts/cm)");
+   pr0->ptge_trklen_mean_XP->SetTitle(";Track length [mm];dE/dx [ADC counts/cm]");
    pr0->ptge_trklen_mean_XP->GetXaxis()->SetLimits(0, 1850);
    pr0->ptge_trklen_mean_XP->GetYaxis()->SetRangeUser(dedxmintrklen, dedxmaxtrklen);
    for (int i = 0; i < ncomparisons; i++) {
@@ -1541,7 +1585,8 @@ void Draw::Compare(const std::vector<std::string> &v_filepaths, const std::strin
    // -----------------------------------------------------------------------------------------------------------------
    // dE/dx VS phi
    // Resolution
-   pr0->ptge_absphi_reso_XP->SetTitle(";#varphi (#circ);dE/dx resolution (%)");
+   pr0->ptge_absphi_reso_XP->SetTitle(
+      ";Track angle #varphi [#circ];dE/dx resolution [%]");
    pr0->ptge_absphi_reso_XP->GetXaxis()->SetLimits(0, 90);
    pr0->ptge_absphi_reso_XP->GetYaxis()->SetRangeUser(resominphi, resomaxphi);
    for (int i = 0; i < ncomparisons + 2; i++) {
@@ -1550,7 +1595,8 @@ void Draw::Compare(const std::vector<std::string> &v_filepaths, const std::strin
    legendXPBC.Draw();
    fpCanvas->SaveAs(OutputFile.c_str());
    // Add WF
-   pr0->ptge_absphi_reso_XP->SetTitle(";#varphi (#circ);dE/dx resolution (%)");
+   pr0->ptge_absphi_reso_XP->SetTitle(
+      ";Track angle #varphi [#circ];dE/dx resolution [%]");
    pr0->ptge_absphi_reso_XP->GetXaxis()->SetLimits(0, 90);
    pr0->ptge_absphi_reso_XP->GetYaxis()->SetRangeUser(resominphi, resomaxphi);
    for (int i = 0; i < ncomparisons + 2; i++) {
@@ -1561,7 +1607,8 @@ void Draw::Compare(const std::vector<std::string> &v_filepaths, const std::strin
    fpCanvas->SaveAs(OutputFile.c_str());
 
    // Mean
-   pr0->ptge_absphi_mean_XP->SetTitle(";#varphi (#circ);dE/dx (ADC counts/cm)");
+   pr0->ptge_absphi_mean_XP->SetTitle(
+      ";Track angle #varphi [#circ];dE/dx [ADC counts/cm]");
    pr0->ptge_absphi_mean_XP->GetXaxis()->SetLimits(0, 90);
    pr0->ptge_absphi_mean_XP->GetYaxis()->SetRangeUser(dedxminphi, dedxmaxphi);
    for (int i = 0; i < ncomparisons + 2; i++) {
@@ -1570,7 +1617,8 @@ void Draw::Compare(const std::vector<std::string> &v_filepaths, const std::strin
    legendXPBC.Draw();
    fpCanvas->SaveAs(OutputFile.c_str());
    // Add WF
-   pr0->ptge_absphi_mean_XP->SetTitle(";#varphi (#circ);dE/dx (ADC counts/cm)");
+   pr0->ptge_absphi_mean_XP->SetTitle(
+      ";Track angle #varphi [#circ];dE/dx [ADC counts/cm]");
    pr0->ptge_absphi_mean_XP->GetXaxis()->SetLimits(0, 90);
    pr0->ptge_absphi_mean_XP->GetYaxis()->SetRangeUser(dedxminphi, dedxmaxphi);
    for (int i = 0; i < ncomparisons + 2; i++) {
@@ -1583,7 +1631,8 @@ void Draw::Compare(const std::vector<std::string> &v_filepaths, const std::strin
    // -----------------------------------------------------------------------------------------------------------------
    // dE/dx VS theta bins
    // Resolution
-   pr0->ptge_abstheta_reso_XP->SetTitle(";#theta (#circ);dE/dx resolution (%)");
+   pr0->ptge_abstheta_reso_XP->SetTitle(
+      ";Track angle #theta [#circ];dE/dx resolution [%]");
    pr0->ptge_abstheta_reso_XP->GetXaxis()->SetLimits(0, 48);
    pr0->ptge_abstheta_reso_XP->GetYaxis()->SetRangeUser(resomintheta, resomaxtheta);
    for (int i = 0; i < ncomparisons; i++) {
@@ -1592,7 +1641,8 @@ void Draw::Compare(const std::vector<std::string> &v_filepaths, const std::strin
    legendXP.Draw();
    fpCanvas->SaveAs(OutputFile.c_str());
    // Add WF
-   pr0->ptge_abstheta_reso_XP->SetTitle(";#theta (#circ);dE/dx resolution (%)");
+   pr0->ptge_abstheta_reso_XP->SetTitle(
+      ";Track angle #theta [#circ];dE/dx resolution [%]");
    pr0->ptge_abstheta_reso_XP->GetXaxis()->SetLimits(0, 48);
    pr0->ptge_abstheta_reso_XP->GetYaxis()->SetRangeUser(resomintheta, resomaxtheta);
    for (int i = 0; i < ncomparisons; i++) {
@@ -1603,7 +1653,8 @@ void Draw::Compare(const std::vector<std::string> &v_filepaths, const std::strin
    fpCanvas->SaveAs(OutputFile.c_str());
 
    // Mean
-   pr0->ptge_abstheta_mean_XP->SetTitle(";#theta (#circ);dE/dx (ADC counts/cm)");
+   pr0->ptge_abstheta_mean_XP->SetTitle(
+      ";Track angle #theta [#circ];dE/dx [ADC counts/cm]");
    pr0->ptge_abstheta_mean_XP->GetXaxis()->SetLimits(0, 48);
    pr0->ptge_abstheta_mean_XP->GetYaxis()->SetRangeUser(dedxmintheta, dedxmaxtheta);
    for (int i = 0; i < ncomparisons; i++) {
@@ -1612,7 +1663,8 @@ void Draw::Compare(const std::vector<std::string> &v_filepaths, const std::strin
    legendXP.Draw();
    fpCanvas->SaveAs(OutputFile.c_str());
    // Add WF
-   pr0->ptge_abstheta_mean_XP->SetTitle(";#theta (#circ);dE/dx (ADC counts/cm)");
+   pr0->ptge_abstheta_mean_XP->SetTitle(
+      ";Track angle #theta [#circ];dE/dx [ADC counts/cm]");
    pr0->ptge_abstheta_mean_XP->GetXaxis()->SetLimits(0, 48);
    pr0->ptge_abstheta_mean_XP->GetYaxis()->SetRangeUser(dedxmintheta, dedxmaxtheta);
    for (int i = 0; i < ncomparisons; i++) {
@@ -1624,4 +1676,187 @@ void Draw::Compare(const std::vector<std::string> &v_filepaths, const std::strin
 
    for (Process *pr : v_processes)
       delete pr;
+}
+
+void Draw::CompareComments(const std::vector<std::string> &v_filepaths)
+{
+
+   // Load processes
+   std::vector<Process *> v_processes;
+   for (int i = 0; i < v_filepaths.size(); i++) {
+      std::cout << "File " << i << ": " << v_filepaths[i] << std::endl;
+      TFile inputFile(v_filepaths[i].c_str(), "READ");
+      Process *process = dynamic_cast<Process *>(inputFile.Get("Process"));
+      v_processes.push_back(process);
+   }
+
+   Process *pr0 = v_processes[0];
+   int ncomparisons = (int)v_processes.size();
+   std::string OutputFile = foutputComparisonFolder + "/Comparison_" + pr0->frun +
+                            pr0->ftag + "_" + pr0->fcomment;
+   for (int i = 1; i < ncomparisons; i++)
+      OutputFile += "_VS_" + v_processes[i]->fcomment;
+   OutputFile += pr0->fcutslist + ".pdf";
+   std::cout << "Output file: " << OutputFile << std::endl;
+
+   // Plot setup
+   // -----------------------------------------------------------------------------------------------------------------
+   int dEdxmax = pr0->dEdxmax;
+   int momrange = pr0->momrange;
+   int nmombins = pr0->nmombins;
+
+   int resominmom = 2;
+   int resomaxmom = 12;
+   int dedxminmom = 350;
+   int dedxmaxmom = 650;
+   int resominX = 1;
+   int resomaxX = 12;
+   int dedxminX = 350;
+   int dedxmaxX = 500;
+   float resomintrklen = 4.5;
+   int resomaxtrklen = 16;
+   int dedxmintrklen = 300;
+   int dedxmaxtrklen = 550;
+   int resominphi = 2;
+   int resomaxphi = 13;
+   int dedxminphi = 350;
+   int dedxmaxphi = 500;
+   int resomintheta = 2;
+   int resomaxtheta = 13;
+   int dedxmintheta = 350;
+   int dedxmaxtheta = 500;
+   if (pr0->ffileName.find("dog1") != std::string::npos or
+       pr0->ffileName.find("cosmics") != std::string::npos) {
+      resominmom = 6;
+      resomaxmom = 14;
+      dedxminmom = 350;
+      dedxmaxmom = 650;
+      resominX = 4;
+      resomaxX = 16;
+      dedxminX = 300;
+      dedxmaxX = 550;
+      resomintrklen = 4;
+      resomaxtrklen = 16;
+      dedxmintrklen = 300;
+      dedxmaxtrklen = 550;
+      resominphi = 4;
+      resomaxphi = 14;
+      dedxminphi = 350;
+      dedxmaxphi = 500;
+      resomintheta = 4;
+      resomaxtheta = 16;
+      dedxmintheta = 300;
+      dedxmaxtheta = 550;
+   }
+
+   std::vector<int> colorsGain = {kBlue + 1, kGreen + 2, kOrange + 7};
+   std::vector<int> markersGain = {20, 22, 23};
+   for (int i = 0; i < ncomparisons; i++) {
+      Graphic_setup(v_processes[i]->fph1f_WF, 0.5, 1, colorsGain[i], 2, colorsGain[i],
+                    colorsGain[i], 0.2);
+      Graphic_setup(v_processes[i]->ptge_absmom_reso_WF, 3, markersGain[i], colorsGain[i],
+                    2, colorsGain[i]);
+      Graphic_setup(v_processes[i]->ptge_absmom_mean_WF, 2, markersGain[i], colorsGain[i],
+                    2, colorsGain[i]);
+   }
+
+   // Legends filling
+   std::vector<std::string> legEntries;
+   TLegend legGain(0.55, 0.75, 0.99, 0.99);
+   std::vector<TGraph*> v_dummies;
+   for (int i = 0; i < ncomparisons; i++) {
+      legEntries.push_back(v_processes[i]->flegend);
+
+      TGraph* dummyNoCorr = new TGraph();
+      dummyNoCorr->SetMarkerStyle(markersGain[i]);
+      dummyNoCorr->SetMarkerSize(7);
+      dummyNoCorr->SetMarkerColor(colorsGain[i]);
+      v_dummies.push_back(dummyNoCorr);
+      legGain.AddEntry(v_dummies[i],
+                       v_processes[i]->flegend.c_str(), "p");
+   }
+   legGain.SetBorderSize(2);
+   legGain.SetLineColor(kBlue - 1);
+   legGain.SetLineWidth(2);
+   legGain.SetTextSize(0.06);
+   legGain.SetTextColor(kBlue - 1);
+
+   // -----------------------------------------------------------------------------------
+   fpCanvas->cd();
+   fpCanvas->SetGrid(1, 1);
+   gStyle->SetOptStat(0);
+   gStyle->SetOptFit(0);
+   gPad->SetBottomMargin(0.15);
+   gPad->SetTopMargin(0.06);
+   v_processes[0]->fph1f_WF->SetTitleOffset(0.8, "Y");
+   // Global dE/dx plot (real data vs simulation)
+   float maxcount = 0;
+   for (int i = 0; i < ncomparisons; i++)
+      maxcount =
+         std::max(pr0->fph1f_WF->GetMaximum(), v_processes[i]->fph1f_WF->GetMaximum());
+   float xwidth = 0.27;
+   float xright = 0.93;
+   float ymax = 0.91;
+   float ygap = 0.03;
+   float ywidth = (ymax - 0.15) / ncomparisons - ygap;
+
+   for (int i = 0; i < ncomparisons; i++) {
+      v_processes[i]->fph1f_WF->SetTitle("");
+      v_processes[i]->fph1f_WF->SetAxisRange(0, 1.1 * maxcount, "Y");
+      float ytop = ymax - i * (ywidth + ygap);
+      v_processes[i]->fph1f_WF->Draw(i == 0 ? "HIST" : "HIST same");
+      PrintResolution(v_processes[i]->fph1f_WF, fpCanvas, xright, ytop, xwidth, ywidth,
+                      "north east", colorsGain[i], v_processes[i]->flegend, 3, 0.045);
+   }
+   fpCanvas->SaveAs((OutputFile + "(").c_str());
+
+   // -----------------------------------------------------------------------------------
+   // dE/dx resolution as a function of momentum
+   fpCanvas->Clear();
+   gPad->SetRightMargin(0.05);
+   gPad->SetLeftMargin(0.14);
+   gPad->SetTopMargin(0.03);
+   double minGainReso = 1e4, maxGainReso = 0;
+   for (int i = 0; i < ncomparisons; i++) {
+      maxGainReso = std::max(
+         maxGainReso, v_processes[i]->ptge_absmom_reso_WF->GetHistogram()->GetMaximum());
+      minGainReso = std::min(
+         minGainReso, v_processes[i]->ptge_absmom_reso_WF->GetHistogram()->GetMinimum());
+   }
+   v_processes[0]->ptge_absmom_reso_WF->SetTitle(
+      ";Momentum [MeV/c];dE/dx resolution [%]");
+   v_processes[0]->ptge_absmom_reso_WF->GetXaxis()->SetLimits(0, momrange);
+   v_processes[0]->ptge_absmom_reso_WF->GetYaxis()->SetRangeUser(6,
+                                                                 17);
+   for (int i = 0; i < ncomparisons; i++) {
+      v_processes[i]->ptge_absmom_reso_WF->DrawClone(i == 0 ? "AP" : "P same");
+   }
+   legGain.Draw();
+   fpCanvas->SaveAs(OutputFile.c_str());
+
+   // -----------------------------------------------------------------------------------
+   // dE/dx mean value as a function of momentum
+   double minGainMean = 1e4, maxGainMean = 0;
+   for (int i = 0; i < ncomparisons; i++) {
+      maxGainMean = std::max(
+         maxGainMean, v_processes[i]->ptge_absmom_mean_WF->GetHistogram()->GetMaximum());
+      minGainMean = std::min(
+         minGainMean, v_processes[i]->ptge_absmom_mean_WF->GetHistogram()->GetMinimum());
+   }
+   v_processes[0]->ptge_absmom_mean_WF->SetTitle(
+      ";Momentum [MeV/c];dE/dx [ADC counts/cm]");
+   v_processes[0]->ptge_absmom_mean_WF->GetXaxis()->SetLimits(0, momrange);
+   v_processes[0]->ptge_absmom_mean_WF->GetYaxis()->SetRangeUser(minGainMean,
+                                                                 maxGainMean);
+   for (int i = 0; i < ncomparisons; i++) {
+      v_processes[i]->ptge_absmom_mean_WF->DrawClone(i == 0 ? "AP" : "P same");
+   }
+   legGain.Draw();
+   fpCanvas->SaveAs((OutputFile + ")").c_str());
+
+   for (Process *pr : v_processes)
+      delete pr;
+   
+   for (TGraph *dummy : v_dummies)
+      delete dummy;
 }

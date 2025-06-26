@@ -26,7 +26,7 @@ public:
    // Member functions
    void Run(const std::string &filepath);
    void Compare(const std::vector<std::string> &v_filepaths, const std::string &type);
-   void PaperPlots(const std::vector<std::string> &v_filepaths, const std::string &type);
+   void CompareComments(const std::vector<std::string> &v_filepaths);
 
 private:
    std::string frun;
@@ -57,6 +57,21 @@ private:
    int meanmax = 600;
    int stdmin = 0;
    int stdmax = 100;
+
+   // Margins
+   float marginTop = 0.06;
+   float marginBottom = 0.15;
+   float marginLeft = 0.14;
+   float marginRighth1 = 0.045;
+   float marginRighth2 = 0.15;
+   void SetMarginH1(TPad *pad)
+   {
+      pad->SetMargin(marginLeft, marginRighth1, marginBottom, marginTop);
+   }
+   void SetMarginH2(TPad *pad)
+   {
+      pad->SetMargin(marginLeft, marginRighth2, marginBottom, marginTop);
+   }
 };
 
 #endif

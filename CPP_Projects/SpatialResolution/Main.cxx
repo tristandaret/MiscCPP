@@ -79,16 +79,22 @@ int main()
    std::vector<TH1F> v_h1f_topresodiffold;
    std::vector<TH1F> v_h1f_topresodiffnew;
    for (int i = 0; i < (int)v_files.size(); i++) {
-      v_h1f_botreso.push_back(TH1F(Form("h1f_botreso_%d", i), "; Resolution (mm); Count (normalized)", 100, -4, 4));
-      v_h1f_topreso.push_back(TH1F(Form("h1f_topreso_%d", i), "; Resolution (mm); Count (normalized)", 100, -4, 4));
-      v_h1f_botresodiffold.push_back(
-         TH1F(Form("h1f_botresodiffold_%d", i), "; Resolution (mm); Count (normalized)", 100, -4, 4));
-      v_h1f_botresodiffnew.push_back(
-         TH1F(Form("h1f_botresodiffnew_%d", i), "; Resolution (mm); Count (normalized)", 100, -4, 4));
-      v_h1f_topresodiffold.push_back(
-         TH1F(Form("h1f_topresodiffold_%d", i), "; Resolution (mm); Count (normalized)", 100, -4, 4));
-      v_h1f_topresodiffnew.push_back(
-         TH1F(Form("h1f_topresodiffnew_%d", i), "; Resolution (mm); Count (normalized)", 100, -4, 4));
+      v_h1f_botreso.push_back(TH1F(Form("h1f_botreso_%d", i),
+                                   "; Resolution [mm]; Count (normalized)", 100, -4, 4));
+      v_h1f_topreso.push_back(TH1F(Form("h1f_topreso_%d", i),
+                                   "; Resolution [mm]; Count (normalized)", 100, -4, 4));
+      v_h1f_botresodiffold.push_back(TH1F(Form("h1f_botresodiffold_%d", i),
+                                          "; Resolution [mm]; Count (normalized)", 100,
+                                          -4, 4));
+      v_h1f_botresodiffnew.push_back(TH1F(Form("h1f_botresodiffnew_%d", i),
+                                          "; Resolution [mm]; Count (normalized)", 100,
+                                          -4, 4));
+      v_h1f_topresodiffold.push_back(TH1F(Form("h1f_topresodiffold_%d", i),
+                                          "; Resolution [mm]; Count (normalized)", 100,
+                                          -4, 4));
+      v_h1f_topresodiffnew.push_back(TH1F(Form("h1f_topresodiffnew_%d", i),
+                                          "; Resolution [mm]; Count (normalized)", 100,
+                                          -4, 4));
    }
 
    // Fill histograms
@@ -153,8 +159,10 @@ int main()
       pad1->cd();
       v_h1f_botreso[i].GetMaximum() > norm ? norm = v_h1f_botreso[i].GetMaximum() : norm;
       v_h1f_topreso[i].GetMaximum() > norm ? norm = v_h1f_topreso[i].GetMaximum() : norm;
-      Graphic_setup(&v_h1f_topreso[i], 0.5, 1, colors[i] - 1, 2, colors[i] - 1, colors[i] - 1, 0.1);
-      Graphic_setup(&v_h1f_botreso[i], 0.5, 1, colors[i] + 1, 2, colors[i] + 1, colors[i] + 1, 0.1);
+      Graphic_setup(&v_h1f_topreso[i], 0.5, 1, colors[i] - 1, 2, colors[i] - 1,
+                    colors[i] - 1, 0.1);
+      Graphic_setup(&v_h1f_botreso[i], 0.5, 1, colors[i] + 1, 2, colors[i] + 1,
+                    colors[i] + 1, 0.1);
       v_h1f_topreso[0].SetMaximum(norm * 1.1);
       v_h1f_topreso[0].GetXaxis()->SetLabelSize(0);
       v_h1f_topreso[0].GetXaxis()->SetTitle("");
@@ -166,19 +174,31 @@ int main()
       if (i == 0)
          continue;
       pad2->cd();
-      v_h1f_botresodiffold[i].GetMaximum() > normdiff ? normdiff = v_h1f_botresodiffold[i].GetMaximum() : normdiff;
-      v_h1f_botresodiffnew[i].GetMaximum() > normdiff ? normdiff = v_h1f_botresodiffnew[i].GetMaximum() : normdiff;
-      v_h1f_topresodiffold[i].GetMaximum() > normdiff ? normdiff = v_h1f_topresodiffold[i].GetMaximum() : normdiff;
-      v_h1f_topresodiffnew[i].GetMaximum() > normdiff ? normdiff = v_h1f_topresodiffnew[i].GetMaximum() : normdiff;
+      v_h1f_botresodiffold[i].GetMaximum() > normdiff
+         ? normdiff = v_h1f_botresodiffold[i].GetMaximum()
+         : normdiff;
+      v_h1f_botresodiffnew[i].GetMaximum() > normdiff
+         ? normdiff = v_h1f_botresodiffnew[i].GetMaximum()
+         : normdiff;
+      v_h1f_topresodiffold[i].GetMaximum() > normdiff
+         ? normdiff = v_h1f_topresodiffold[i].GetMaximum()
+         : normdiff;
+      v_h1f_topresodiffnew[i].GetMaximum() > normdiff
+         ? normdiff = v_h1f_topresodiffnew[i].GetMaximum()
+         : normdiff;
       v_h1f_botresodiffold[1].SetMaximum(normdiff * 1.1);
       v_h1f_botresodiffold[1].GetXaxis()->SetTitleSize(0.12);
       v_h1f_botresodiffold[1].GetXaxis()->SetLabelSize(0.1);
       v_h1f_botresodiffold[1].GetYaxis()->SetTitleSize(0.12);
       v_h1f_botresodiffold[1].GetYaxis()->SetLabelSize(0.1);
-      Graphic_setup(&v_h1f_botresodiffold[i], 0.5, 1, colors[i] + 1, 1, colors[i] + 1, 0, 0);
-      Graphic_setup(&v_h1f_botresodiffnew[i], 0.5, 1, colors[i] + 1, 1, colors[i] + 1, 0, 0);
-      Graphic_setup(&v_h1f_topresodiffold[i], 0.5, 1, colors[i] - 1, 1, colors[i] - 1, 0, 0);
-      Graphic_setup(&v_h1f_topresodiffnew[i], 0.5, 1, colors[i] - 1, 1, colors[i] - 1, 0, 0);
+      Graphic_setup(&v_h1f_botresodiffold[i], 0.5, 1, colors[i] + 1, 1, colors[i] + 1, 0,
+                    0);
+      Graphic_setup(&v_h1f_botresodiffnew[i], 0.5, 1, colors[i] + 1, 1, colors[i] + 1, 0,
+                    0);
+      Graphic_setup(&v_h1f_topresodiffold[i], 0.5, 1, colors[i] - 1, 1, colors[i] - 1, 0,
+                    0);
+      Graphic_setup(&v_h1f_topresodiffnew[i], 0.5, 1, colors[i] - 1, 1, colors[i] - 1, 0,
+                    0);
       v_h1f_botresodiffold[i].Draw(i == 0 ? "HIST" : "HIST same");
       v_h1f_botresodiffnew[i].Draw("HIST same");
       v_h1f_topresodiffold[i].Draw("HIST same");

@@ -8,8 +8,8 @@ TStyle *SetMyStyle()
    TStyle *myStyle = new TStyle("tristanstyle", "Tristan's style");
 
    Int_t FontStyle = 132;
-   Float_t FontSizeLabel = 0.045;
-   Float_t FontSizeTitle = 0.055;
+   Float_t FontSizeLabel = 0.06;
+   Float_t FontSizeTitle = 0.07;
    Color_t FontColor = kBlue - 1;
 
    // Standard histogram decorations
@@ -57,7 +57,7 @@ TStyle *SetMyStyle()
 
    // Text
    myStyle->SetTextFont(FontStyle);
-   myStyle->SetTextSize(0.04);
+   myStyle->SetTextSize(0.07);
    myStyle->SetTextColor(FontColor);
 
    // Labels
@@ -89,6 +89,7 @@ TStyle *SetMyStyle()
    myStyle->SetAxisColor(FontColor, "xyz");
    myStyle->SetStripDecimals(kFALSE);  // removes decimals in labels
    myStyle->SetHistMinimumZero(kTRUE); // forces 0 to appear on y-axis
+   myStyle->SetNdivisions(505, "xyz"); // 5 divisions on each axis
 
    // Grid
    myStyle->SetPadGridX(1);

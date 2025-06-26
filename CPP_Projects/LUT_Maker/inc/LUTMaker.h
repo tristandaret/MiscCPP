@@ -91,10 +91,14 @@ private:
    // Vectors of discrete values for each dimension
    std::vector<double> v_phi, v_impact, v_drift, v_RC, v_Dt;
 
+   static constexpr int RCmin = 80;
+   static constexpr int RCmax = 160;
+   static constexpr int DtwithB=286;
+   static constexpr int DtwithoutB=323;
    // Number of discrete steps in each dimension of the Look Up Table
    static const int SNSTEPS_TRANS = 2;
-   static const int SNSTEPS_RC = 2;
-   static const int SNSTEPS_DRIFT = 101;
+   static const int SNSTEPS_RC = 17;
+   static const int SNSTEPS_DRIFT = 21;
    static const int SNSTEPS_D = 250;
    static const int SNSTEPS_PHI = 250;
 
@@ -108,7 +112,7 @@ private:
    static float LUTValues[SNSTEPS_TRANS][SNSTEPS_RC][SNSTEPS_DRIFT][SNSTEPS_D]
                          [SNSTEPS_PHI];
    float stepSizeTrans = 37; // 323->286, only 2 values
-   static constexpr float sSTEP_RC = 46;    // 112->158, only 2 values
+   static constexpr float sSTEP_RC = 5;
    static constexpr float sSTEP_PHI = 90. / (SNSTEPS_PHI - 1);
    static constexpr float sSTEP_IMPACT = (PAD_DIAG / 2) / (SNSTEPS_D - 1);
    static constexpr float sSTEP_DRIFT = 1000. / (SNSTEPS_DRIFT - 1);

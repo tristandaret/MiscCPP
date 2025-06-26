@@ -36,7 +36,8 @@ OA_EXCEPTION(EMissingDatum, EoaCore);
 #include <TrackingUtils.hxx>
 #include <fstream>
 
-ND::TG4TrajectoryPoint GetCloserG4Point(ND::TG4Trajectory &traj, ND::THandle<ND::TTrackState> front, double &dist)
+ND::TG4TrajectoryPoint GetCloserG4Point(ND::TG4Trajectory &traj,
+                                        ND::THandle<ND::TTrackState> front, double &dist)
 {
 
    std::vector<ND::TG4TrajectoryPoint> points = traj.GetTrajectoryPoints();
@@ -60,9 +61,11 @@ ND::TG4TrajectoryPoint GetCloserG4Point(ND::TG4Trajectory &traj, ND::THandle<ND:
    }
 
    if (icloser >= 0) {
-      // std::cout << " X " << points[icloser].GetPosition().X() << "  " << front->GetPosition()[0] << std::endl;
-      // std::cout << " Y " << points[icloser].GetPosition().Y() << "  " << front->GetPosition()[1] << std::endl;
-      // std::cout << " Z " << points[icloser].GetPosition().Z() << "  " << front->GetPosition()[2] << std::endl;
+      // std::cout << " X " << points[icloser].GetPosition().X() << "  " <<
+      // front->GetPosition()[0] << std::endl; std::cout << " Y " <<
+      // points[icloser].GetPosition().Y() << "  " << front->GetPosition()[1] <<
+      // std::endl; std::cout << " Z " << points[icloser].GetPosition().Z() << "  " <<
+      // front->GetPosition()[2] << std::endl;
 
       dist = dmin;
       return points[icloser];
@@ -75,7 +78,8 @@ ND::TG4TrajectoryPoint GetCloserG4Point(ND::TG4Trajectory &traj, ND::THandle<ND:
 class THATReconTreeMakerLoop : public ND::TND280EventLoopFunction {
 
 public:
-   THATReconTreeMakerLoop() : fEvent(0), fMomentum(0), fNclusters(0), fCurvature(0), fDirNorm(0)
+   THATReconTreeMakerLoop()
+      : fEvent(0), fMomentum(0), fNclusters(0), fCurvature(0), fDirNorm(0)
    {
       m_counter_Evt = 0;
       fPos[0] = 0;
@@ -109,13 +113,17 @@ public:
 
       fres_his_ep0 = new TH1F("res_ep0", "res_ep0", 200, -10, 10);
       fres_his_ep1 = new TH1F("res_ep1", "res_ep1", 200, -10, 10);
-      residuals_col = new TH2D("residuals_col", "residuals_col", 1152, 0, 1152, 200, -10, 10);
-      residuals_row = new TH2D("residuals_row", "residuals_row", 1024, 0, 1024, 200, -10, 10);
+      residuals_col =
+         new TH2D("residuals_col", "residuals_col", 1152, 0, 1152, 200, -10, 10);
+      residuals_row =
+         new TH2D("residuals_row", "residuals_row", 1024, 0, 1024, 200, -10, 10);
 
-      fres_his_ep0->SetTitle("cluster_residuals_EP0;counts;residuals (mm)");
-      fres_his_ep1->SetTitle("cluster_residuals_EP1;counts;residuals (mm)");
-      residuals_row->SetTitle("residuals vs row; col + 36 * mm + 36 * 8 * EP; residuals (mm)");
-      residuals_col->SetTitle("residuals vs col; row + 32 * mm + 32 * 8 * EP; residuals (mm)");
+      fres_his_ep0->SetTitle("cluster_residuals_EP0;counts;residuals [mm]");
+      fres_his_ep1->SetTitle("cluster_residuals_EP1;counts;residuals [mm]");
+      residuals_row->SetTitle(
+         "residuals vs row; col + 36 * mm + 36 * 8 * EP; residuals [mm]");
+      residuals_col->SetTitle(
+         "residuals vs col; row + 32 * mm + 32 * 8 * EP; residuals [mm]");
    };
 
    ~THATReconTreeMakerLoop() override = default;
@@ -200,13 +208,16 @@ public:
                continue;
             }
             if (trk->Get<ND::TIntegerDatum>("PathId"))
-               ND280Verbose("Pattern id: " << pattern->Get<ND::TIntegerDatum>("PathId")->GetValue());
+               ND280Verbose("Pattern id: "
+                            << pattern->Get<ND::TIntegerDatum>("PathId")->GetValue());
             ND280Verbose("\tNumber of hits " << trk->GetHits()->size());
 
             fCurvature = trk->GetCurvature();
 
-            TVector3 Pos(trk->GetPosition()[0], trk->GetPosition()[1], trk->GetPosition()[2]);
-            TVector3 Dir(trk->GetDirection()[0], trk->GetDirection()[1], trk->GetDirection()[2]);
+            TVector3 Pos(trk->GetPosition()[0], trk->GetPosition()[1],
+                         trk->GetPosition()[2]);
+            TVector3 Dir(trk->GetDirection()[0], trk->GetDirection()[1],
+                         trk->GetDirection()[2]);
 
             double B = 0.2;
             // project into the bending plane
@@ -270,11 +281,12 @@ public:
                ND::THandle<ND::TReconCluster> clt = clus;
                TVector3 global;
                if (clt->GetPosition().X() > 0)
-                  global.SetXYZ(980.59, clt->GetPosition().Y(), clt->GetPosition().Z()); // X is the drift
+                  global.SetXYZ(980.59, clt->GetPosition().Y(),
+                                clt->GetPosition().Z()); // X is the drift
                else
                   global.SetXYZ(-980.59, clt->GetPosition().Y(), clt->GetPosition().Z());
-               if (clt->GetPosition().Y() > 1200 or clt->GetPosition().Y() < 400 or clt->GetPosition().Z() > -1000 or
-                   clt->GetPosition().Z() < -2900)
+               if (clt->GetPosition().Y() > 1200 or clt->GetPosition().Y() < 400 or
+                   clt->GetPosition().Z() > -1000 or clt->GetPosition().Z() < -2900)
                   continue;
                ND::TGeometryId id;
                bool is_inside = ND::TGeomInfo::HAT().GlobalXYZToGeomId(global, id);
@@ -293,7 +305,8 @@ public:
                list_subtrack[mms + 8 * half] = 1;
                n_clus[mms + 8 * half]++;
             }
-            int n_subtracks = std::accumulate(std::begin(list_subtrack), std::end(list_subtrack), 0);
+            int n_subtracks =
+               std::accumulate(std::begin(list_subtrack), std::end(list_subtrack), 0);
 
             for (int iMM = 0; iMM < 32; iMM++) {
                if (list_subtrack[iMM] == 0)
@@ -323,23 +336,29 @@ public:
             fPID = pid_result->GetParticleId();
             // fPullMuon = pid_result->GetPIDWeight();
             fdEdx = pid_result->Get<ND::TRealDatum>("dEdx_PID")->GetValue();
-            // std::cout<<fPID<<" "<<fdEdx<<" pull mu "<<pid_result->GetPIDWeight()<<std::endl;
+            // std::cout<<fPID<<" "<<fdEdx<<" pull mu
+            // "<<pid_result->GetPIDWeight()<<std::endl;
 
             ND::TReconObjectContainer::const_iterator it;
-            for (it = pid_result->GetAlternates().begin(); it != pid_result->GetAlternates().end(); ++it) {
+            for (it = pid_result->GetAlternates().begin();
+                 it != pid_result->GetAlternates().end(); ++it) {
                ND::THandle<ND::TReconPID> alter = *it;
-               if (ND::TReconPID::ConvertParticleId(alter->GetParticleId()) == "Electron") {
-                  // std::cout << " name " << ND::TReconPID::ConvertParticleId(alter->GetParticleId()) << " pull "
+               if (ND::TReconPID::ConvertParticleId(alter->GetParticleId()) ==
+                   "Electron") {
+                  // std::cout << " name " <<
+                  // ND::TReconPID::ConvertParticleId(alter->GetParticleId()) << " pull "
                   //           << alter->GetPIDWeight() << std::endl;
                   fPullElec = alter->GetPIDWeight();
                }
                if (ND::TReconPID::ConvertParticleId(alter->GetParticleId()) == "Proton") {
-                  // std::cout << " name " << ND::TReconPID::ConvertParticleId(alter->GetParticleId()) << " pull "
+                  // std::cout << " name " <<
+                  // ND::TReconPID::ConvertParticleId(alter->GetParticleId()) << " pull "
                   //           << alter->GetPIDWeight() << std::endl;
                   fPullProt = alter->GetPIDWeight();
                }
                if (ND::TReconPID::ConvertParticleId(alter->GetParticleId()) == "Muon") {
-                  // std::cout << " name " << ND::TReconPID::ConvertParticleId(alter->GetParticleId()) << " pull "
+                  // std::cout << " name " <<
+                  // ND::TReconPID::ConvertParticleId(alter->GetParticleId()) << " pull "
                   //           << alter->GetPIDWeight() << std::endl;
                   fPullMuon = alter->GetPIDWeight();
                }
@@ -351,14 +370,19 @@ public:
       ND280Log("    Subtracks: " << n_tracks);
       int i_track = 0;
       for (int isub = 0; isub < n_tracks; isub++) {
-         ND280Log("    Open:  Subtracks " << i_track + 1 << "/" << n_tracks << " (MM #" << v_MM_ID[isub] << "):");
+         ND280Log("    Open:  Subtracks " << i_track + 1 << "/" << n_tracks << " (MM #"
+                                          << v_MM_ID[isub] << "):");
          for (int iC = 0; iC < (int)arr_tracks_x[isub].size(); iC++) {
             ND280Log("      Cluster " << std::setw(3) << iC << ": "
-                                      << "X = " << arr_tracks_x[isub][iC] << " ± " << arr_tracks_ex[isub][iC] << " | "
-                                      << "Y = " << arr_tracks_y[isub][iC] << " ± " << arr_tracks_ey[isub][iC] << " | "
-                                      << "Z = " << arr_tracks_z[isub][iC] << " ± " << 0.3);
+                                      << "X = " << arr_tracks_x[isub][iC] << " ± "
+                                      << arr_tracks_ex[isub][iC] << " | "
+                                      << "Y = " << arr_tracks_y[isub][iC] << " ± "
+                                      << arr_tracks_ey[isub][iC] << " | "
+                                      << "Z = " << arr_tracks_z[isub][iC] << " ± "
+                                      << 0.3);
          }
-         ND280Log("    Close: Subtracks " << i_track + 1 << "/" << n_tracks << " (MM #" << v_MM_ID[isub] << "):");
+         ND280Log("    Close: Subtracks " << i_track + 1 << "/" << n_tracks << " (MM #"
+                                          << v_MM_ID[isub] << "):");
          i_track++;
       }
 
@@ -391,11 +415,13 @@ public:
 
    void Usage() override
    {
-      std::cout << "Generate TTree from reconstructed track parameters." << std::endl << std::endl;
+      std::cout << "Generate TTree from reconstructed track parameters." << std::endl
+                << std::endl;
       fParOptMan.Usage();
    }
 
-   double GetMeanTimeOfMax_WF(ND::THandle<ND::TReconTrack> trk, ND::THandle<ND::THitSelection> fusedHitSelection)
+   double GetMeanTimeOfMax_WF(ND::THandle<ND::TReconTrack> trk,
+                              ND::THandle<ND::THitSelection> fusedHitSelection)
    {
 
       int i = 0;
@@ -453,8 +479,8 @@ public:
             else
                global.SetXYZ(-980.59, clt->GetPosition().Y(), clt->GetPosition().Z());
 
-            if (clt->GetPosition().Y() > 1200 or clt->GetPosition().Y() < 400 or clt->GetPosition().Z() > -1000 or
-                clt->GetPosition().Z() < -2900)
+            if (clt->GetPosition().Y() > 1200 or clt->GetPosition().Y() < 400 or
+                clt->GetPosition().Z() > -1000 or clt->GetPosition().Z() < -2900)
                continue;
 
             ND::TGeometryId id;
@@ -475,8 +501,10 @@ public:
                EP0 = true;
             else if (EP_num == 1)
                EP1 = true;
-            auto r = sqrt((clt->GetPosition().Z() - fcenter_circle_X) * (clt->GetPosition().Z() - fcenter_circle_X) +
-                          (clt->GetPosition().Y() - fcenter_circle_Y) * (clt->GetPosition().Y() - fcenter_circle_Y)) -
+            auto r = sqrt((clt->GetPosition().Z() - fcenter_circle_X) *
+                             (clt->GetPosition().Z() - fcenter_circle_X) +
+                          (clt->GetPosition().Y() - fcenter_circle_Y) *
+                             (clt->GetPosition().Y() - fcenter_circle_Y)) -
                      R;
 
             n_clus++;

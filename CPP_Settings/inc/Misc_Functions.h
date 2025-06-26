@@ -20,26 +20,28 @@ int sign(T x)
 
 // Add vectors
 template <typename T>
-std::vector<T>& operator+=(std::vector<T>& a, const std::vector<T>& b) {
-    if (a.size() != b.size()) {
-        throw std::runtime_error("Vector sizes don't match in operator+=");
-    }
-    for (size_t i = 0; i < a.size(); ++i) {
-        a[i] += b[i];
-    }
-    return a;
+std::vector<T> &operator+=(std::vector<T> &a, const std::vector<T> &b)
+{
+   if (a.size() != b.size()) {
+      throw std::runtime_error("Vector sizes don't match in operator+=");
+   }
+   for (size_t i = 0; i < a.size(); ++i) {
+      a[i] += b[i];
+   }
+   return a;
 }
 
 // Substract vectors
 template <typename T>
-std::vector<T>& operator-=(std::vector<T>& a, const std::vector<T>& b) {
-    if (a.size() != b.size()) {
-        throw std::runtime_error("Vector sizes don't match in operator-=");
-    }
-    for (size_t i = 0; i < a.size(); ++i) {
-        a[i] -= b[i];
-    }
-    return a;
+std::vector<T> &operator-=(std::vector<T> &a, const std::vector<T> &b)
+{
+   if (a.size() != b.size()) {
+      throw std::runtime_error("Vector sizes don't match in operator-=");
+   }
+   for (size_t i = 0; i < a.size(); ++i) {
+      a[i] -= b[i];
+   }
+   return a;
 }
 
 /* GENERAL MATH*/
@@ -54,10 +56,12 @@ TF1 *Fit1Gauss(TH1 *h1F);
 TF1 *Fit1Gauss(TH1 *h1F, const float &range);
 
 /* ROOT */
-double GetSeparation(const float &mean1, const float &std1, const float &mean2, const float &std2);
+double GetSeparation(const float &mean1, const float &std1, const float &mean2,
+                     const float &std2);
 double GetSeparation(const TF1 *tf1_1, const TF1 *tf1_2);
-double GetSeparationError(const float &mean1, const float &std1, const float &dmean1, const float &dstd1,
-                          const float &mean2, const float &std2, const float &dmean2, const float &dstd2);
+double GetSeparationError(const float &mean1, const float &std1, const float &dmean1,
+                          const float &dstd1, const float &mean2, const float &std2,
+                          const float &dmean2, const float &dstd2);
 double GetSeparationError(const TF1 *tf1_1, const TF1 *tf1_2);
 
 // Formula to get resolution error using a TF1
@@ -66,9 +70,15 @@ double GetResoError(TF1 *tf1, const int &mu, const int &sigma);
 
 // Write resolution value for a 1-gaussian fit
 void PrintResolution(TH1 *th1, TCanvas *pCanvas);
-void PrintResolution(TH1 *th1, TCanvas *pCanvas, float NDCx, float NDCy, Color_t color, const std::string &title);
-void PrintResolution(TH1 *th1, TCanvas *pCanvas, float NDCx, float NDCy, const float &xwidth, const float &ywidth,
-                     const std::string &anchor, Color_t color, const std::string &title);
+void PrintResolution(TH1 *th1, TCanvas *pCanvas, float NDCx, float NDCy, Color_t color,
+                     const std::string &title);
+void PrintResolution(TH1 *th1, TCanvas *pCanvas, float NDCx, float NDCy,
+                     const float &xwidth, const float &ywidth, const std::string &anchor,
+                     Color_t color, const std::string &title);
+void PrintResolution(TH1 *th1, TCanvas *pCanvas, float NDCx, float NDCy,
+                     const float &xwidth, const float &ywidth, const std::string &anchor,
+                     Color_t color, const std::string &title, const int &myLineWidth,
+                     const float &myFontSize);
 
 // Draw TH1
 void DrawTH1(const std::string &OutDir, TH1 *h1);

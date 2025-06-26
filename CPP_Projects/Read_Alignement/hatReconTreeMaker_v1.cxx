@@ -36,7 +36,8 @@ OA_EXCEPTION(EMissingDatum, EoaCore);
 #include <TrackingUtils.hxx>
 #include <fstream>
 
-ND::TG4TrajectoryPoint GetCloserG4Point(ND::TG4Trajectory &traj, ND::THandle<ND::TTrackState> front, double &dist)
+ND::TG4TrajectoryPoint GetCloserG4Point(ND::TG4Trajectory &traj,
+                                        ND::THandle<ND::TTrackState> front, double &dist)
 {
 
    std::vector<ND::TG4TrajectoryPoint> points = traj.GetTrajectoryPoints();
@@ -60,9 +61,11 @@ ND::TG4TrajectoryPoint GetCloserG4Point(ND::TG4Trajectory &traj, ND::THandle<ND:
    }
 
    if (icloser >= 0) {
-      // std::cout << " X " << points[icloser].GetPosition().X() << "  " << front->GetPosition()[0] << std::endl;
-      // std::cout << " Y " << points[icloser].GetPosition().Y() << "  " << front->GetPosition()[1] << std::endl;
-      // std::cout << " Z " << points[icloser].GetPosition().Z() << "  " << front->GetPosition()[2] << std::endl;
+      // std::cout << " X " << points[icloser].GetPosition().X() << "  " <<
+      // front->GetPosition()[0] << std::endl; std::cout << " Y " <<
+      // points[icloser].GetPosition().Y() << "  " << front->GetPosition()[1] <<
+      // std::endl; std::cout << " Z " << points[icloser].GetPosition().Z() << "  " <<
+      // front->GetPosition()[2] << std::endl;
 
       dist = dmin;
       return points[icloser];
@@ -75,7 +78,8 @@ ND::TG4TrajectoryPoint GetCloserG4Point(ND::TG4Trajectory &traj, ND::THandle<ND:
 class THATReconTreeMakerLoop : public ND::TND280EventLoopFunction {
 
 public:
-   THATReconTreeMakerLoop() : fEvent(0), fMomentum(0), fNclusters(0), fCurvature(0), fDirNorm(0)
+   THATReconTreeMakerLoop()
+      : fEvent(0), fMomentum(0), fNclusters(0), fCurvature(0), fDirNorm(0)
    {
       ND280Log("Beacon: THATReconTreeMakerLoop()");
       m_counter_Evt = 0;
@@ -110,13 +114,17 @@ public:
 
       fres_his_ep0 = new TH1F("res_ep0", "res_ep0", 200, -10, 10);
       fres_his_ep1 = new TH1F("res_ep1", "res_ep1", 200, -10, 10);
-      residuals_col = new TH2D("residuals_col", "residuals_col", 1152, 0, 1152, 200, -10, 10);
-      residuals_row = new TH2D("residuals_row", "residuals_row", 1024, 0, 1024, 200, -10, 10);
+      residuals_col =
+         new TH2D("residuals_col", "residuals_col", 1152, 0, 1152, 200, -10, 10);
+      residuals_row =
+         new TH2D("residuals_row", "residuals_row", 1024, 0, 1024, 200, -10, 10);
 
-      fres_his_ep0->SetTitle("cluster_residuals_EP0;counts;residuals (mm)");
-      fres_his_ep1->SetTitle("cluster_residuals_EP1;counts;residuals (mm)");
-      residuals_row->SetTitle("residuals vs row; col + 36 * mm + 36 * 8 * EP; residuals (mm)");
-      residuals_col->SetTitle("residuals vs col; row + 32 * mm + 32 * 8 * EP; residuals (mm)");
+      fres_his_ep0->SetTitle("cluster_residuals_EP0;counts;residuals [mm]");
+      fres_his_ep1->SetTitle("cluster_residuals_EP1;counts;residuals [mm]");
+      residuals_row->SetTitle(
+         "residuals vs row; col + 36 * mm + 36 * 8 * EP; residuals [mm]");
+      residuals_col->SetTitle(
+         "residuals vs col; row + 32 * mm + 32 * 8 * EP; residuals [mm]");
    };
 
    ~THATReconTreeMakerLoop() override = default;
@@ -196,16 +204,15 @@ public:
                continue;
             }
             if (trk->Get<ND::TIntegerDatum>("PathId"))
-               ND280Verbose("Pattern id: " << pattern->Get<ND::TIntegerDatum>("PathId")->GetValue());
+               ND280Verbose("Pattern id: "
+                            << pattern->Get<ND::TIntegerDatum>("PathId")->GetValue());
             ND280Verbose("\tNumber of hits " << trk->GetHits()->size());
 
             /*
             double complete = -999.;
             double clean = -999.;
-            ND::THandle<ND::TG4Trajectory> g4traj = TrackTruthInfo::GetG4Trajectory(trk, complete, clean);
-            if (!g4traj) {
-              ND280Warn("Didn't find G4 traj!");
-              continue;
+            ND::THandle<ND::TG4Trajectory> g4traj = TrackTruthInfo::GetG4Trajectory(trk,
+            complete, clean); if (!g4traj) { ND280Warn("Didn't find G4 traj!"); continue;
             }
             double dist;
             ND::THandle<ND::TTrackState> trackState = trk->GetState();
@@ -214,10 +221,13 @@ public:
             */
             fCurvature = trk->GetCurvature();
 
-            TVector3 Pos(trk->GetPosition()[0], trk->GetPosition()[1], trk->GetPosition()[2]);
-            TVector3 Dir(trk->GetDirection()[0], trk->GetDirection()[1], trk->GetDirection()[2]);
+            TVector3 Pos(trk->GetPosition()[0], trk->GetPosition()[1],
+                         trk->GetPosition()[2]);
+            TVector3 Dir(trk->GetDirection()[0], trk->GetDirection()[1],
+                         trk->GetDirection()[2]);
 
-            ND280Log("  Open:  Trk " << counter_Trk << " | " << Pos[0] << " | " << Pos[1] << " | " << Pos[2]);
+            ND280Log("  Open:  Trk " << counter_Trk << " | " << Pos[0] << " | " << Pos[1]
+                                     << " | " << Pos[2]);
 
             double B = 0.2;
             // project into the bending plane
@@ -281,11 +291,12 @@ public:
                ND::THandle<ND::TReconCluster> clt = clus;
                TVector3 global;
                if (clt->GetPosition().X() > 0)
-                  global.SetXYZ(980.59, clt->GetPosition().Y(), clt->GetPosition().Z()); // X is the drift
+                  global.SetXYZ(980.59, clt->GetPosition().Y(),
+                                clt->GetPosition().Z()); // X is the drift
                else
                   global.SetXYZ(-980.59, clt->GetPosition().Y(), clt->GetPosition().Z());
-               if (clt->GetPosition().Y() > 1200 or clt->GetPosition().Y() < 400 or clt->GetPosition().Z() > -1000 or
-                   clt->GetPosition().Z() < -2900)
+               if (clt->GetPosition().Y() > 1200 or clt->GetPosition().Y() < 400 or
+                   clt->GetPosition().Z() > -1000 or clt->GetPosition().Z() < -2900)
                   continue;
                ND::TGeometryId id;
                bool is_inside = ND::TGeomInfo::HAT().GlobalXYZToGeomId(global, id);
@@ -306,28 +317,37 @@ public:
                arr_subtracks_ez[mms + 8 * half].push_back(clt->GetPositionVariance().Z());
                list_subtrack[mms + 8 * half] = 1;
                n_clus[mms + 8 * half]++;
-               // ND280Log("    Cluster " << std::setw(3) << n_clus <<  ": " << "MM " << std::setw(2) << mms+8*half << "
-               // | col: " << std::setw(2) << col << " | row: " << std::setw(2) << row << " | " <<
-               //             "X = " << clt->GetPosition().X() << " ± " << clt->GetPositionVariance().X() << " | " <<
-               //             "Y = " << clt->GetPosition().Y() << " ± " << clt->GetPositionVariance().Y() << " | " <<
-               //             "Z = " << clt->GetPosition().Z() << " ± " << clt->GetPositionVariance().Z() );
+               // ND280Log("    Cluster " << std::setw(3) << n_clus <<  ": " << "MM " <<
+               // std::setw(2) << mms+8*half << " | col: " << std::setw(2) << col << " |
+               // row: " << std::setw(2) << row << " | " <<
+               //             "X = " << clt->GetPosition().X() << " ± " <<
+               //             clt->GetPositionVariance().X() << " | " << "Y = " <<
+               //             clt->GetPosition().Y() << " ± " <<
+               //             clt->GetPositionVariance().Y() << " | " << "Z = " <<
+               //             clt->GetPosition().Z() << " ± " <<
+               //             clt->GetPositionVariance().Z() );
                // n_clus++;
             }
-            int n_subtracks = std::accumulate(std::begin(list_subtrack), std::end(list_subtrack), 0);
+            int n_subtracks =
+               std::accumulate(std::begin(list_subtrack), std::end(list_subtrack), 0);
             ND280Log("    Subtracks: " << n_subtracks);
             int i_track = 0;
             for (int iMM = 0; iMM < 32; iMM++) {
                if (list_subtrack[iMM] == 0)
                   continue;
-               ND280Log("    Open:  Subtracks " << i_track + 1 << "/" << n_subtracks << " (MM #" << iMM << "):");
+               ND280Log("    Open:  Subtracks " << i_track + 1 << "/" << n_subtracks
+                                                << " (MM #" << iMM << "):");
                for (int iC = 0; iC < (int)n_clus[iMM]; iC++) {
-                  ND280Log("      Cluster "
-                           << std::setw(3) << iC << ": "
-                           << "X = " << arr_subtracks_x[iMM][iC] << " ± " << arr_subtracks_ex[iMM][iC] << " | "
-                           << "Y = " << arr_subtracks_y[iMM][iC] << " ± " << arr_subtracks_ey[iMM][iC] << " | "
-                           << "Z = " << arr_subtracks_z[iMM][iC] << " ± " << arr_subtracks_ez[iMM][iC]);
+                  ND280Log("      Cluster " << std::setw(3) << iC << ": "
+                                            << "X = " << arr_subtracks_x[iMM][iC] << " ± "
+                                            << arr_subtracks_ex[iMM][iC] << " | "
+                                            << "Y = " << arr_subtracks_y[iMM][iC] << " ± "
+                                            << arr_subtracks_ey[iMM][iC] << " | "
+                                            << "Z = " << arr_subtracks_z[iMM][iC] << " ± "
+                                            << arr_subtracks_ez[iMM][iC]);
                }
-               ND280Log("    Close: Subtracks " << i_track + 1 << "/" << n_subtracks << " (MM #" << iMM << "):");
+               ND280Log("    Close: Subtracks " << i_track + 1 << "/" << n_subtracks
+                                                << " (MM #" << iMM << "):");
                i_track++;
             }
 
@@ -335,27 +355,37 @@ public:
             //     ND::THandle<ND::TComboHit> chit = hit; // choosing only combo hits
             //     if (!chit) { ND280Warn("Not a comboHit"); continue; }
             //     TVector3 global_clus;
-            //     if( chit->GetPosition().X() > 0 )   global_clus.SetXYZ(chit->GetPosition().X(),
-            //     chit->GetPosition().Y(), chit->GetPosition().Z() ); else global_clus.SetXYZ(chit->GetPosition().X(),
-            //     chit->GetPosition().Y(), chit->GetPosition().Z() ); if (chit->GetPosition().Y() > 1200 or
-            //     chit->GetPosition().Y() < 400 or chit->GetPosition().Z() > -1000 or chit->GetPosition().Z() < -2900)
-            //     continue; ND::TGeometryId id; bool is_inside = ND::TGeomInfo::HAT().GlobalXYZToGeomId(global_clus,
-            //     id); if (!is_inside) { ND280Log("ID not found"); continue; } auto row =
-            //     ND::TGeomInfo::HAT().GeomIdToRow(id); auto col = ND::TGeomInfo::HAT().GeomIdToColumn(id); auto mms =
-            //     ND::TGeomInfo::HAT().GeomIdToMM(id); ND280Log(       "Cluster " << std::setw(3) << n_clus <<  ": " <<
-            //                     "X = " << chit->GetPosition().X()   << " ± " << std::setw(5) << std::setprecision(4)
-            //                     << chit->GetUncertainty().X() << " | " << "Y = " << chit->GetPosition().Y()   << " ±
-            //                     " << std::setw(5) << std::setprecision(4) << chit->GetUncertainty().Y() << " | " <<
-            //                     "Z = " << chit->GetPosition().Z()   << " ± " << std::setw(5) << std::setprecision(4)
-            //                     << chit->GetUncertainty().Z() << " | " << "Endplate: " << fEndPlate_ID << " | MM " <<
-            //                     mms << " | col: " << col << " | row: " << row);
+            //     if( chit->GetPosition().X() > 0 )
+            //     global_clus.SetXYZ(chit->GetPosition().X(), chit->GetPosition().Y(),
+            //     chit->GetPosition().Z() ); else
+            //     global_clus.SetXYZ(chit->GetPosition().X(), chit->GetPosition().Y(),
+            //     chit->GetPosition().Z() ); if (chit->GetPosition().Y() > 1200 or
+            //     chit->GetPosition().Y() < 400 or chit->GetPosition().Z() > -1000 or
+            //     chit->GetPosition().Z() < -2900) continue; ND::TGeometryId id; bool
+            //     is_inside = ND::TGeomInfo::HAT().GlobalXYZToGeomId(global_clus, id); if
+            //     (!is_inside) { ND280Log("ID not found"); continue; } auto row =
+            //     ND::TGeomInfo::HAT().GeomIdToRow(id); auto col =
+            //     ND::TGeomInfo::HAT().GeomIdToColumn(id); auto mms =
+            //     ND::TGeomInfo::HAT().GeomIdToMM(id); ND280Log(       "Cluster " <<
+            //     std::setw(3) << n_clus <<  ": " <<
+            //                     "X = " << chit->GetPosition().X()   << " ± " <<
+            //                     std::setw(5) << std::setprecision(4)
+            //                     << chit->GetUncertainty().X() << " | " << "Y = " <<
+            //                     chit->GetPosition().Y()   << " ± " << std::setw(5) <<
+            //                     std::setprecision(4) << chit->GetUncertainty().Y() << "
+            //                     | " << "Z = " << chit->GetPosition().Z()   << " ± " <<
+            //                     std::setw(5) << std::setprecision(4)
+            //                     << chit->GetUncertainty().Z() << " | " << "Endplate: "
+            //                     << fEndPlate_ID << " | MM " << mms << " | col: " << col
+            //                     << " | row: " << row);
 
             //     int n_pad = 0;
             //     for (const auto &subhit: chit->GetHits()) {
             //         ND280Log(   "    Pad " << std::setw(3) << n_pad << ": " <<
-            //                     "X = " << subhit->GetPosition().X() << std::setw(11) << " | " <<
-            //                     "Y = " << subhit->GetPosition().Y() << std::setw(10) << " | " <<
-            //                     "Z = " << subhit->GetPosition().Z()  );
+            //                     "X = " << subhit->GetPosition().X() << std::setw(11) <<
+            //                     " | " << "Y = " << subhit->GetPosition().Y() <<
+            //                     std::setw(10) << " | " << "Z = " <<
+            //                     subhit->GetPosition().Z()  );
             //         n_pad++;
             //     }
             //     n_clus++;
@@ -368,32 +398,44 @@ public:
             //     if (not chit) continue; // this is not a Combo hit
             //     // Clusters (ComboHit)
             //     TVector3 global_clus;
-            //     if( chit->GetPosition().X() > 0 )   global_clus.SetXYZ( 980.59, chit->GetPosition().Y(),
-            //     chit->GetPosition().Z() ); else                                global_clus.SetXYZ(-980.59,
-            //     chit->GetPosition().Y(), chit->GetPosition().Z() ); if (chit->GetPosition().Y() > 1200 or
-            //     chit->GetPosition().Y() < 400 or chit->GetPosition().Z() > -1000 or chit->GetPosition().Z() < -2900)
-            //     continue; ND::TGeometryId id; bool is_inside = ND::TGeomInfo::HAT().GlobalXYZToGeomId(global_clus,
-            //     id); if (!is_inside) { ND280Log("ID not found"); continue; } auto row =
-            //     ND::TGeomInfo::HAT().GeomIdToRow(id); auto col = ND::TGeomInfo::HAT().GeomIdToColumn(id); auto mms =
-            //     ND::TGeomInfo::HAT().GeomIdToMM(id); ND280Log("Cluster " << n_clus << " | MM " << mms << " |
-            //     Endplate: " << fEndPlate_ID     << " | col: " << col << " | row: " << row << " | " <<
-            //                 "X = " << chit->GetPosition().X() << " ± " << chit->GetUncertainty().X() << " | " <<
-            //                 "Y = " << chit->GetPosition().Y() << " ± " << chit->GetUncertainty().Y() << " | " <<
-            //                 "Z = " << chit->GetPosition().Z() << " ± " << chit->GetUncertainty().Z() );
+            //     if( chit->GetPosition().X() > 0 )   global_clus.SetXYZ( 980.59,
+            //     chit->GetPosition().Y(), chit->GetPosition().Z() ); else
+            //     global_clus.SetXYZ(-980.59, chit->GetPosition().Y(),
+            //     chit->GetPosition().Z() ); if (chit->GetPosition().Y() > 1200 or
+            //     chit->GetPosition().Y() < 400 or chit->GetPosition().Z() > -1000 or
+            //     chit->GetPosition().Z() < -2900) continue; ND::TGeometryId id; bool
+            //     is_inside = ND::TGeomInfo::HAT().GlobalXYZToGeomId(global_clus, id); if
+            //     (!is_inside) { ND280Log("ID not found"); continue; } auto row =
+            //     ND::TGeomInfo::HAT().GeomIdToRow(id); auto col =
+            //     ND::TGeomInfo::HAT().GeomIdToColumn(id); auto mms =
+            //     ND::TGeomInfo::HAT().GeomIdToMM(id); ND280Log("Cluster " << n_clus << "
+            //     | MM " << mms << " | Endplate: " << fEndPlate_ID     << " | col: " <<
+            //     col << " | row: " << row << " | " <<
+            //                 "X = " << chit->GetPosition().X() << " ± " <<
+            //                 chit->GetUncertainty().X() << " | " << "Y = " <<
+            //                 chit->GetPosition().Y() << " ± " <<
+            //                 chit->GetUncertainty().Y() << " | " << "Z = " <<
+            //                 chit->GetPosition().Z() << " ± " <<
+            //                 chit->GetUncertainty().Z() );
             //     n_clus++;
             //     // Pads (Hit)
             //     int n_pad = 0;
             //     for (auto hit: chit->GetHits()){
             //         TVector3 global_pad;
-            //         if (hit->GetPosition().X() > 0) global_pad.SetXYZ( 980.59, hit->GetPosition().Y(),
-            //         hit->GetPosition().Z()); else                            global_pad.SetXYZ(-980.59,
-            //         hit->GetPosition().Y(), hit->GetPosition().Z()); if (hit->GetPosition().Y() > 1200 or
+            //         if (hit->GetPosition().X() > 0) global_pad.SetXYZ( 980.59,
+            //         hit->GetPosition().Y(), hit->GetPosition().Z()); else
+            //         global_pad.SetXYZ(-980.59, hit->GetPosition().Y(),
+            //         hit->GetPosition().Z()); if (hit->GetPosition().Y() > 1200 or
             //         hit->GetPosition().Y() < 400 or
-            //             hit->GetPosition().Z() > -1000 or hit->GetPosition().Z() < -2900) continue;
+            //             hit->GetPosition().Z() > -1000 or hit->GetPosition().Z() <
+            //             -2900) continue;
             //         ND280Log(   "Pad " << n_pad << ": " <<
-            //                     "X = " << hit->GetPosition().X() << " ± " << hit->GetUncertainty().X() << " | " <<
-            //                     "Y = " << hit->GetPosition().Y() << " ± " << hit->GetUncertainty().Y() << " | " <<
-            //                     "Z = " << hit->GetPosition().Z() << " ± " << hit->GetUncertainty().Z() );
+            //                     "X = " << hit->GetPosition().X() << " ± " <<
+            //                     hit->GetUncertainty().X() << " | " << "Y = " <<
+            //                     hit->GetPosition().Y() << " ± " <<
+            //                     hit->GetUncertainty().Y() << " | " << "Z = " <<
+            //                     hit->GetPosition().Z() << " ± " <<
+            //                     hit->GetUncertainty().Z() );
             //         n_pad++;
             //     }
             // }
@@ -407,14 +449,16 @@ public:
             //     for (auto hit: chit->GetHits()) {
             //         TVector3 global;
             //         if (hit->GetPosition().X() > 0)
-            //             global.SetXYZ(980.59, hit->GetPosition().Y(), hit->GetPosition().Z());
-            //         else global.SetXYZ(-980.59, hit->GetPosition().Y(), hit->GetPosition().Z());
-            //         if (hit->GetPosition().Y() > 1200 or hit->GetPosition().Y() < 400 or
-            //             hit->GetPosition().Z() > -1000 or hit->GetPosition().Z() < -2900)
-            //             continue;
+            //             global.SetXYZ(980.59, hit->GetPosition().Y(),
+            //             hit->GetPosition().Z());
+            //         else global.SetXYZ(-980.59, hit->GetPosition().Y(),
+            //         hit->GetPosition().Z()); if (hit->GetPosition().Y() > 1200 or
+            //         hit->GetPosition().Y() < 400 or
+            //             hit->GetPosition().Z() > -1000 or hit->GetPosition().Z() <
+            //             -2900) continue;
             //         ND::TGeometryId id;
-            //         bool is_inside = ND::TGeomInfo::HAT().GlobalXYZToGeomId(global, id);
-            //         if (!is_inside) {
+            //         bool is_inside = ND::TGeomInfo::HAT().GlobalXYZToGeomId(global,
+            //         id); if (!is_inside) {
             //             ND280Log("ID not found");
             //             continue;
             //         }
@@ -437,23 +481,29 @@ public:
             fPID = pid_result->GetParticleId();
             // fPullMuon = pid_result->GetPIDWeight();
             fdEdx = pid_result->Get<ND::TRealDatum>("dEdx_PID")->GetValue();
-            // std::cout<<fPID<<" "<<fdEdx<<" pull mu "<<pid_result->GetPIDWeight()<<std::endl;
+            // std::cout<<fPID<<" "<<fdEdx<<" pull mu
+            // "<<pid_result->GetPIDWeight()<<std::endl;
 
             ND::TReconObjectContainer::const_iterator it;
-            for (it = pid_result->GetAlternates().begin(); it != pid_result->GetAlternates().end(); ++it) {
+            for (it = pid_result->GetAlternates().begin();
+                 it != pid_result->GetAlternates().end(); ++it) {
                ND::THandle<ND::TReconPID> alter = *it;
-               if (ND::TReconPID::ConvertParticleId(alter->GetParticleId()) == "Electron") {
-                  // std::cout << " name " << ND::TReconPID::ConvertParticleId(alter->GetParticleId()) << " pull "
+               if (ND::TReconPID::ConvertParticleId(alter->GetParticleId()) ==
+                   "Electron") {
+                  // std::cout << " name " <<
+                  // ND::TReconPID::ConvertParticleId(alter->GetParticleId()) << " pull "
                   //           << alter->GetPIDWeight() << std::endl;
                   fPullElec = alter->GetPIDWeight();
                }
                if (ND::TReconPID::ConvertParticleId(alter->GetParticleId()) == "Proton") {
-                  // std::cout << " name " << ND::TReconPID::ConvertParticleId(alter->GetParticleId()) << " pull "
+                  // std::cout << " name " <<
+                  // ND::TReconPID::ConvertParticleId(alter->GetParticleId()) << " pull "
                   //           << alter->GetPIDWeight() << std::endl;
                   fPullProt = alter->GetPIDWeight();
                }
                if (ND::TReconPID::ConvertParticleId(alter->GetParticleId()) == "Muon") {
-                  // std::cout << " name " << ND::TReconPID::ConvertParticleId(alter->GetParticleId()) << " pull "
+                  // std::cout << " name " <<
+                  // ND::TReconPID::ConvertParticleId(alter->GetParticleId()) << " pull "
                   //           << alter->GetPIDWeight() << std::endl;
                   fPullMuon = alter->GetPIDWeight();
                }
@@ -497,11 +547,13 @@ public:
 
    void Usage() override
    {
-      std::cout << "Generate TTree from reconstructed track parameters." << std::endl << std::endl;
+      std::cout << "Generate TTree from reconstructed track parameters." << std::endl
+                << std::endl;
       fParOptMan.Usage();
    }
 
-   double GetMeanTimeOfMax_WF(ND::THandle<ND::TReconTrack> trk, ND::THandle<ND::THitSelection> fusedHitSelection)
+   double GetMeanTimeOfMax_WF(ND::THandle<ND::TReconTrack> trk,
+                              ND::THandle<ND::THitSelection> fusedHitSelection)
    {
 
       int i = 0;
@@ -560,8 +612,8 @@ public:
             else
                global.SetXYZ(-980.59, clt->GetPosition().Y(), clt->GetPosition().Z());
 
-            if (clt->GetPosition().Y() > 1200 or clt->GetPosition().Y() < 400 or clt->GetPosition().Z() > -1000 or
-                clt->GetPosition().Z() < -2900)
+            if (clt->GetPosition().Y() > 1200 or clt->GetPosition().Y() < 400 or
+                clt->GetPosition().Z() > -1000 or clt->GetPosition().Z() < -2900)
                continue;
 
             ND::TGeometryId id;
@@ -582,8 +634,10 @@ public:
                EP0 = true;
             else if (EP_num == 1)
                EP1 = true;
-            auto r = sqrt((clt->GetPosition().Z() - fcenter_circle_X) * (clt->GetPosition().Z() - fcenter_circle_X) +
-                          (clt->GetPosition().Y() - fcenter_circle_Y) * (clt->GetPosition().Y() - fcenter_circle_Y)) -
+            auto r = sqrt((clt->GetPosition().Z() - fcenter_circle_X) *
+                             (clt->GetPosition().Z() - fcenter_circle_X) +
+                          (clt->GetPosition().Y() - fcenter_circle_Y) *
+                             (clt->GetPosition().Y() - fcenter_circle_Y)) -
                      R;
 
             n_clus++;

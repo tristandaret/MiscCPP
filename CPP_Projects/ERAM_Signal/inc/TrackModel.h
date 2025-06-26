@@ -11,8 +11,8 @@ public:
    virtual ~TrackModel();
 
    // Initialize parameters and variables
-   void SetParameters(const double &length, const double &impact, const double &phi, const double &RC,
-                      const double &drift, const double &Dt);
+   void SetParameters(const double &length, const double &impact, const double &phi,
+                      const double &RC, const double &drift, const double &Dt);
    void SetVariables(const double &signal);
    void SetNConvPoints(const double &nconvpoints) { fnconvolpoints = nconvpoints; }
    void SetTMax(const double &tmax) { ftmax = tmax; }
@@ -26,15 +26,17 @@ public:
 
    // Compute the signal amplitude loss due to charge spreading
    void ComputeAmplitudeLoss();
-   void ComputeAmplitudeLoss(const double &length, const double &impact, const double &phi, const double &RC,
-                             const double &drift, const double &Dt);
+   void ComputeAmplitudeLoss(const double &length, const double &impact,
+                             const double &phi, const double &RC, const double &drift,
+                             const double &Dt);
    double GetAmplitudeLoss() const { return famplitudeloss; }
 
    // Recompute the deposited charge based on model
    // distances in mm, angles in degrees
    void ComputeRealCharge();
-   void ComputeRealCharge(const double &ADCmax, const double &length, const double &impact, const double &phi,
-                          const double &RC, const double &drift, const double &Dt);
+   void ComputeRealCharge(const double &ADCmax, const double &length,
+                          const double &impact, const double &phi, const double &RC,
+                          const double &drift, const double &Dt);
    double GetRealCharge() const { return fchargereal; }
 
    double GetPeakingTime() const { return fpeakingTime; }
@@ -59,13 +61,14 @@ private:
    double expfactor = ws / (2 * Q);
    double arg = ws / 2 * std::sqrt(4 - 1 / std::pow(Q, 2));
    const double sinfactor = std::sqrt((2 * Q - 1) / (2 * Q + 1));
-   const double fnormelec = 4096. / 120. / 0.16233963; // 4096 max ADC for 120 fC | 0.16... max of ETF
+   const double fnormelec =
+      4096. / 120. / 0.16233963; // 4096 max ADC for 120 fC | 0.16... max of ETF
    double ETFmax = 0;
 
    // Charge function
    Double_t Charge(Double_t *x, Double_t *par);
    // Track inputs
-   double fDt = 0; // conversion to sqrt(mm) Transverse diffusion coefficent
+   double fDt = 0; // conversion to sqrt[mm] Transverse diffusion coefficent
    double fRC = 0;
    double flength = 0;
    double fimpact = 0;

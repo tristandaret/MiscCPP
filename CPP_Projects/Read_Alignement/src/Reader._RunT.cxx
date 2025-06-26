@@ -55,22 +55,26 @@ void Reader(const char *filename)
          int i_subtrk = 0;
 
          for (const TrackT &track : event.tracks) {
-            std::cout << "  Track's ID: #" << track.trackid << " | " << track.n_subtracks << " subtracks" << endl;
-            std::cout << "  Track's parameters (mm): X = " << track.params[0] << " | Y = " << track.params[1]
-                      << " | Z = " << track.params[2] << " | Vx = " << track.params[3] << " | Vy = " << track.params[4]
-                      << " | Vz = " << track.params[5] << " | Curve = " << track.params[6] << endl;
+            std::cout << "  Track's ID: #" << track.trackid << " | " << track.n_subtracks
+                      << " subtracks" << endl;
+            std::cout << "  Track's parameters [mm]: X = " << track.params[0]
+                      << " | Y = " << track.params[1] << " | Z = " << track.params[2]
+                      << " | Vx = " << track.params[3] << " | Vy = " << track.params[4]
+                      << " | Vz = " << track.params[5] << " | Curve = " << track.params[6]
+                      << endl;
 
             for (const SubtrackT &subtrack : track.subtracks) {
                std::cout << "    Subtrack's ERAM ID: #" << subtrack.moduleid << endl;
                TGraph *tg_subtrk = new TGraph();
-               std::string name_tg = Form("tg_evt%i_trk%i_sbtk%i", event.eventid, track.trackid, subtrack.moduleid);
+               std::string name_tg = Form("tg_evt%i_trk%i_sbtk%i", event.eventid,
+                                          track.trackid, subtrack.moduleid);
                tg_subtrk->SetNameTitle(name_tg.c_str(), name_tg.c_str());
 
                int iC = 0;
                float avg_x = 0;
                for (const ClusterT &cluster : subtrack.clusters) {
-                  std::cout << "      Cluster's position: X = " << cluster.x << " | Y = " << cluster.y
-                            << " | Z = " << cluster.z << endl;
+                  std::cout << "      Cluster's position: X = " << cluster.x
+                            << " | Y = " << cluster.y << " | Z = " << cluster.z << endl;
                   tg_subtrk->SetPoint(iC, cluster.z, cluster.y);
                   avg_x += cluster.x;
                   iC++;
@@ -87,8 +91,9 @@ void Reader(const char *filename)
                tg_subtrk->SetMinimum(300);
                tg_subtrk->SetMaximum(1200);
                if (i_subtrk == 0) {
-                  tg_subtrk->SetNameTitle(Form("tg_evt%i", event.eventid),
-                                          Form("Event %i Display;Z (mm);Y (mm)", event.eventid));
+                  tg_subtrk->SetNameTitle(
+                     Form("tg_evt%i", event.eventid),
+                     Form("Event %i Display;Z [mm];Y [mm]", event.eventid));
                   tg_subtrk->DrawClone("ap");
                } else
                   tg_subtrk->DrawClone("p same");
