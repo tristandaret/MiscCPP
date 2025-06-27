@@ -726,53 +726,64 @@ void Drawing::Distributions()
    }
 
    pTCanvas->Clear();
-   gPad->SetGrid(1, 1);
    gPad->SetRightMargin(0.2);
+   gPad->SetLeftMargin(0.1);
+   gPad->SetBottomMargin(0.15);
    gStyle->SetPalette(kRainBow);
+   ph2_gainmap->SetTitleOffset(0.7, "Y");
    ph2_gainmap->Draw("colz");
    pTCanvas->SaveAs(OutputFile.c_str());
 
    pTCanvas->Clear();
    ph2_rcmap->SetMinimum(min_avg_rc);
    ph2_rcmap->SetMaximum(max_avg_rc);
+   ph2_rcmap->SetTitleOffset(0.7, "Y");
    ph2_rcmap->Draw("colz");
 
    pTCanvas->SaveAs(OutputFile.c_str());
    ph2_rcmaptop->SetMinimum(min_avg_rc);
    ph2_rcmaptop->SetMaximum(max_avg_rc);
+   ph2_rcmaptop->SetTitleOffset(0.7, "Y");
    ph2_rcmaptop->Draw("colz");
    pTCanvas->SaveAs(OutputFile.c_str());
 
    ph2_rcmapbot->SetMinimum(min_avg_rc);
    ph2_rcmapbot->SetMaximum(max_avg_rc);
+   ph2_rcmapbot->SetTitleOffset(0.7, "Y");
    ph2_rcmapbot->Draw("colz");
    pTCanvas->SaveAs(OutputFile.c_str());
 
    ph2_rcdiffTPC->Draw("colz");
+   ph2_rcdiffTPC->SetTitleOffset(0.7, "Y");
    pTCanvas->SaveAs(OutputFile.c_str());
 
    pTCanvas->Clear();
    ph2_rcnorm->SetMinimum(0);
    ph2_rcnorm->SetMaximum(1);
+   ph2_rcnorm->SetTitleOffset(0.7, "Y");
    ph2_rcnorm->Draw("colz");
    pTCanvas->SaveAs(OutputFile.c_str());
 
    ph2_rcnormtop->SetMinimum(0);
    ph2_rcnormtop->SetMaximum(1);
+   ph2_rcnormtop->SetTitleOffset(0.7, "Y");
    ph2_rcnormtop->Draw("colz");
    pTCanvas->SaveAs(OutputFile.c_str());
 
    ph2_rcnormbot->SetMinimum(0);
    ph2_rcnormbot->SetMaximum(1);
+   ph2_rcnormbot->SetTitleOffset(0.7, "Y");
    ph2_rcnormbot->Draw("colz");
    pTCanvas->SaveAs(OutputFile.c_str());
 
    ph2_rcnormdiffTPC->SetMinimum(0);
+   ph2_rcnormdiffTPC->SetTitleOffset(0.7, "Y");
    ph2_rcnormdiffTPC->Draw("colz");
    pTCanvas->SaveAs(OutputFile.c_str());
 
    pTCanvas->Clear();
    ph2_rcnormstd->SetMinimum(0);
+   ph2_rcnormstd->SetTitleOffset(0.7, "Y");
    ph2_rcnormstd->Draw("colz");
    pTCanvas->SaveAs(OutputFile_End.c_str());
 }
