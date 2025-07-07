@@ -320,8 +320,8 @@ void Draw::Run(const std::string &filepath)
    fpCanvas->Clear();
    fpCanvas->SetGrid(1, 1);
    SetMarginH1((TPad *)gPad);
-   Graphic_setup(pr.ptge_X_reso_WF, 2, 33, kCyan + 2, 2, kCyan + 2);
-   Graphic_setup(pr.ptge_X_reso_XP, 2, 47, kMagenta + 2, 2, kMagenta + 2);
+   Graphic_setup(pr.ptge_X_reso_WF, 5, 33, kCyan + 2, 2, kCyan + 2);
+   Graphic_setup(pr.ptge_X_reso_XP, 5, 47, kMagenta + 2, 2, kMagenta + 2);
    pr.ptge_X_reso_XP->SetTitle(";Track X position [mm];dE/dx resolution [%]");
    pr.ptge_X_reso_XP->GetXaxis()->SetLimits(-1000, 1000);
    pr.ptge_X_reso_XP->GetYaxis()->SetRangeUser(resomin, resomax);
@@ -335,8 +335,8 @@ void Draw::Run(const std::string &filepath)
    // Mean
    fpCanvas->Clear();
    fpCanvas->SetGrid(1, 1);
-   Graphic_setup(pr.ptge_X_mean_WF, 0, 33, kCyan + 2, 2, kCyan + 2);
-   Graphic_setup(pr.ptge_X_mean_XP, 0, 47, kMagenta + 2, 2, kMagenta + 2);
+   Graphic_setup(pr.ptge_X_mean_WF, 5, 33, kCyan + 2, 2, kCyan + 2);
+   Graphic_setup(pr.ptge_X_mean_XP, 5, 47, kMagenta + 2, 2, kMagenta + 2);
    pr.ptge_X_mean_XP->SetTitle(";Track X position [mm];dE/dx [ADC counts/cm]");
    pr.ptge_X_mean_XP->GetXaxis()->SetLimits(-1000, 1000);
    pr.ptge_X_mean_XP->GetYaxis()->SetRangeUser(meanmin, meanmax);
@@ -382,12 +382,37 @@ void Draw::Run(const std::string &filepath)
 
    // -----------------------------------------------------------------------------------------------------------------
    // dE/dx vs Track length
+   const char *trklenresoform = "[0]*1/pow(x, [1])";
+   TF1 trklenresofit("trklenresofit", trklenresoform, 300, 1800);
+   trklenresofit.SetParameter(1, 0.5);
+   trklenresofit.SetLineColor(kBlack);
+   trklenresofit.SetLineStyle(9);
+   pr.ptge_trklen_reso_XP->Fit(&trklenresofit, "R", "", 300, 1800);
+   pr.ptge_trklen_reso_XP->GetFunction("trklenresofit")->SetLineColor(kBlack);
+   pr.ptge_trklen_reso_XP->GetFunction("trklenresofit")->SetLineWidth(2);
+   pr.ptge_trklen_reso_XP->GetFunction("trklenresofit")->SetRange(300, 1800);
+   TPaveText paveparam(0.17, 0.2, 0.47, 0.5, "NDC");
+   paveparam.SetTextColor(kBlue - 1);
+   paveparam.SetTextAlign(12);
+   paveparam.SetTextSize(0.05);
+   paveparam.SetLineColor(kBlue - 1);
+   paveparam.SetLineWidth(2);
+   paveparam.SetBorderSize(2);
+   std::string parnames[3] = {"#alpha", "#beta"};
+   paveparam.AddText("f(L) = #alpha / L^{#beta}");
+   paveparam.AddText(Form("%s = %.0f #pm %.0f", parnames[0].c_str(),
+                          trklenresofit.GetParameter(0), trklenresofit.GetParError(0)));
+   paveparam.AddText(Form("%s = %.3f #pm %.3f", parnames[1].c_str(),
+                          trklenresofit.GetParameter(1), trklenresofit.GetParError(1)));
+   TString chi2line = TString::Format(
+      "#chi^{2}/ndf = %.2f", trklenresofit.GetChisquare() / trklenresofit.GetNDF());
+   paveparam.AddText(chi2line);
    // Resolution
    fpCanvas->Clear();
    fpCanvas->SetGrid(1, 1);
    SetMarginH1((TPad *)gPad);
-   Graphic_setup(pr.ptge_trklen_reso_WF, 2, 33, kCyan + 2, 2, kCyan + 2);
-   Graphic_setup(pr.ptge_trklen_reso_XP, 2, 47, kMagenta + 2, 2, kMagenta + 2);
+   Graphic_setup(pr.ptge_trklen_reso_WF, 5, 33, kCyan + 2, 2, kCyan + 2);
+   Graphic_setup(pr.ptge_trklen_reso_XP, 5, 47, kMagenta + 2, 2, kMagenta + 2);
    pr.ptge_trklen_reso_XP->SetTitle(";Track length [mm];dE/dx resolution [%]");
    pr.ptge_trklen_reso_XP->GetYaxis()->SetRangeUser(resomin, resomax);
    pr.ptge_trklen_reso_XP->DrawClone("AP");
@@ -395,12 +420,13 @@ void Draw::Run(const std::string &filepath)
    pr.ptge_trklen_reso_XP->SetMarkerSize(7);
    pr.ptge_trklen_reso_WF->SetMarkerSize(7);
    fpLegend->Draw();
+   paveparam.Draw();
    fpCanvas->SaveAs(fRealpathPDF.c_str());
 
    // Mean
    fpCanvas->Clear();
-   Graphic_setup(pr.ptge_trklen_mean_WF, 0, 33, kCyan + 2, 2, kCyan + 2);
-   Graphic_setup(pr.ptge_trklen_mean_XP, 0, 47, kMagenta + 2, 2, kMagenta + 2);
+   Graphic_setup(pr.ptge_trklen_mean_WF, 3, 33, kCyan + 2, 2, kCyan + 2);
+   Graphic_setup(pr.ptge_trklen_mean_XP, 3, 47, kMagenta + 2, 2, kMagenta + 2);
    pr.ptge_trklen_mean_XP->SetTitle(";Track length [mm];Mean dE/dx [ADC counts/cm]");
    pr.ptge_trklen_mean_XP->GetYaxis()->SetRangeUser(meanmin, meanmax);
    pr.ptge_trklen_mean_XP->Draw("AP");
@@ -425,8 +451,8 @@ void Draw::Run(const std::string &filepath)
    // Resolution
    fpCanvas->Clear();
    SetMarginH1((TPad *)gPad);
-   Graphic_setup(pr.ptge_absphi_reso_WF, 2, 33, kCyan + 2, 2, kCyan + 2);
-   Graphic_setup(pr.ptge_absphi_reso_XP, 2, 47, kMagenta + 2, 2, kMagenta + 2);
+   Graphic_setup(pr.ptge_absphi_reso_WF, 5, 33, kCyan + 2, 2, kCyan + 2);
+   Graphic_setup(pr.ptge_absphi_reso_XP, 5, 47, kMagenta + 2, 2, kMagenta + 2);
    pr.ptge_absphi_reso_XP->SetTitle(";Track angle #varphi [#circ];dE/dx resolution [%]");
    pr.ptge_absphi_reso_XP->GetXaxis()->SetLimits(0, 93);
    pr.ptge_absphi_reso_XP->GetYaxis()->SetRangeUser(resomin, resomax);
@@ -439,8 +465,8 @@ void Draw::Run(const std::string &filepath)
 
    // Mean
    fpCanvas->Clear();
-   Graphic_setup(pr.ptge_absphi_mean_WF, 0, 33, kCyan + 2, 2, kCyan + 2);
-   Graphic_setup(pr.ptge_absphi_mean_XP, 0, 47, kMagenta + 2, 2, kMagenta + 2);
+   Graphic_setup(pr.ptge_absphi_mean_WF, 3, 33, kCyan + 2, 2, kCyan + 2);
+   Graphic_setup(pr.ptge_absphi_mean_XP, 3, 47, kMagenta + 2, 2, kMagenta + 2);
    pr.ptge_absphi_mean_XP->SetTitle(
       ";Track angle #varphi [#circ];Mean dE/dx [ADC counts/cm]");
    pr.ptge_absphi_mean_XP->GetXaxis()->SetLimits(0, 93);
@@ -507,8 +533,8 @@ void Draw::Run(const std::string &filepath)
    // -----------------------------------------------------------------------------------------------------------------
    // Resolution
    fpCanvas->Clear();
-   Graphic_setup(pr.ptge_abstheta_reso_WF, 2, 33, kCyan + 2, 2, kCyan + 2);
-   Graphic_setup(pr.ptge_abstheta_reso_XP, 2, 47, kMagenta + 2, 2, kMagenta + 2);
+   Graphic_setup(pr.ptge_abstheta_reso_WF, 5, 33, kCyan + 2, 2, kCyan + 2);
+   Graphic_setup(pr.ptge_abstheta_reso_XP, 5, 47, kMagenta + 2, 2, kMagenta + 2);
    pr.ptge_abstheta_reso_XP->SetTitle(";Track angle #theta [#circ];dE/dx resolution [%]");
    pr.ptge_abstheta_reso_XP->GetXaxis()->SetLimits(0, 93);
    pr.ptge_abstheta_reso_XP->GetYaxis()->SetRangeUser(resomin, resomax);
@@ -521,8 +547,8 @@ void Draw::Run(const std::string &filepath)
 
    // Mean
    fpCanvas->Clear();
-   Graphic_setup(pr.ptge_abstheta_mean_WF, 0, 33, kCyan + 2, 2, kCyan + 2);
-   Graphic_setup(pr.ptge_abstheta_mean_XP, 0, 47, kMagenta + 2, 2, kMagenta + 2);
+   Graphic_setup(pr.ptge_abstheta_mean_WF, 3, 33, kCyan + 2, 2, kCyan + 2);
+   Graphic_setup(pr.ptge_abstheta_mean_XP, 3, 47, kMagenta + 2, 2, kMagenta + 2);
    pr.ptge_abstheta_mean_XP->SetTitle(
       ";Track angle #theta [#circ];Mean dE/dx [ADC counts/cm]");
    pr.ptge_abstheta_mean_XP->GetXaxis()->SetLimits(0, 93);
@@ -969,38 +995,40 @@ void Draw::Run(const std::string &filepath)
    std::cout << std::fixed << std::setprecision(3);
    std::cout << "tmin, tmax: " << tmin << " " << tmax << std::endl;
 
-   // pr.fph1i_tminEP0->				Fit("gaus", "RQ", "", tmin-2, tmin+2);
-   // pr.fph1i_tminEP2->				Fit("gaus", "RQ", "", tmin-2, tmin+2);
-   // pr.fph1i_tmaxBotCath->			Fit("gaus", "RQ", "", tmax-4, tmax+4);
-   // pr.fph1i_tmaxTopCath->			Fit("gaus", "RQ", "", tmax-4, tmax+4);
-   // TF1 *ptf1_tminEP0 =			pr.fph1i_tminEP0->GetFunction("gaus");
-   // TF1 *ptf1_tminEP2 =			pr.fph1i_tminEP2->GetFunction("gaus");
-   // TF1 *ptf1_tmaxBotCath =		pr.fph1i_tmaxBotCath->GetFunction("gaus");
-   // TF1 *ptf1_tmaxTopCath =		pr.fph1i_tmaxTopCath->GetFunction("gaus");
+   pr.fph1i_tminEP0->Fit("gaus", "RQ", "", tmin - 2, tmin + 2);
+   pr.fph1i_tminEP2->Fit("gaus", "RQ", "", tmin - 2, tmin + 2);
+   pr.fph1i_tmaxBotCath->Fit("gaus", "RQ", "", tmax - 4, tmax + 4);
+   pr.fph1i_tmaxTopCath->Fit("gaus", "RQ", "", tmax - 4, tmax + 4);
+   TF1 *ptf1_tminEP0 = pr.fph1i_tminEP0->GetFunction("gaus");
+   TF1 *ptf1_tminEP2 = pr.fph1i_tminEP2->GetFunction("gaus");
+   TF1 *ptf1_tmaxBotCath = pr.fph1i_tmaxBotCath->GetFunction("gaus");
+   TF1 *ptf1_tmaxTopCath = pr.fph1i_tmaxTopCath->GetFunction("gaus");
 
-   // float Tmin =				ptf1_tminEP0->GetParameter(1)*40/1000;
-   // float dTmin =				ptf1_tminEP0->GetParError(1)*40/1000;
-   // float Tmax =				ptf1_tmaxBotCath->GetParameter(1)*40/1000;
-   // float dTmax =				ptf1_tmaxBotCath->GetParError(1)*40/1000;
-   // float Tdrift =				(Tmax - Tmin);
-   // float dTdrift =				sqrt(dTmin*dTmin + dTmax*dTmax);
-   // std::cout << "Drift time in bHATPC: " << Tdrift << " +/- " << dTdrift << " ns" <<
-   // std::endl; float driftVel =			98.5/Tdrift;
-   // float dtriftVel =			driftVel * dTdrift/Tdrift;
-   // std::cout << "Drift velocity in bHATPC: " << driftVel << " +/- " << dtriftVel << "
-   // cm/µs" << std::endl;
+   float Tmin = ptf1_tminEP0->GetParameter(1) * 40 / 1000;
+   float dTmin = ptf1_tminEP0->GetParError(1) * 40 / 1000;
+   float Tmax = ptf1_tmaxBotCath->GetParameter(1) * 40 / 1000;
+   float dTmax = ptf1_tmaxBotCath->GetParError(1) * 40 / 1000;
+   float Tdrift = (Tmax - Tmin);
+   float dTdrift = sqrt(dTmin * dTmin + dTmax * dTmax);
+   std::cout << "Drift time in bHATPC: " << Tdrift << " +/- " << dTdrift << " ns"
+             << std::endl;
+   float driftVel = 98.5 / Tdrift;
+   float dtriftVel = driftVel * dTdrift / Tdrift;
+   std::cout << "Drift velocity in bHATPC: " << driftVel << " +/- " << dtriftVel
+             << " cm /µs " << std::endl;
 
-   // Tmin =						ptf1_tminEP2->GetParameter(1)*40/1000;
-   // dTmin =						ptf1_tminEP2->GetParError(1)*40/1000;
-   // Tmax =						ptf1_tmaxTopCath->GetParameter(1)*40/1000;
-   // dTmax =						ptf1_tmaxTopCath->GetParError(1)*40/1000;
-   // Tdrift =					(Tmax - Tmin);
-   // dTdrift =					sqrt(dTmin*dTmin + dTmax*dTmax);
-   // std::cout << "Drift time in tHATPC: " << Tdrift << " +/- " << dTdrift << " ns" <<
-   // std::endl; driftVel =					98.5/Tdrift;
-   // dtriftVel =					driftVel * dTdrift/Tdrift;
-   // std::cout << "Drift velocity in tHATPC: " << driftVel << " +/- " << dtriftVel << "
-   // cm/µs" << std::endl;
+   Tmin = ptf1_tminEP2->GetParameter(1) * 40 / 1000;
+   dTmin = ptf1_tminEP2->GetParError(1) * 40 / 1000;
+   Tmax = ptf1_tmaxTopCath->GetParameter(1) * 40 / 1000;
+   dTmax = ptf1_tmaxTopCath->GetParError(1) * 40 / 1000;
+   Tdrift = (Tmax - Tmin);
+   dTdrift = sqrt(dTmin * dTmin + dTmax * dTmax);
+   std::cout << "Drift time in tHATPC: " << Tdrift << " +/- " << dTdrift << " ns"
+             << std::endl;
+   driftVel = 98.5 / Tdrift;
+   dtriftVel = driftVel * dTdrift / Tdrift;
+   std::cout << "Drift velocity in tHATPC: " << driftVel << " +/- " << dtriftVel
+             << " cm /µs " << std::endl;
 
    pr.fph1i_tminBotCath->SetAxisRange(
       0,
@@ -1083,6 +1111,8 @@ void Draw::Run(const std::string &filepath)
    delete legtmax;
    fpCanvas->SaveAs((fRealpathPDF + ")").c_str());
    fpCanvas->Clear();
+
+   inputFile.Close();
 
    // Reset style
    gPad->UseCurrentStyle();
@@ -1763,17 +1793,16 @@ void Draw::CompareComments(const std::vector<std::string> &v_filepaths)
    // Legends filling
    std::vector<std::string> legEntries;
    TLegend legGain(0.55, 0.75, 0.99, 0.99);
-   std::vector<TGraph*> v_dummies;
+   std::vector<TGraph *> v_dummies;
    for (int i = 0; i < ncomparisons; i++) {
       legEntries.push_back(v_processes[i]->flegend);
 
-      TGraph* dummyNoCorr = new TGraph();
+      TGraph *dummyNoCorr = new TGraph();
       dummyNoCorr->SetMarkerStyle(markersGain[i]);
       dummyNoCorr->SetMarkerSize(7);
       dummyNoCorr->SetMarkerColor(colorsGain[i]);
       v_dummies.push_back(dummyNoCorr);
-      legGain.AddEntry(v_dummies[i],
-                       v_processes[i]->flegend.c_str(), "p");
+      legGain.AddEntry(v_dummies[i], v_processes[i]->flegend.c_str(), "p");
    }
    legGain.SetBorderSize(2);
    legGain.SetLineColor(kBlue - 1);
@@ -1826,8 +1855,7 @@ void Draw::CompareComments(const std::vector<std::string> &v_filepaths)
    v_processes[0]->ptge_absmom_reso_WF->SetTitle(
       ";Momentum [MeV/c];dE/dx resolution [%]");
    v_processes[0]->ptge_absmom_reso_WF->GetXaxis()->SetLimits(0, momrange);
-   v_processes[0]->ptge_absmom_reso_WF->GetYaxis()->SetRangeUser(6,
-                                                                 17);
+   v_processes[0]->ptge_absmom_reso_WF->GetYaxis()->SetRangeUser(6, 17);
    for (int i = 0; i < ncomparisons; i++) {
       v_processes[i]->ptge_absmom_reso_WF->DrawClone(i == 0 ? "AP" : "P same");
    }
@@ -1856,7 +1884,81 @@ void Draw::CompareComments(const std::vector<std::string> &v_filepaths)
 
    for (Process *pr : v_processes)
       delete pr;
-   
+
    for (TGraph *dummy : v_dummies)
       delete dummy;
+}
+
+void Draw::CompareAlpha(const std::vector<std::string> &v_filepaths)
+{
+
+   // -----------------------------------------------------------------------------------
+   // Load processes
+   std::vector<Process *> v_processes;
+   for (int i = 0; i < v_filepaths.size(); i++) {
+      std::cout << "File " << i << ": " << v_filepaths[i] << std::endl;
+      TFile inputFile(v_filepaths[i].c_str(), "READ");
+      Process *process = dynamic_cast<Process *>(inputFile.Get("Process"));
+      v_processes.push_back(process);
+   }
+   int ncomparisons = (int)v_processes.size();
+   std::string OutputFile = foutputComparisonFolder + "/Comparison_" +
+                            v_processes[0]->frun + "_" + v_processes[0]->fcomment +
+                            v_processes[0]->fcutslist + "_Alpha.pdf";
+   std::cout << "Output file: " << OutputFile << std::endl;
+
+   // -----------------------------------------------------------------------------------
+   // Make TGraphErrors for alpha
+   TGraphErrors tgeWFmean;
+   TGraphErrors tgeWFreso;
+   std::vector<int> vAlphaVals = {10, 20, 30, 40, 50, 60, 65, 70, 75, 80, 90, 100};
+   for (int i = 0; i < ncomparisons; i++) {
+      TF1 *gaussFitWF = Fit1Gauss(v_processes[i]->fph1f_WF);
+      tgeWFmean.SetPoint(i, 100 - vAlphaVals[i], gaussFitWF->GetParameter(1));
+      tgeWFmean.SetPointError(i, 0, gaussFitWF->GetParameter(2));
+      tgeWFreso.SetPoint(i, 100 - vAlphaVals[i],
+                         gaussFitWF->GetParameter(2) / gaussFitWF->GetParameter(1) * 100);
+      tgeWFreso.SetPointError(i, 0, GetResoError(gaussFitWF));
+      delete gaussFitWF;
+   }
+
+   // -----------------------------------------------------------------------------------
+   // Graphic Setup
+   Graphic_setup(&tgeWFmean, 8, 33, kCyan + 2, 4, kCyan + 2);
+   Graphic_setup(&tgeWFreso, 8, 33, kCyan + 2, 4, kCyan + 2);
+
+   // Canvas setup
+   fpCanvas->cd();
+   fpCanvas->SetGrid(1, 1);
+   gStyle->SetOptStat(0);
+   gStyle->SetOptFit(0);
+
+   // -----------------------------------------------------------------------------------
+   // dE/dx resolution as a function of momentum
+   fpCanvas->Clear();
+   gPad->SetRightMargin(0.04);
+   gPad->SetLeftMargin(0.12);
+   gPad->SetTopMargin(0.03);
+   gPad->SetBottomMargin(0.15);
+   tgeWFreso.SetTitle(";Truncation [%];dE/dx resolution [%]");
+   tgeWFreso.GetXaxis()->SetLimits(-5, 100);
+   tgeWFreso.GetYaxis()->SetTitleOffset(0.8);
+   tgeWFreso.GetXaxis()->SetNdivisions(510);
+   tgeWFreso.GetYaxis()->SetNdivisions(510);
+   tgeWFreso.Draw("AP");
+   fpCanvas->SaveAs((OutputFile + "(").c_str());
+
+   // -----------------------------------------------------------------------------------
+   // dE/dx mean value as a function of momentum
+   fpCanvas->Clear();
+   gPad->SetLeftMargin(0.14);
+   tgeWFmean.SetTitle(";Truncation [%];dE/dx [ADC counts/cm]");
+   tgeWFmean.GetXaxis()->SetLimits(-5, 100);
+   tgeWFmean.GetXaxis()->SetNdivisions(510);
+   tgeWFmean.GetYaxis()->SetNdivisions(510);
+   tgeWFmean.Draw("AP");
+   fpCanvas->SaveAs((OutputFile + ")").c_str());
+
+   for (Process *pr : v_processes)
+      delete pr;
 }

@@ -521,19 +521,19 @@ Process::~Process()
 
 void Process::SetCuts()
 {
-   int nclmincosmics = 0, nclminbeam = 0;
-   if (ffileName.find("dog1") != std::string::npos or
-       ffileName.find("cosmics") != std::string::npos) {
-      nclmin = 60;
-      nclmincosmics = 60;
-   } else if (ffileName.find("beam") != std::string::npos or
-              ffileName.find("sandmu") != std::string::npos) {
-      nclmin = 130;
-      nclminbeam = 130;
-   }
-   fcutslist +=
-      ("_B" + std::to_string(nclminbeam) + "C" + std::to_string(nclmincosmics) +
-      "ncl");
+   // int nclmincosmics = 0, nclminbeam = 0;
+   // if (ffileName.find("dog1") != std::string::npos or
+   //     ffileName.find("cosmics") != std::string::npos) {
+   //    nclmin = 60;
+   //    nclmincosmics = 60;
+   // } else if (ffileName.find("beam") != std::string::npos or
+   //            ffileName.find("sandmu") != std::string::npos) {
+   //    nclmin = 130;
+   //    nclminbeam = 130;
+   // }
+   // fcutslist +=
+   //    ("_B" + std::to_string(nclminbeam) + "C" + std::to_string(nclmincosmics) +
+   //    "ncl");
 
    chi2max = 20;
    fcutslist += ("_chi2ndf" + std::to_string(chi2max));

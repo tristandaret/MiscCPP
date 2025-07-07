@@ -27,6 +27,7 @@ public:
    void Run(const std::string &filepath);
    void Compare(const std::vector<std::string> &v_filepaths, const std::string &type);
    void CompareComments(const std::vector<std::string> &v_filepaths);
+   void CompareAlpha(const std::vector<std::string> &v_filepaths);
 
 private:
    std::string frun;

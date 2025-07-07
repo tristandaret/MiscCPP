@@ -7,7 +7,7 @@
 float LUTMaker::LUTValues[LUTMaker::SNSTEPS_TRANS][LUTMaker::SNSTEPS_RC]
                          [LUTMaker::SNSTEPS_DRIFT][LUTMaker::SNSTEPS_D]
                          [LUTMaker::SNSTEPS_PHI];
-=
+
 // Constructor
 LUTMaker::LUTMaker()
 {

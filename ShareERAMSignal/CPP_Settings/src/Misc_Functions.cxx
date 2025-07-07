@@ -1,8 +1,6 @@
 #include "Misc_Functions.h"
 
 #include <stdexcept> // for std::runtime_error
-#include "TFitResult.h"
-#include "TMatrixDSym.h"
 
 // General functions
 // //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -96,39 +94,6 @@ TF1 *Fit1Gauss(TH1 *h1F, const float &range)
    return tf1;
 }
 
-TFitResultPtr ResultFit1Gauss(TH1 *h1F)
-{
-   // Create Gaussian function
-   TF1 *gausn = new TF1("gausn", "gausn");
-
-   // Initial estimates
-   float mean = h1F->GetBinCenter(h1F->GetMaximumBin());
-   float std = h1F->GetRMS();
-
-   float min = mean - 1.8 * std;
-   float max = mean + 1.8 * std;
-
-   // First fit
-   // S=return result
-   TFitResultPtr fitResult = h1F->Fit(gausn, "SRQ", "", min, max);
-   if (fitResult->Status() != 0) {
-      delete gausn;
-      return fitResult; // return even if failed
-   }
-
-   // Refine window iteratively
-   for (float factor : {1.7, 1.6, 2.0}) {
-      mean = fitResult->Parameter(1);
-      std = fitResult->Parameter(2);
-      min = mean - factor * std;
-      max = mean + factor * std;
-      fitResult = h1F->Fit(gausn, "SRQ", "", min, max);
-   }
-
-   // Final result includes covariance matrix etc.
-   return fitResult;
-}
-
 // ROOT
 // /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -185,30 +150,16 @@ double GetSeparationError(const TF1 *tf1_1, const TF1 *tf1_2)
    return GetSeparationError(mean1, std1, dmean1, dstd1, mean2, std2, dmean2, dstd2);
 }
 
-double GetResoError(TFitResultPtr fitResult)
+double GetResoError(TF1 *tf1)
 {
-   return GetResoError(fitResult, 1, 2);
+   return GetResoError(tf1, 1, 2);
 }
-double GetResoError(TFitResultPtr fitResult, const int &mu, const int &sigma)
-{   // Values
-   float mean = fitResult->Parameter(mu);
-   float std = fitResult->Parameter(sigma);
-   float reso = fitResult->Parameter(sigma) / fitResult->Parameter(mu) * 100;
-
-   // Errors
-   float dmean = fitResult->ParError(mu);
-   float dstd = fitResult->ParError(sigma);
-   TMatrixDSym cov = fitResult->GetCovarianceMatrix();
-   double cov_mean_std = cov(mean, std);
-
-   // Compute the error
-   double term1 = (dstd / mean) * (dstd / mean);
-   double term2 = (std * dmean / (mean * mean)) * (std * dmean / (mean * mean));
-   double term3 = -2.0 * std * cov_mean_std / (mean * mean * mean);
-
-   double variance = term1 + term2 + term3;
-   // Safety check (variance should be positive)
-   double dreso = (variance > 0) ? std::sqrt(variance) : 0.0;
+double GetResoError(TF1 *tf1, const int &mu, const int &sigma)
+{
+   double mean = tf1->GetParameter(mu);
+   double std = tf1->GetParameter(sigma);
+   double dmean = tf1->GetParError(mu);
+   double dstd = tf1->GetParError(sigma);
    return (std * dmean / (mean * mean) + dstd / mean) * 100;
 }
 
@@ -235,8 +186,14 @@ void PrintResolution(TH1 *th1, TCanvas *pCanvas, float NDCx, float NDCy,
                      Color_t color, const std::string &title, const int &myLineWidth,
                      const float &myFontSize)
 {
-   TFitResultPtr fitResult = ResultFit1Gauss(th1);
    TF1 *tf1 = th1->GetFunction("gausn");
+   if (!tf1) {
+      tf1 = Fit1Gauss(th1);
+      if (!tf1) {
+         std::cerr << "Error: No fit found for " << th1->GetName() << std::endl;
+         return;
+      }
+   }
 
    float arg1 = NDCx, arg2 = NDCy, arg3 = NDCx + xwidth, arg4 = NDCy + ywidth;
    if (anchor.find("west") != std::string::npos) {
@@ -269,12 +226,12 @@ void PrintResolution(TH1 *th1, TCanvas *pCanvas, float NDCx, float NDCy,
    pPaveText->SetFillColorAlpha(kWhite, 0.95);
    // pPaveText->SetBorderSize(0);
 
-   float mu = fitResult->Parameter(1);
-   float dmu = fitResult->ParError(1);
-   float sigma = fitResult->Parameter(2);
-   float dsigma = fitResult->ParError(2);
-   float reso = fitResult->Parameter(2) / fitResult->Parameter(1) * 100;
-   float dreso = GetResoError(fitResult);
+   float mu = tf1->GetParameter(1);
+   float dmu = tf1->GetParError(1);
+   float sigma = tf1->GetParameter(2);
+   float dsigma = tf1->GetParError(2);
+   float reso = tf1->GetParameter(2) / tf1->GetParameter(1) * 100;
+   float dreso = GetResoError(tf1);
 
    if (title != " " && !title.empty()) {
       pPaveText->AddText(Form("%s", title.c_str()));

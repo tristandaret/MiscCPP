@@ -3,7 +3,6 @@
 
 #include "Util.h"
 #include <type_traits> // for sign template
-#include "TFitResultPtr.h"
 
 /* GENERAL FUNCTIONS*/
 // Find if a value is in a vector
@@ -55,7 +54,6 @@ float mean(const std::vector<float> &values);
 // Fit a gaussian but within +/- 2sigma to fit only the peak correctly
 TF1 *Fit1Gauss(TH1 *h1F);
 TF1 *Fit1Gauss(TH1 *h1F, const float &range);
-TFitResultPtr ResultFit1Gauss(TH1 *h1F);
 
 /* ROOT */
 double GetSeparation(const float &mean1, const float &std1, const float &mean2,
@@ -67,8 +65,8 @@ double GetSeparationError(const float &mean1, const float &std1, const float &dm
 double GetSeparationError(const TF1 *tf1_1, const TF1 *tf1_2);
 
 // Formula to get resolution error using a TF1
-double GetResoError(TFitResultPtr fitResult);
-double GetResoError(TFitResultPtr fitResult, const int &mu, const int &sigma);
+double GetResoError(TF1 *tf1);
+double GetResoError(TF1 *tf1, const int &mu, const int &sigma);
 
 // Write resolution value for a 1-gaussian fit
 void PrintResolution(TH1 *th1, TCanvas *pCanvas);

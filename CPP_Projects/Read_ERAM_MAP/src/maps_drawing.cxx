@@ -62,6 +62,7 @@ void Drawing::maps_pdf()
       high_rc = 0;
       high_gain = 0;
       int id = pERAMMaps->ID(i);
+      std::cout << "ERAM#" << id << " (" << i << ")" << std::endl;
       for (int j = 0; j < 36; j++) {
          for (int k = 0; k < 32; k++) {
             float gain = pERAMMaps->Gain(i, j, k);
@@ -109,8 +110,8 @@ void Drawing::maps_pdf()
    high_gain = *std::max_element(v_high_gain.begin(), v_high_gain.end());
    avg_rc /= n_pads;
    avg_gain /= n_pads;
-   // std::cout << "Average RC: " << avg_rc << std::endl;
-   // std::cout << "Average Gain: " << avg_gain << std::endl;
+   std::cout << "Average RC: " << avg_rc << std::endl;
+   std::cout << "Average Gain: " << avg_gain << std::endl;
 
    // for(int i=0;i<(int)v_avg_gain.size();i++) std::cout <<"Gain ERAM#" << std::setw(2)
    // << pERAMMaps->ID(i) << "(" << std::setw(2) << i << "): " << std::setprecision(4) <<
@@ -268,16 +269,16 @@ void Drawing::Distributions()
    int nerams = 32;
    std::cout << "Running Distributions" << std::endl;
 
-   TH2F *ph2_GRC = new TH2F("ph2_GRC", ";RC value (ns/mm^{2});Gain (ADC count)", 50,
-                            50, 270, 50, 700, 2700);
+   TH2F *ph2_GRC = new TH2F("ph2_GRC", ";RC value [ns/mm^{2}];Gain (ADC count)", 50, 50,
+                            270, 50, 700, 2700);
    std::vector<TH2F *> v_ph2_GRC;
    std::vector<float> v_min_rc;
    std::vector<float> v_max_rc;
    for (int i = 0; i < nerams; i++)
-      v_ph2_GRC.push_back(new TH2F(
-         Form("ph2_GRC_%d", i),
-         Form("ERAM#%i;RC value (ns/mm^{2});Gain (ADC count)", pERAMMaps->ID(i)),
-         50, 50, 270, 50, 700, 2700));
+      v_ph2_GRC.push_back(
+         new TH2F(Form("ph2_GRC_%d", i),
+                  Form("ERAM#%i;RC value [ns/mm^{2}];Gain (ADC count)", pERAMMaps->ID(i)),
+                  50, 50, 270, 50, 700, 2700));
    TH2F *ph2_gainmap = new TH2F("ph2_gainmap", ";Column;Row;Average gain", col, -0.5,
                                 35.5, row, -0.5, 31.5);
 
@@ -325,26 +326,26 @@ void Drawing::Distributions()
    TH2F *ph2_rcnormstd =
       new TH2F("ph2_rcnormstd", "Std of normalized average RC difference map (in %)", col,
                -0.5, 35.5, row, -0.5, 31.5);
-   TH1F *ph1_gain = new TH1F("ph1_gain", ";Gain (ADC count);Count", 200, 700, 2700);
-   TH1F *ph1_rc = new TH1F("ph1_rc", ";RC value (ns/mm^{2});Count", nRC, RCmin, RCmax);
+   TH1F *ph1_gain = new TH1F("ph1_gain", ";Gain;Count", 200, 700, 2700);
+   TH1F *ph1_rc = new TH1F("ph1_rc", ";RC value [ns/mm^{2}];Count", nRC, RCmin, RCmax);
    TH1F *ph1_rchigh = new TH1F(
-      "ph1_rchigh", "High RC distribution;RC value (ns/mm^{2});Count", nRC, RCmin, RCmax);
+      "ph1_rchigh", "High RC distribution;RC value [ns/mm^{2}];Count", nRC, RCmin, RCmax);
    TH1F *ph1_rclow =
-      new TH1F("ph1_rclow", ";RC value (ns/mm^{2});Count", nRC, RCmin, RCmax);
+      new TH1F("ph1_rclow", ";RC value [ns/mm^{2}];Count", nRC, RCmin, RCmax);
    TH1F *ph1_rchighdiff =
-      new TH1F("ph1_rchighdiff", ";RC difference (ns/mm^{2});Count", 141, -60, 80);
+      new TH1F("ph1_rchighdiff", ";RC difference [ns/mm^{2}];Count", 141, -60, 80);
    TH1F *ph1_rclowdiff = new TH1F(
-      "ph1_rclowdiff", ";RC_{pad} - RC_{reference} (ns/mm^{2});Count", 141, -60, 80);
+      "ph1_rclowdiff", ";RC_{pad} - RC_{reference} [ns/mm^{2}];Count", 141, -60, 80);
    TH1F *ph1_rcbot =
-      new TH1F("ph1_rcbot", "RC distribution (bHAT);RC value (ns/mm^{2});Count", nRC,
+      new TH1F("ph1_rcbot", "RC distribution (bHAT);RC value [ns/mm^{2}];Count", nRC,
                RCmin, RCmax);
    TH1F *ph1_rctop =
-      new TH1F("ph1_rctop", "RC distribution (tHAT);RC value (ns/mm^{2});Count", nRC,
+      new TH1F("ph1_rctop", "RC distribution (tHAT);RC value [ns/mm^{2}];Count", nRC,
                RCmin, RCmax);
    TH1F *ph1_rcdiff = new TH1F(
-      "ph1_rcdiff", ";RC difference between neighbours (ns/mm^{2});Count", 61, -30, 30);
+      "ph1_rcdiff", ";RC difference between neighbors [ns/mm^{2}];Count", 61, -30, 30);
    TH1F *ph1_rcdiffcut =
-      new TH1F("ph1_rcdiffcut", ";RC difference between neighbours (ns/mm^{2});Count", 61,
+      new TH1F("ph1_rcdiffcut", ";RC difference between neighbors [ns/mm^{2}];Count", 61,
                -30, 30);
    TH1F *ph1_rcdiffhori = new TH1F("ph1_rcdiffhori", "ph1_rcdiffhori", 61, -30, 30);
    TH1F *ph1_rcdiffvert = new TH1F("ph1_rcdiffvert", "ph1_rc", 61, -30, 30);
@@ -369,6 +370,9 @@ void Drawing::Distributions()
    }
 
    // Normalized mean rc value of each pad
+   float meanRC = 0;
+   float meanGain = 0;
+   float npads = 0;
    float mean_rc[col][row];
    for (int j = 0; j < col; j++)
       for (int k = 0; k < row; k++)
@@ -376,11 +380,16 @@ void Drawing::Distributions()
    for (int j = 0; j < col; j++) {
       for (int k = 0; k < row; k++) {
          for (int i = 0; i < nerams; i++) {
+            meanRC += pERAMMaps->RC(i, j, k);
+            meanGain += pERAMMaps->Gain(i, j, k);
+            npads++;
             mean_rc[j][k] += (pERAMMaps->RC(i, j, k) - v_min_rc[i]) /
                              (v_max_rc[i] - v_min_rc[i]) / (nerams - 1);
          }
       }
    }
+   std::cout << "Mean RC: " << meanRC / npads << std::endl; 
+   std::cout << "Mean Gain: " << meanGain / npads << std::endl;
 
    // Mean RC per ERAM
    std::vector<float> v_eram_rc;
@@ -559,6 +568,7 @@ void Drawing::Distributions()
    float min_avg_rc = *std::min_element(v_min_avg_rc.begin(), v_min_avg_rc.end());
    float max_avg_rc = *std::max_element(v_max_avg_rc.begin(), v_max_avg_rc.end());
 
+   // -----------------------------------------------------------------------------------
    // Drawing
    gStyle->SetOptStat(0);
    gStyle->SetOptFit(0);
@@ -577,14 +587,14 @@ void Drawing::Distributions()
    pTCanvas->Clear();
 
    // RC distributions
-   Graphic_setup(ph1_rc, 0.5, 1, kMagenta + 1, 2, kMagenta - 2, kMagenta, 0.2);
-   Graphic_setup(ph1_rctop, 0.5, 1, kRed + 1, 2, kRed - 2, kRed, 0.2);
-   Graphic_setup(ph1_rcbot, 0.5, 1, kBlue + 1, 2, kBlue - 2, kBlue, 0.2);
+   Graphic_setup(ph1_rc, 0.5, 1, kGreen + 2, 2, kGreen + 2, kGreen + 2, 0.2);
+   Graphic_setup(ph1_rctop, 0.5, 1, kOrange + 7, 2, kOrange + 7, kOrange + 7, 0.2);
+   Graphic_setup(ph1_rcbot, 0.5, 1, kAzure - 3, 2, kAzure - 3, kAzure - 3, 0.2);
    ph1_rc->Draw("hist");
    ph1_rcbot->Draw("hist same");
    ph1_rctop->Draw("hist same");
    doubleGaus->SetLineColor(kMagenta + 3);
-   doubleGaus->Draw("same");
+   // doubleGaus->Draw("same");
    pTLegend = new TLegend(0.55, 0.7, 0.92, 0.93);
    pTLegend->SetTextSize(0.07);
    pTLegend->AddEntry(ph1_rc, "Both", "f");
@@ -673,7 +683,7 @@ void Drawing::Distributions()
    pTCanvas->SaveAs(OutputFile.c_str());
    pTCanvas->Clear();
 
-   gPad->SetRightMargin(0.12);
+   gPad->SetRightMargin(0.14);
    ph2_GRC->Draw("colz");
    pTCanvas->SaveAs(OutputFile.c_str());
 
@@ -726,11 +736,13 @@ void Drawing::Distributions()
    }
 
    pTCanvas->Clear();
+   pTCanvas->SetCanvasSize(pTCanvas->GetWw(), 1350);
    gPad->SetRightMargin(0.2);
    gPad->SetLeftMargin(0.1);
    gPad->SetBottomMargin(0.15);
    gStyle->SetPalette(kRainBow);
    ph2_gainmap->SetTitleOffset(0.7, "Y");
+   ph2_gainmap->SetTitleOffset(1.1, "Z");
    ph2_gainmap->Draw("colz");
    pTCanvas->SaveAs(OutputFile.c_str());
 
