@@ -8,8 +8,6 @@
 #include <TF1.h>
 #include <TF1Convolution.h>
 
-void DrawPointModel();
-
 class PointModel {
 public:
    PointModel(float peakingTime, float xpad, float ypad, float xcharge, float ycharge, float RC, float Qdrop = Q0);

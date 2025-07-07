@@ -34,7 +34,8 @@ void TrackModel::SetParameters(const double &length, const double &impact, const
       fphirad = (90 - 1e-5) / 180 * M_PI;
    // Set parameters
    fm = std::tan(fphirad);
-   fq = (cos(fphirad) * fxpad - sin(fphirad) * fxpad + fimpact) / cos(fphirad);
+   // fq = (cos(fphirad) * fxpad - sin(fphirad) * fxpad + fimpact) / cos(fphirad);
+   fq = (cos(fphirad) * fypad - sin(fphirad) * fxpad + fimpact) / cos(fphirad);
 }
 
 // Initialize real signal

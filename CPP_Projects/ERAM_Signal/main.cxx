@@ -3,13 +3,10 @@
 #include "Util.h"
 #include "SetStyle.h"
 
-#include "PointModel.h"
-#include "TrackModel.h"
-#include "GeomFunctions.h"
+#include "Drawers.h"
 
 int main(int argc, char const *argv[])
 {
-   DrawPointModel();
-   
-   
+   // DrawPointModel();
+   DrawTrackModel2(0, 4, 0, 120);   
 }
